@@ -1,50 +1,40 @@
-##  SEO与工具
-- [SEO菜鸟工具](https://www.jyshare.com/)
-- [Github](https://github.com/) 
-- [inftab](https://inftab.com/)
-- [豆包](https://dis.csqixiang.cn/unpo/doubaocngj.html)
-- [shouku123](https://shouku123.com/)
-- [shouku码农版](https://shouku123.com/manong)
-- [Gitee搜索](https://search.gitee.com/)
-- [草料二维码生成器](http://cli.im/)
-- [Xget全球加速](https://xuc.xi-xu.me/?utm_source=opensource.zone)
-- [微信网页版](https://wx.qq.com/)
-- [思维导图](https://shouku123.com/pub/gotoUrl.do?id=1399860)
-- [蓝奏云](https://www.lanzoui.com/)
-- [Kimi](https://shouku123.com/pub/gotoUrl.do?id=1399776)
-- [Httpi](https://httpie.io/app)
-- [xdown](https://www.xdown.org/)
-- [ATK HUB](https://hub.atk.pro/)
-- [Cubox-CrxSoso](https://www.crxsoso.com/webstore/detail/bflmgpechpeohjfomgfdkkfcbhfcjohl)
-
-## 下载-releases
-- [sk](https://xget.xi-xu.me/gh/theallw/sk/raw/refs/heads/main/README.md)
-- [qianxin-pc](https://pc.soft.qianxin.com/)
-- [360-chrome](https://baoku.360.cn/soft/show/appid/2000004411?channel=9510140&channel=9510140)
-- [360-Git](https://baoku.360.cn/soft/search?kw=git&channel=9510140)
-- [qq-vivaldi](https://pc.qq.com/search.html#!keyword=viva)
-- [qq-wegame](https://www.wegame.com.cn/home/)
-- [yunlogin-releases](https://www.yunlogin.com/oldversion.html?platform=windows)
-- [qianxin-Thonny](https://pc.soft.qianxin.com/search/thonny)
-- [360-Vivaldi](https://baoku.360.cn/qbfl/105016627.html?channel=9510140)
-- [obsidian语法](https://publish.obsidian.md/help-zh/%E7%BC%96%E8%BE%91%E4%B8%8E%E6%A0%BC%E5%BC%8F%E5%8C%96/Obsidian+%E9%A3%8E%E6%A0%BC%E7%9A%84+Markdown+%E8%AF%AD%E6%B3%95)
-
 ##  常用网站
 - [哔哩哔哩](http://www.bilibili.com/)
-- [豆瓣电影](https://movie.douban.com/explore)
 - [菜鸟工具-search](https://www.jyshare.com/)
+- [豆瓣电影](https://movie.douban.com/explore)
 - [sealos开发系统](https://sealos.run/?s=首页)
 - [IP138](https://www.ip138.com/)
 - [17500](17500.cn)
 - [FlowUs 息流](https://flowus.cn/)
 
+##  SEO与工具
+- [SEO菜鸟工具](https://www.jyshare.com/)
+- [Github](https://github.com/) 
+- [豆包](https://dis.csqixiang.cn/unpo/doubaocngj.html)
+- [shouku123](https://shouku123.com/)
+- [Gitee搜索](https://search.gitee.com/)
+- [Xget全球加速](https://xuc.xi-xu.me/?utm_source=opensource.zone)
+- [蓝奏云](https://www.lanzoui.com/)
+- [ATK HUB](https://hub.atk.pro/)
+
+## 下载-Root-Tool
+- [Reqable](https://reqable.com/zh-CN/)
+- [奇安信-pc](https://pc.soft.qianxin.com/)
+- [360-chrome](https://baoku.360.cn/soft/show/appid/2000004411?channel=9510140&channel=9510140)
+- [360-Git](https://baoku.360.cn/soft/search?kw=git&channel=9510140)
+- [360-Vivaldi](https://baoku.360.cn/qbfl/105016627.html?channel=9510140)
+- [qq-vivaldi](https://pc.qq.com/search.html#!keyword=viva)
+- [qq-wegame](https://www.wegame.com.cn/home/)
+- [yunlogin-Browser-releases](https://www.yunlogin.com/oldversion.html?platform=windows)
+- [qianxin-Thonny](https://pc.soft.qianxin.com/search/thonny)
+- [163客户端](https://d8.music.126.net/dmusic2/NeteaseCloudMusic_Music_official_3.1.30.205130_64.exe)
+
 ##  浏览器与插件
 - [CRX插件搜索](https://www.crxsoso.com/)
 - [beb-theme-xpi](https://f2.crxsoso.com/firefox/downloads/latest/beb/platform:5/beb.xpi)
 - [bianse-xpi](https://f2.crxsoso.com/firefox/downloads/latest/adaptive-tab-bar-colour/platform:5/adaptive-tab-bar-colour.xpi)
-- [指纹浏览器下载](https://version.adspower.net/software/win64-global/7.12.29/AdsPower-Global-7.12.29-x64.exe)
 
-##  游戏（云顶/英雄联盟）
+##  游戏（云顶/LOL）
 - [TFT数据检索](https://www.datatft.com/explorer)
 - [tactics.tools数据检索](https://tactics.tools/zh/team-compositions)
 - [云顶模拟器](https://www.datatft.com/)
@@ -68,8 +58,7 @@
 - [英雄联盟配置文件路径](notepad X:\网络游戏\英雄联盟\Game\config\PersistedSettings.json)
 - [Chrome设置](chrome://settings/)
 - 系统版本：Windows 10 企业版 LTSC 21H2
-- [Opera下载](https://download.operachina.com/ftp/pub/opera/desktop/129.0.5823.28/win/Opera_129.0.5823.28_Setup.exe)
-- [网易云音乐下载](https://d8.music.126.net/dmusic2/NeteaseCloudMusic_Music_official_3.1.30.205130_64.exe)
+
 
 ##  学习资源
 - [科学文库](https://book.sciencereading.cn/shop/main/Login/shopFrame.do)
@@ -123,7 +112,6 @@
 - [Termux下载](https://gitee.com/ygt314159/subject-termux)
 - [晨钟网络软件](http://jamcz.com/)
 - [Sukisu](https://sukisu.org/zh/)
-- [Reqable](https://reqable.com/zh-CN/)
 - [HTTP Shortcuts](https://github.com/Waboodoo/HTTP-Shortcuts)
 - [MuMu模拟器](https://mumu.163.com/)
 - [SukiSU-Ultra教程](https://optool.daxiaamu.com/install_sukisu-ultra)
