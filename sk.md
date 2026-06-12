@@ -1,5 +1,6 @@
 ##  常用网站
 - [哔哩哔哩](http://www.bilibili.com/)
+- [书签地球](https://www.bookmarkearth.cn/)
 - [菜鸟工具-search](https://www.jyshare.com/)
 - [豆瓣电影](https://movie.douban.com/explore)
 - [sealos开发系统](https://sealos.run/?s=首页)
@@ -9,7 +10,8 @@
 
 ##  SEO与工具
 - [SEO菜鸟工具](https://www.jyshare.com/)
-- [Github](https://github.com/) 
+- [Github](https://github.com/)
+ - [DeepSeek](https://chat.deepseek.com/)
 - [豆包](https://dis.csqixiang.cn/unpo/doubaocngj.html)
 - [shouku123](https://shouku123.com/)
 - [Gitee搜索](https://search.gitee.com/)
@@ -70,7 +72,6 @@
 - [数学资料汇总](https://flowus.cn/less/share/7af590fc-23cd-4f4e-a429-2303ea3f0d95)
 - [考研进阶版](https://flowus.cn/share/74caa249-11a2-404a-97b9-048a8fd91a03)
 - [数学乐](https://www.shuxuele.com/)
-- [DeepSeek](https://chat.deepseek.com/)
 - [多邻国](https://www.duolingo.cn/)
 - [广东省教育考试院](https://eea.gd.gov.cn/bmbk/index.html)
 - [深圳大学继续教育学院](https://cce.szu.edu.cn/)
