@@ -82,7 +82,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             ''')
         
         sections_html.append(f'''
-            <div class="category-section">
+            <div class="category-section" id="{html.escape(cat_name)}">
                 <h2 class="category-title">{html.escape(cat_name)}</h2>
                 <div class="bookmarks-grid">
                     {''.join(links_html)}
