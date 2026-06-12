@@ -1,5 +1,5 @@
 ##  常用网站
-- [哔哩哔哩](http://www.bilibili.com/)
+-- [哔哩哔哩](http://www.bilibili.com/)
 - [书签地球](https://www.bookmarkearth.cn/)
 - [菜鸟工具-search](https://www.jyshare.com/)
 - [豆瓣电影](https://movie.douban.com/explore)
