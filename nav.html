@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>我的导航页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", 
+                         "SF Pro Text", "SF Pro Display", "PingFang SC", "Microsoft YaHei", 
+                         sans-serif;
+            background-color: #f5f5f7;
+            color: #1d1c1f;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* 头部 - 苹果风格 */
+        .header {
+            text-align: center;
+            padding: 80px 20px 60px;
+            background: linear-gradient(135deg, #f5f5f7 0%, #ffffff 100%);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #1d1c1f 0%, #3a3a3e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: #86868b;
+            font-weight: 400;
+        }
+
+        /* 导航栏 - 毛玻璃效果 */
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 12px 0;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .nav-item {
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1d1c1f;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.2s ease;
+            background: rgba(0,0,0,0.02);
+        }
+
+        .nav-item:hover {
+            background: rgba(0,0,0,0.08);
+            color: #007aff;
+        }
+
+        /* 主内容 */
+        .main {
+            padding: 40px 0 60px;
+        }
+
+        /* 分类区域 */
+        .category-section {
+            margin-bottom: 48px;
+        }
+
+        .category-title {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: #1d1c1f;
+            margin-bottom: 20px;
+            padding-left: 4px;
+            position: relative;
+        }
+
+        .category-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 3px;
+            background: #007aff;
+            border-radius: 2px;
+        }
+
+        /* 书签网格 - 苹果风格卡片 */
+        .bookmarks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .bookmark-link {
+            text-decoration: none;
+        }
+
+        .bookmark-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: #ffffff;
+            border-radius: 14px;
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid #e9e9ef;
+            cursor: pointer;
+        }
+
+        .bookmark-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border-color: transparent;
+            background: #ffffff;
+        }
+
+        .bookmark-favicon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            border-radius: 4px;
+        }
+
+        .bookmark-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1d1c1f;
+            line-height: 1.4;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .bookmark-item:hover .bookmark-title {
+            color: #007aff;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid #e9e9ef;
+            color: #86868b;
+            font-size: 13px;
+        }
+
+        /* 返回顶部按钮 - 苹果风格 */
+        .back-to-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            z-index: 99;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .back-to-top svg {
+            width: 20px;
+            height: 20px;
+            stroke: #1d1c1f;
+            stroke-width: 2;
+        }
+
+        /* 搜索框 */
+        .search-wrapper {
+            max-width: 400px;
+            margin: 0 auto 32px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-family: inherit;
+            border: 1px solid #e9e9ef;
+            border-radius: 12px;
+            background: #ffffff;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #007aff;
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #c6c6c8;
+        }
+
+        /* 搜索结果高亮 */
+        .bookmark-link.hidden {
+            display: none;
+        }
+
+        /* 空状态 */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #86868b;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .header {
+                padding: 60px 16px 40px;
+            }
+            
+            .header h1 {
+                font-size: 32px;
+            }
+            
+            .header p {
+                font-size: 16px;
+            }
+            
+            .category-title {
+                font-size: 24px;
+            }
+            
+            .bookmarks-grid {
+                gap: 10px;
+            }
+            
+            .bookmark-item {
+                padding: 12px 16px;
+            }
+            
+            .nav-item {
+                padding: 6px 14px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .bookmarks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f5f5f7;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #c6c6c8;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #86868b;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📖 我的导航页</h1>
+        <p>188 个精选网站 · 快速访问</p>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-links">
+            <a href="#常用网站" class="nav-item">常用网站</a>
+<a href="#SEO与工具" class="nav-item">SEO与工具</a>
+<a href="#下载-Root-Tool" class="nav-item">下载-Root-Tool</a>
+<a href="#浏览器与插件" class="nav-item">浏览器与插件</a>
+<a href="#游戏（云顶/LOL）" class="nav-item">游戏（云顶/LOL）</a>
+<a href="#Windows与系统设置" class="nav-item">Windows与系统设置</a>
+<a href="#学习资源" class="nav-item">学习资源</a>
+<a href="#开发与代码" class="nav-item">开发与代码</a>
+<a href="#GitHub与镜像" class="nav-item">GitHub与镜像</a>
+<a href="#PCB与硬件" class="nav-item">PCB与硬件</a>
+<a href="#Android与Root" class="nav-item">Android与Root</a>
+<a href="#邮箱与临时邮箱" class="nav-item">邮箱与临时邮箱</a>
+        </div>
+    </div>
+
+    <div class="container main">
+        <div class="search-wrapper">
+            <input type="text" class="search-input" id="searchInput" placeholder="搜索书签... ⌘K" autocomplete="off">
+        </div>
+
+        <div id="bookmarksContainer">
+            
+            <div class="category-section" id="常用网站">
+                <h2 class="category-title">常用网站</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="http://www.bilibili.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/bilibili.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">哔哩哔哩</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.bookmarkearth.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/bookmarkearth.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">书签地球</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.jyshare.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/jyshare.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">菜鸟工具-search</span>
+                    </div>
+                </a>
+            
+                <a href="https://movie.douban.com/explore" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/movie.douban.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">豆瓣电影</span>
+                    </div>
+                </a>
+            
+                <a href="https://sealos.run/?s=首页" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/sealos.run" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">sealos开发系统</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.ip138.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/ip138.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">IP138</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.17500.cn" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/17500.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">17500</span>
+                    </div>
+                </a>
+            
+                <a href="https://flowus.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/flowus.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">FlowUs 息流</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="SEO与工具">
+                <h2 class="category-title">SEO与工具</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://www.jyshare.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/jyshare.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">SEO菜鸟工具</span>
+                    </div>
+                </a>
+            
+                <a href="https://github.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/github.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Github</span>
+                    </div>
+                </a>
+            
+                <a href="https://chat.deepseek.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/chat.deepseek.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">DeepSeek</span>
+                    </div>
+                </a>
+            
+                <a href="https://dis.csqixiang.cn/unpo/doubaocngj.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/dis.csqixiang.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">豆包</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">shouku123</span>
+                    </div>
+                </a>
+            
+                <a href="https://search.gitee.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/search.gitee.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Gitee搜索</span>
+                    </div>
+                </a>
+            
+                <a href="https://xuc.xi-xu.me/?utm_source=opensource.zone" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/xuc.xi-xu.me" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Xget全球加速</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.lanzoui.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/lanzoui.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">蓝奏云</span>
+                    </div>
+                </a>
+            
+                <a href="https://hub.atk.pro/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/hub.atk.pro" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">ATK HUB</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="下载-Root-Tool">
+                <h2 class="category-title">下载-Root-Tool</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://reqable.com/zh-CN/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/reqable.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Reqable</span>
+                    </div>
+                </a>
+            
+                <a href="https://pc.soft.qianxin.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/pc.soft.qianxin.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">奇安信-pc</span>
+                    </div>
+                </a>
+            
+                <a href="https://baoku.360.cn/soft/show/appid/2000004411?channel=9510140&amp;channel=9510140" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/baoku.360.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">360-chrome</span>
+                    </div>
+                </a>
+            
+                <a href="https://baoku.360.cn/soft/search?kw=git&amp;channel=9510140" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/baoku.360.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">360-Git</span>
+                    </div>
+                </a>
+            
+                <a href="https://baoku.360.cn/qbfl/105016627.html?channel=9510140" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/baoku.360.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">360-Vivaldi</span>
+                    </div>
+                </a>
+            
+                <a href="https://pc.qq.com/search.html#!keyword=viva" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/pc.qq.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">qq-vivaldi</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.wegame.com.cn/home/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/wegame.com.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">qq-wegame</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.yunlogin.com/oldversion.html?platform=windows" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/yunlogin.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">yunlogin-Browser-releases</span>
+                    </div>
+                </a>
+            
+                <a href="https://pc.soft.qianxin.com/search/thonny" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/pc.soft.qianxin.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">qianxin-Thonny</span>
+                    </div>
+                </a>
+            
+                <a href="https://d8.music.126.net/dmusic2/NeteaseCloudMusic_Music_official_3.1.30.205130_64.exe" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/d8.music.126.net" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">163客户端</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="浏览器与插件">
+                <h2 class="category-title">浏览器与插件</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://www.crxsoso.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/crxsoso.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">CRX插件搜索</span>
+                    </div>
+                </a>
+            
+                <a href="https://f2.crxsoso.com/firefox/downloads/latest/beb/platform:5/beb.xpi" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/f2.crxsoso.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">beb-theme-xpi</span>
+                    </div>
+                </a>
+            
+                <a href="https://f2.crxsoso.com/firefox/downloads/latest/adaptive-tab-bar-colour/platform:5/adaptive-tab-bar-colour.xpi" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/f2.crxsoso.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">bianse-xpi</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="游戏（云顶/LOL）">
+                <h2 class="category-title">游戏（云顶/LOL）</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://www.datatft.com/explorer" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/datatft.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">TFT数据检索</span>
+                    </div>
+                </a>
+            
+                <a href="https://tactics.tools/zh/team-compositions" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/tactics.tools" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">tactics.tools数据检索</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.datatft.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/datatft.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">云顶模拟器</span>
+                    </div>
+                </a>
+            
+                <a href="https://op.gg/zh-cn/lol/modes/aram" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/op.gg" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">OP.GG</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.datatft.com/comps/tier" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/datatft.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">国服云顶</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.datatft.com/units" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/datatft.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">datatft英雄数据</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.metatft.com/comps" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/metatft.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">metatft</span>
+                    </div>
+                </a>
+            
+                <a href="https://101.qq.com/#/hero-rank-fight" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/101.qq.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">LOL攻略资料</span>
+                    </div>
+                </a>
+            
+                <a href="https://lol.dzzdz.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/lol.dzzdz.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">海克斯大乱斗</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399878" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">TapTap</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.metatft.com/comps" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/metatft.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">MetaTFT</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="Windows与系统设置">
+                <h2 class="category-title">Windows与系统设置</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="notepad X:\网络游戏\英雄联盟\Game\config\PersistedSettings.json" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/notepad X:\网络游戏\英雄联盟\Game\config\PersistedSettings.json" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">英雄联盟配置文件路径</span>
+                    </div>
+                </a>
+            
+                <a href="chrome://settings/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/settings" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Chrome设置</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="学习资源">
+                <h2 class="category-title">学习资源</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://book.sciencereading.cn/shop/main/Login/shopFrame.do" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/book.sciencereading.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">科学文库</span>
+                    </div>
+                </a>
+            
+                <a href="https://cn.bing.com/search?q=site:flowus.cn" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/cn.bing.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Flowus搜索</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.wolai.com/ustcse/eNDbNZUnpVc7ZwRL9EWbHd" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/wolai.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">中国科学技术大学</span>
+                    </div>
+                </a>
+            
+                <a href="https://flowus.cn/xuhu/share/41126a04-54ef-4bf9-95ef-b9b7ebdd2581" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/flowus.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">苏州大学</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.dpm.org.cn/explores/courts.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/dpm.org.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">故宫博物馆</span>
+                    </div>
+                </a>
+            
+                <a href="https://cn.bing.com/search?q=site%3Aflowus.cn%2F%20%E6%96%87%E8%81%8C%E9%AB%98%E6%95%B0" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/cn.bing.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">部队文职高数</span>
+                    </div>
+                </a>
+            
+                <a href="https://flowus.cn/less/share/7af590fc-23cd-4f4e-a429-2303ea3f0d95" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/flowus.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">数学资料汇总</span>
+                    </div>
+                </a>
+            
+                <a href="https://flowus.cn/share/74caa249-11a2-404a-97b9-048a8fd91a03" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/flowus.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">考研进阶版</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.shuxuele.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shuxuele.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">数学乐</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.duolingo.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/duolingo.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">多邻国</span>
+                    </div>
+                </a>
+            
+                <a href="https://eea.gd.gov.cn/bmbk/index.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/eea.gd.gov.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">广东省教育考试院</span>
+                    </div>
+                </a>
+            
+                <a href="https://cce.szu.edu.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/cce.szu.edu.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">深圳大学继续教育学院</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.hello-algo.com/chapter_hello_algo/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/hello-algo.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">hello算法</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.runoob.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/runoob.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">菜鸟教程</span>
+                    </div>
+                </a>
+            
+                <a href="https://gitee.com/wqlwcp/CookLikeHOC/tree/main/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/gitee.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">跟着老乡鸡做饭</span>
+                    </div>
+                </a>
+            
+                <a href="https://sousuo.www.gov.cn/zcwjk/policyDocumentLibrary" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/sousuo.gov.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">政府政策搜索</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.bilibili.com/festival/2026zhsk?bvid=BV1YbApzkEmm" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/bilibili.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">高考最后十节课</span>
+                    </div>
+                </a>
+            
+                <a href="https://abserari.github.io/quartz-blog/Anthropic%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%96%87%E6%A1%A3%E9%9B%86" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/abserari.github.io" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Anthropic工程实践文档</span>
+                    </div>
+                </a>
+            
+                <a href="https://blog.siriyang.cn/posts/20190915230345id.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/blog.siriyang.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">考研计算机网络笔记 | SiriBlog</span>
+                    </div>
+                </a>
+            
+                <a href="https://blog.siriyang.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/blog.siriyang.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">SiriBlog</span>
+                    </div>
+                </a>
+            
+                <a href="https://blog.zgsec.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/blog.zgsec.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">曾哥</span>
+                    </div>
+                </a>
+            
+                <a href="https://mirrors.cernet.edu.cn/about" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/mirrors.cernet.edu.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">校园网联合镜像站</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="开发与代码">
+                <h2 class="category-title">开发与代码</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://soft.3dmgame.com/down/198331.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/soft.3dmgame.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">VMware</span>
+                    </div>
+                </a>
+            
+                <a href="https://soft.3dmgame.com/down/347894.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/soft.3dmgame.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">BT专用工具</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.icloud.com.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/icloud.com.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">iCloud</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399863" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Apple Developer</span>
+                    </div>
+                </a>
+            
+                <a href="https://bgithub.xyz/BaBaLiBoo/TongjiCS-Resources" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/bgithub.xyz" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">TongjiCS资源</span>
+                    </div>
+                </a>
+            
+                <a href="https://bgithub.xyz/Eished/self-study-exam_notes" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/bgithub.xyz" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">深大自考笔记</span>
+                    </div>
+                </a>
+            
+                <a href="https://sysin.org/blog/macos-big-sur/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/sysin.org" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Mac ISO下载</span>
+                    </div>
+                </a>
+            
+                <a href="https://github.com/Pyenb/macOS-ISOs" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/github.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Mac ISO下载2</span>
+                    </div>
+                </a>
+            
+                <a href="https://msdn.itellyou.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/msdn.itellyou.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Windows镜像下载</span>
+                    </div>
+                </a>
+            
+                <a href="https://jishuzhan.net/article/1965957555249266689" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/jishuzhan.net" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">技术站文章</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="GitHub与镜像">
+                <h2 class="category-title">GitHub与镜像</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://www.moretools.app/zh-CN/github-proxy" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/moretools.app" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">GitHub镜像站</span>
+                    </div>
+                </a>
+            
+                <a href="https://mirrors.tuna.tsinghua.edu.cn/help/fdroid/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/mirrors.tuna.tsinghua.edu.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">清华镜像站</span>
+                    </div>
+                </a>
+            
+                <a href="https://steampp.net/download" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/steampp.net" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">GitHub加速-steampp</span>
+                    </div>
+                </a>
+            
+                <a href="https://xuc.xi-xu.me/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/xuc.xi-xu.me" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Xget加速</span>
+                    </div>
+                </a>
+            
+                <a href="https://wwn.lanzouy.com/b01v4iz1g" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/wwn.lanzouy.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">steampp-windows</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="PCB与硬件">
+                <h2 class="category-title">PCB与硬件</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://oshwhub.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/oshwhub.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">嘉立创开源广场</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="Android与Root">
+                <h2 class="category-title">Android与Root</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://mirrors.tuna.tsinghua.edu.cn/help/fdroid/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/mirrors.tuna.tsinghua.edu.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Fdroid清华源</span>
+                    </div>
+                </a>
+            
+                <a href="https://gitee.com/ygt314159/subject-termux" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/gitee.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Termux下载</span>
+                    </div>
+                </a>
+            
+                <a href="http://jamcz.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/jamcz.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">晨钟网络软件</span>
+                    </div>
+                </a>
+            
+                <a href="https://sukisu.org/zh/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/sukisu.org" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Sukisu</span>
+                    </div>
+                </a>
+            
+                <a href="https://github.com/Waboodoo/HTTP-Shortcuts" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/github.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">HTTP Shortcuts</span>
+                    </div>
+                </a>
+            
+                <a href="https://mumu.163.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/mumu.163.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">MuMu模拟器</span>
+                    </div>
+                </a>
+            
+                <a href="https://optool.daxiaamu.com/install_sukisu-ultra" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/optool.daxiaamu.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">SukiSU-Ultra教程</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399853" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">修补 init_boot.img</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399854" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">修补 boot.img</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399855" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">一加工具箱</span>
+                    </div>
+                </a>
+            
+                <a href="https://sukisu.org/zh/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/sukisu.org" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Android Root方案</span>
+                    </div>
+                </a>
+            
+                <a href="https://rom.yulovehan.top/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/rom.yulovehan.top" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">模块化Android工具箱</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="邮箱与临时邮箱">
+                <h2 class="category-title">邮箱与临时邮箱</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://mail.qq.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/mail.qq.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">QQ邮箱</span>
+                    </div>
+                </a>
+            
+                <a href="http://mail.163.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/mail.163.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">163邮箱</span>
+                    </div>
+                </a>
+            
+                <a href="http://www.126.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/126.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">126邮箱</span>
+                    </div>
+                </a>
+            
+                <a href="https://mail.aliyun.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/mail.aliyun.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">阿里邮箱</span>
+                    </div>
+                </a>
+            
+                <a href="http://mail.sina.com.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/mail.sina.com.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">新浪邮箱</span>
+                    </div>
+                </a>
+            
+                <a href="https://temp-mail.io/zh" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/temp-mail.io" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Temp Mail</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="新闻与资讯">
+                <h2 class="category-title">新闻与资讯</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="http://www.toutiao.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/toutiao.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">今日头条</span>
+                    </div>
+                </a>
+            
+                <a href="http://news.qq.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/news.qq.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">腾讯新闻</span>
+                    </div>
+                </a>
+            
+                <a href="http://news.163.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/news.163.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">网易新闻</span>
+                    </div>
+                </a>
+            
+                <a href="http://news.ifeng.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/news.ifeng.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">凤凰资讯</span>
+                    </div>
+                </a>
+            
+                <a href="http://www.myzaker.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/myzaker.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">ZAKER</span>
+                    </div>
+                </a>
+            
+                <a href="http://36kr.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/36kr.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">36氪</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.yfchuhai.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/yfchuhai.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">扬帆出海</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="音乐">
+                <h2 class="category-title">音乐</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://www.gequbao.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/gequbao.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">歌曲宝</span>
+                    </div>
+                </a>
+            
+                <a href="https://member.bilibili.com/platform/upload/text/draft" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/member.bilibili.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">B站创作中心</span>
+                    </div>
+                </a>
+            
+                <a href="https://music.163.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/music.163.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">网易云音乐</span>
+                    </div>
+                </a>
+            
+                <a href="https://y.qq.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/y.qq.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">QQ音乐</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.kugou.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/kugou.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">酷狗音乐</span>
+                    </div>
+                </a>
+            
+                <a href="https://music.apple.com/cn/new" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/music.apple.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Apple Music</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="网购">
+                <h2 class="category-title">网购</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://www.taobao.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/taobao.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">淘宝</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.jd.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/jd.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">京东</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.amazon.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/amazon.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">亚马逊</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.suning.com" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/suning.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">苏宁易购</span>
+                    </div>
+                </a>
+            
+                <a href="http://jumei.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/jumei.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">聚美优品</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="安全与渗透">
+                <h2 class="category-title">安全与渗透</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://www.shentoushi.top/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shentoushi.top" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">渗透导航</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.secrss.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/secrss.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">安全内参</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.freebuf.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/freebuf.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Freebuf</span>
+                    </div>
+                </a>
+            
+                <a href="https://bbs.kanxue.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/bbs.kanxue.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">看雪论坛</span>
+                    </div>
+                </a>
+            
+                <a href="https://x.threatbook.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/x.threatbook.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">微步安全</span>
+                    </div>
+                </a>
+            
+                <a href="https://threathunter.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/threathunter.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">威胁猎人</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="政务服务">
+                <h2 class="category-title">政务服务</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://gjzwfw.www.gov.cn/index.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/gjzwfw.gov.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">国家政务服务平台</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399869" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">教育部</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399870" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">学信网</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399871" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">软考报名</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399872" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">海事一网通办</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399873" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">自然人税务申报</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="直播与短视频">
+                <h2 class="category-title">直播与短视频</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="http://www.bilibili.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/bilibili.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">哔哩哔哩</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.douyin.com" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/douyin.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">抖音</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.douyu.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/douyu.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">斗鱼</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399794" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">快手</span>
+                    </div>
+                </a>
+            
+                <a href="http://www.huya.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/huya.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">虎牙</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399796" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">直播吧</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="App数据与IPA">
+                <h2 class="category-title">App数据与IPA</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399876" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">iPhone参数</span>
+                    </div>
+                </a>
+            
+                <a href="https://app.diandian.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/app.diandian.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">点点app数据</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.qimai.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/qimai.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">七麦app数据</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.yfchuhai.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/yfchuhai.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">扬帆出海</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.nppa.gov.cn/bsfw/jggs/yxspjg/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/nppa.gov.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">版号查询</span>
+                    </div>
+                </a>
+            
+                <a href="https://ipadump.com/#/home" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/ipadump.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">IPA下载</span>
+                    </div>
+                </a>
+            
+                <a href="https://apps.apple.com/us/app/notion-notes-tasks-ai/id1232780281" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/apps.apple.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Notion - App Store</span>
+                    </div>
+                </a>
+            
+                <a href="https://betahub.cn/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/betahub.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">尝鲜派</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="社区与问答">
+                <h2 class="category-title">社区与问答</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://www.zhihu.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/zhihu.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">知乎</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.xiaohongshu.com" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/xiaohongshu.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">小红书</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.douban.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/douban.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">豆瓣</span>
+                    </div>
+                </a>
+            
+                <a href="https://tieba.baidu.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/tieba.baidu.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">贴吧</span>
+                    </div>
+                </a>
+            
+                <a href="http://www.jianshu.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/jianshu.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">简书</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399817" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">V2EX</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399819" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Quora</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399820" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">StackOverflow</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399821" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">SegmentFault</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="参考手册与文档">
+                <h2 class="category-title">参考手册与文档</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399827" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">HTML参考手册</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399828" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">CSS参考手册</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399829" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">JavaScript参考手册</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399830" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">jQuery API中文文档</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399831" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Java SE文档</span>
+                    </div>
+                </a>
+            
+                <a href="https://docs.pythonlang.cn/3.12/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/docs.pythonlang.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Python3.12文档</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="开发与云平台">
+                <h2 class="category-title">开发与云平台</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399807" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">阿里云</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399808" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">腾讯云</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399809" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">七牛云</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399810" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">UCloud</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399811" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">西部数码</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="前端与UI">
+                <h2 class="category-title">前端与UI</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399832" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">jQuery</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399833" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Bootstrap</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399834" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">AngularJS</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399835" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">jQuery插件库</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399836" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Iconfont</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="技术社区">
+                <h2 class="category-title">技术社区</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399822" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">IBM中国</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399823" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">开源中国</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399824" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">CSDN</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399825" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">51CTO</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399826" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">InfoQ</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="开放平台">
+                <h2 class="category-title">开放平台</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399842" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">微信开放平台</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399843" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">百度开发者中心</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399844" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">蚂蚁金服开放平台</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399845" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">新浪微博开放平台</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1399846" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Apple Developer</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="彩票与娱乐">
+                <h2 class="category-title">彩票与娱乐</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://www.lottery.gov.cn/dlt/index.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/lottery.gov.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">超级大乐透</span>
+                    </div>
+                </a>
+            
+                <a href="https://zx.500.com/zc/?zkid=157" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/zx.500.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">14场胜平负</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.17500.cn/tool/pl5-ylzx.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/17500.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">P5和值</span>
+                    </div>
+                </a>
+            
+                <a href="https://m.17500.cn/zq/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/m.17500.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">足球竞彩</span>
+                    </div>
+                </a>
+            
+                <a href="https://caipiao.ip138.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/caipiao.ip138.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">IP138彩票</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1400156" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">彩票</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="生活服务">
+                <h2 class="category-title">生活服务</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://passport.meituan.com/account/unitivelogin" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/passport.meituan.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">美团</span>
+                    </div>
+                </a>
+            
+                <a href="https://h5.ele.me/login/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/h5.ele.me" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">饿了么</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+            <div class="category-section" id="壁纸">
+                <h2 class="category-title">壁纸</h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://www.applewalls.com/zh/macos-wallpapers" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/applewalls.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">macOS Wallpapers</span>
+                    </div>
+                </a>
+            
+                <a href="https://phwalls.com/zh" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/phwalls.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">Phone Wallpaper</span>
+                    </div>
+                </a>
+            
+                </div>
+            </div>
+        
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 我的导航页 · 个性化网址导航</p>
+    </div>
+
+    <div class="back-to-top" id="backToTop">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </div>
+
+    <script>
+        // 搜索功能
+        const searchInput = document.getElementById('searchInput');
+        const categories = document.querySelectorAll('.category-section');
+        
+        function searchBookmarks() {
+            const keyword = searchInput.value.toLowerCase().trim();
+            let totalMatches = 0;
+            
+            categories.forEach(category => {
+                const bookmarks = category.querySelectorAll('.bookmark-link');
+                let categoryMatches = 0;
+                
+                bookmarks.forEach(bookmark => {
+                    const title = bookmark.querySelector('.bookmark-title').textContent.toLowerCase();
+                    if (keyword === '' || title.includes(keyword)) {
+                        bookmark.classList.remove('hidden');
+                        categoryMatches++;
+                    } else {
+                        bookmark.classList.add('hidden');
+                    }
+                });
+                
+                totalMatches += categoryMatches;
+                
+                // 如果分类下有匹配结果则显示分类，否则隐藏
+                if (keyword === '' || categoryMatches > 0) {
+                    category.style.display = 'block';
+                } else {
+                    category.style.display = 'none';
+                }
+            });
+            
+            // 显示无结果提示
+            let noResultsDiv = document.getElementById('noResults');
+            if (totalMatches === 0 && keyword !== '') {
+                if (!noResultsDiv) {
+                    noResultsDiv = document.createElement('div');
+                    noResultsDiv.id = 'noResults';
+                    noResultsDiv.className = 'no-results';
+                    noResultsDiv.innerHTML = '<p>🔍 没有找到相关书签</p><p style="font-size: 14px;">试试其他关键词</p>';
+                    document.getElementById('bookmarksContainer').appendChild(noResultsDiv);
+                }
+            } else if (noResultsDiv) {
+                noResultsDiv.remove();
+            }
+        }
+        
+        searchInput.addEventListener('input', searchBookmarks);
+        
+        // 快捷键 Ctrl+K / Cmd+K 聚焦搜索框
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            // ESC 清空搜索
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                searchBookmarks();
+                searchInput.blur();
+            }
+        });
+        
+        // 返回顶部按钮
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+        
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 平滑滚动到分类
+        document.querySelectorAll('.nav-item').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    const navBarHeight = document.querySelector('.nav-bar').offsetHeight;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - navBarHeight - 20;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 懒加载favicon（可选）
+        const observerOptions = {
+            rootMargin: '50px'
+        };
+        
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src || img.src;
+                    imageObserver.unobserve(img);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.bookmark-favicon').forEach(img => {
+            imageObserver.observe(img);
+        });
+    </script>
+</body>
+</html>
