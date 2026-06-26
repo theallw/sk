@@ -13,146 +13,383 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --sidebar-width: 260px;
+            --header-height: 60px;
+            --radius: 14px;
+            --bg-primary: #f5f5f7;
+            --bg-secondary: #ffffff;
+            --bg-sidebar: #f8f8fa;
+            --text-primary: #1d1c1f;
+            --text-secondary: #6e6e73;
+            --text-muted: #8e8e93;
+            --border-color: #e5e5ea;
+            --accent-color: #007aff;
+            --accent-hover: #0066d9;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", 
-                         "SF Pro Text", "SF Pro Display", "PingFang SC", "Microsoft YaHei", 
-                         sans-serif;
-            background-color: #f5f5f7;
-            color: #1d1c1f;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", 
+                         "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            min-height: 100vh;
         }
 
-        /* 容器 */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            padding: 20px 0 30px;
+            overflow-y: auto;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* 头部 - 苹果风格 */
-        .header {
-            text-align: center;
-            padding: 80px 20px 60px;
-            background: linear-gradient(135deg, #f5f5f7 0%, #ffffff 100%);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+        .sidebar-header {
+            padding: 0 20px 16px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
         }
 
-        .header h1 {
-            font-size: 48px;
-            font-weight: 600;
-            letter-spacing: -0.02em;
+        .sidebar-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
             background: linear-gradient(135deg, #1d1c1f 0%, #3a3a3e 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 12px;
         }
 
-        .header p {
-            font-size: 18px;
-            color: #86868b;
+        .sidebar-header p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
             font-weight: 400;
         }
 
-        /* 导航栏 - 毛玻璃效果 */
-        .nav-bar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.72);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-            padding: 12px 0;
+        .sidebar-search {
+            padding: 12px 16px;
+            flex-shrink: 0;
         }
 
-        .nav-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .nav-item {
-            padding: 8px 20px;
+        .sidebar-search input {
+            width: 100%;
+            padding: 10px 14px;
             font-size: 14px;
-            font-weight: 500;
-            color: #1d1c1f;
-            text-decoration: none;
-            border-radius: 30px;
+            font-family: inherit;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
             transition: all 0.2s ease;
-            background: rgba(0,0,0,0.02);
+            outline: none;
+            color: var(--text-primary);
         }
 
-        .nav-item:hover {
-            background: rgba(0,0,0,0.08);
-            color: #007aff;
+        .sidebar-search input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.08);
         }
 
-        /* 主内容 */
-        .main {
-            padding: 40px 0 60px;
+        .sidebar-search input::placeholder {
+            color: var(--text-muted);
         }
 
-        /* 分类区域 */
-        .category-section {
-            margin-bottom: 48px;
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 12px;
         }
 
-        .category-title {
-            font-size: 28px;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-            color: #1d1c1f;
-            margin-bottom: 20px;
-            padding-left: 4px;
+        /* ===== 侧边栏项目 - 带彩色圆点 ===== */
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.15s ease;
+            cursor: pointer;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 450;
             position: relative;
         }
 
-        .category-title::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -8px;
-            width: 40px;
-            height: 3px;
-            background: #007aff;
-            border-radius: 2px;
+        .sidebar-item:hover {
+            background: rgba(0, 0, 0, 0.04);
         }
 
-        /* 书签网格 - 苹果风格卡片 */
+        .sidebar-item.active {
+            background: rgba(0, 122, 255, 0.08);
+            color: var(--accent-color);
+        }
+
+        /* 彩色圆点样式 - 类似 GitHub */
+        .sidebar-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-item:hover .sidebar-dot {
+            transform: scale(1.15);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar-item.active .sidebar-dot {
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+        }
+
+        .sidebar-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .sidebar-badge {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.05);
+            padding: 2px 10px;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-item.active .sidebar-badge {
+            background: rgba(0, 122, 255, 0.12);
+            color: var(--accent-color);
+        }
+
+        .sidebar-footer {
+            padding: 12px 12px 8px;
+            border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        /* ===== 主内容区域 ===== */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 30px 40px 60px;
+            min-height: 100vh;
+        }
+
+        .content-header {
+            padding: 8px 0 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 32px;
+        }
+
+        .content-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--text-primary);
+        }
+
+        .content-header p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* ===== 搜索引擎区域 ===== */
+        .search-engines-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .search-engines-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-right: 4px;
+        }
+
+        .search-engine-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-family: inherit;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            gap: 6px;
+        }
+
+        .search-engine-btn:hover {
+            background: rgba(0, 122, 255, 0.06);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-1px);
+        }
+
+        .search-engine-btn.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+
+        .search-engine-btn .search-engine-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            vertical-align: middle;
+            object-fit: cover;
+        }
+
+        .search-engine-btn .search-engine-name {
+            margin-left: 2px;
+        }
+
+        /* ===== 搜索框 ===== */
+        .main-search-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .main-search-wrapper .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 18px;
+            font-size: 15px;
+            font-family: inherit;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            transition: all 0.2s ease;
+            outline: none;
+            color: var(--text-primary);
+        }
+
+        .main-search-wrapper .search-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.08);
+        }
+
+        .main-search-wrapper .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-shortcut {
+            font-size: 12px;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.04);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        /* ===== 内容分类 - 修改后的样式 ===== */
+        .content-section {
+            margin-bottom: 40px;
+            scroll-margin-top: 20px;
+        }
+
+        .content-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .section-title:hover::after {
+            width: 100px;
+        }
+
+        .section-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ===== 书签网格 ===== */
         .bookmarks-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 10px;
         }
 
         .bookmark-link {
             text-decoration: none;
+            display: block;
         }
 
         .bookmark-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 14px 18px;
-            background: #ffffff;
-            border-radius: 14px;
-            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            border: 1px solid #e9e9ef;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1);
+            border: 1px solid var(--border-color);
             cursor: pointer;
         }
 
         .bookmark-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
             border-color: transparent;
-            background: #ffffff;
         }
 
         .bookmark-favicon {
@@ -163,10 +400,10 @@
         }
 
         .bookmark-title {
-            font-size: 15px;
-            font-weight: 500;
-            color: #1d1c1f;
-            line-height: 1.4;
+            font-size: 14px;
+            font-weight: 450;
+            color: var(--text-primary);
+            line-height: 1.3;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -174,26 +411,36 @@
         }
 
         .bookmark-item:hover .bookmark-title {
-            color: #007aff;
+            color: var(--accent-color);
         }
 
-        /* 页脚 */
-        .footer {
+        .bookmark-link.hidden {
+            display: none;
+        }
+
+        .content-section.hidden {
+            display: none;
+        }
+
+        .no-results {
             text-align: center;
-            padding: 40px 20px;
-            border-top: 1px solid #e9e9ef;
-            color: #86868b;
-            font-size: 13px;
+            padding: 60px 20px;
+            color: var(--text-muted);
         }
 
-        /* 返回顶部按钮 - 苹果风格 */
+        .no-results p:first-child {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        /* ===== 返回顶部 ===== */
         .back-to-top {
             position: fixed;
             bottom: 24px;
             right: 24px;
             width: 44px;
             height: 44px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 50%;
@@ -203,8 +450,8 @@
             text-decoration: none;
             opacity: 0;
             transition: opacity 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(0,0,0,0.04);
             cursor: pointer;
             z-index: 99;
         }
@@ -215,105 +462,39 @@
 
         .back-to-top:hover {
             transform: scale(1.05);
-            background: rgba(255, 255, 255, 1);
         }
 
         .back-to-top svg {
             width: 20px;
             height: 20px;
-            stroke: #1d1c1f;
+            stroke: var(--text-primary);
             stroke-width: 2;
         }
 
-        /* 搜索框 */
-        .search-wrapper {
-            max-width: 400px;
-            margin: 0 auto 32px;
+        /* ===== 滚动条 ===== */
+        .sidebar::-webkit-scrollbar,
+        .sidebar-nav::-webkit-scrollbar {
+            width: 4px;
         }
 
-        .search-input {
-            width: 100%;
-            padding: 14px 20px;
-            font-size: 16px;
-            font-family: inherit;
-            border: 1px solid #e9e9ef;
-            border-radius: 12px;
-            background: #ffffff;
-            transition: all 0.2s ease;
-            outline: none;
+        .sidebar::-webkit-scrollbar-track,
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: transparent;
         }
 
-        .search-input:focus {
-            border-color: #007aff;
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+        .sidebar::-webkit-scrollbar-thumb,
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
         }
 
-        .search-input::placeholder {
-            color: #c6c6c8;
-        }
-
-        /* 搜索结果高亮 */
-        .bookmark-link.hidden {
-            display: none;
-        }
-
-        /* 空状态 */
-        .no-results {
-            text-align: center;
-            padding: 60px 20px;
-            color: #86868b;
-        }
-
-        /* 响应式 */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 16px;
-            }
-            
-            .header {
-                padding: 60px 16px 40px;
-            }
-            
-            .header h1 {
-                font-size: 32px;
-            }
-            
-            .header p {
-                font-size: 16px;
-            }
-            
-            .category-title {
-                font-size: 24px;
-            }
-            
-            .bookmarks-grid {
-                gap: 10px;
-            }
-            
-            .bookmark-item {
-                padding: 12px 16px;
-            }
-            
-            .nav-item {
-                padding: 6px 14px;
-                font-size: 13px;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .bookmarks-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* 滚动条 */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         
         ::-webkit-scrollbar-track {
-            background: #f5f5f7;
+            background: var(--bg-primary);
         }
         
         ::-webkit-scrollbar-thumb {
@@ -324,46 +505,376 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #86868b;
         }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 1024px) {
+            :root {
+                --sidebar-width: 220px;
+            }
+            .main-content {
+                padding: 20px 24px 40px;
+            }
+        }
+
+        @media (max-width: 820px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+                width: 280px;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 16px 20px 40px;
+            }
+            .menu-toggle {
+                display: flex !important;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .bookmarks-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .main-search-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-shortcut {
+                align-self: flex-end;
+            }
+            .search-engines-wrapper {
+                gap: 6px;
+            }
+            .search-engine-btn {
+                padding: 4px 10px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .bookmarks-grid {
+                grid-template-columns: 1fr;
+            }
+            .main-content {
+                padding: 12px 14px 30px;
+            }
+            .search-engines-wrapper {
+                justify-content: center;
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            z-index: 200;
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .menu-toggle:hover {
+            background: rgba(255,255,255,1);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.2);
+            z-index: 99;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        @media (max-width: 820px) {
+            .sidebar-overlay.show {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>📖 我的导航页</h1>
-        <p>188 个精选网站 · 快速访问</p>
-    </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="切换侧边栏">☰</button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <div class="nav-bar">
-        <div class="nav-links">
-            <a href="#常用网站" class="nav-item">常用网站</a>
-<a href="#SEO与工具" class="nav-item">SEO与工具</a>
-<a href="#下载-Root-Tool" class="nav-item">下载-Root-Tool</a>
-<a href="#浏览器与插件" class="nav-item">浏览器与插件</a>
-<a href="#游戏（云顶/LOL）" class="nav-item">游戏（云顶/LOL）</a>
-<a href="#Windows与系统设置" class="nav-item">Windows与系统设置</a>
-<a href="#学习资源" class="nav-item">学习资源</a>
-<a href="#开发与代码" class="nav-item">开发与代码</a>
-<a href="#GitHub与镜像" class="nav-item">GitHub与镜像</a>
-<a href="#PCB与硬件" class="nav-item">PCB与硬件</a>
-<a href="#Android与Root" class="nav-item">Android与Root</a>
-<a href="#邮箱与临时邮箱" class="nav-item">邮箱与临时邮箱</a>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h1>📖 我的导航页</h1>
+            <p>189 个网站</p>
         </div>
-    </div>
 
-    <div class="container main">
-        <div class="search-wrapper">
-            <input type="text" class="search-input" id="searchInput" placeholder="搜索书签... ⌘K" autocomplete="off">
+        <div class="sidebar-search">
+            <input type="text" id="sidebarSearch" placeholder="搜索分类..." autocomplete="off">
+        </div>
+
+        <nav class="sidebar-nav">
+            
+            <a href="#常用网站" class="sidebar-item" data-target="常用网站">
+                <span class="sidebar-dot" style="background-color: #ff6b6b;"></span>
+                <span class="sidebar-name">常用网站</span>
+                <span class="sidebar-badge">7</span>
+            </a>
+        
+            <a href="#SEO与工具" class="sidebar-item" data-target="SEO与工具">
+                <span class="sidebar-dot" style="background-color: #3f51b5;"></span>
+                <span class="sidebar-name">SEO与工具</span>
+                <span class="sidebar-badge">9</span>
+            </a>
+        
+            <a href="#下载-Root-Tool" class="sidebar-item" data-target="下载-Root-Tool">
+                <span class="sidebar-dot" style="background-color: #ff9500;"></span>
+                <span class="sidebar-name">下载-Root-Tool</span>
+                <span class="sidebar-badge">10</span>
+            </a>
+        
+            <a href="#浏览器与插件" class="sidebar-item" data-target="浏览器与插件">
+                <span class="sidebar-dot" style="background-color: #9c27b0;"></span>
+                <span class="sidebar-name">浏览器与插件</span>
+                <span class="sidebar-badge">3</span>
+            </a>
+        
+            <a href="#游戏（云顶/LOL）" class="sidebar-item" data-target="游戏（云顶/LOL）">
+                <span class="sidebar-dot" style="background-color: #007aff;"></span>
+                <span class="sidebar-name">游戏（云顶/LOL）</span>
+                <span class="sidebar-badge">10</span>
+            </a>
+        
+            <a href="#Windows与系统设置" class="sidebar-item" data-target="Windows与系统设置">
+                <span class="sidebar-dot" style="background-color: #e91e63;"></span>
+                <span class="sidebar-name">Windows与系统设置</span>
+                <span class="sidebar-badge">2</span>
+            </a>
+        
+            <a href="#学习资源" class="sidebar-item" data-target="学习资源">
+                <span class="sidebar-dot" style="background-color: #3f51b5;"></span>
+                <span class="sidebar-name">学习资源</span>
+                <span class="sidebar-badge">22</span>
+            </a>
+        
+            <a href="#开发与代码" class="sidebar-item" data-target="开发与代码">
+                <span class="sidebar-dot" style="background-color: #5856d6;"></span>
+                <span class="sidebar-name">开发与代码</span>
+                <span class="sidebar-badge">11</span>
+            </a>
+        
+            <a href="#彩票与娱乐" class="sidebar-item" data-target="彩票与娱乐">
+                <span class="sidebar-dot" style="background-color: #00c7be;"></span>
+                <span class="sidebar-name">彩票与娱乐</span>
+                <span class="sidebar-badge">6</span>
+            </a>
+        
+            <a href="#GitHub与镜像" class="sidebar-item" data-target="GitHub与镜像">
+                <span class="sidebar-dot" style="background-color: #607d8b;"></span>
+                <span class="sidebar-name">GitHub与镜像</span>
+                <span class="sidebar-badge">5</span>
+            </a>
+        
+            <a href="#PCB与硬件" class="sidebar-item" data-target="PCB与硬件">
+                <span class="sidebar-dot" style="background-color: #f7c948;"></span>
+                <span class="sidebar-name">PCB与硬件</span>
+                <span class="sidebar-badge">2</span>
+            </a>
+        
+            <a href="#Android与Root" class="sidebar-item" data-target="Android与Root">
+                <span class="sidebar-dot" style="background-color: #34c759;"></span>
+                <span class="sidebar-name">Android与Root</span>
+                <span class="sidebar-badge">12</span>
+            </a>
+        
+            <a href="#邮箱与临时邮箱" class="sidebar-item" data-target="邮箱与临时邮箱">
+                <span class="sidebar-dot" style="background-color: #9c27b0;"></span>
+                <span class="sidebar-name">邮箱与临时邮箱</span>
+                <span class="sidebar-badge">6</span>
+            </a>
+        
+            <a href="#新闻与资讯" class="sidebar-item" data-target="新闻与资讯">
+                <span class="sidebar-dot" style="background-color: #795548;"></span>
+                <span class="sidebar-name">新闻与资讯</span>
+                <span class="sidebar-badge">7</span>
+            </a>
+        
+            <a href="#音乐" class="sidebar-item" data-target="音乐">
+                <span class="sidebar-dot" style="background-color: #009688;"></span>
+                <span class="sidebar-name">音乐</span>
+                <span class="sidebar-badge">6</span>
+            </a>
+        
+            <a href="#网购" class="sidebar-item" data-target="网购">
+                <span class="sidebar-dot" style="background-color: #4caf50;"></span>
+                <span class="sidebar-name">网购</span>
+                <span class="sidebar-badge">5</span>
+            </a>
+        
+            <a href="#安全与渗透" class="sidebar-item" data-target="安全与渗透">
+                <span class="sidebar-dot" style="background-color: #5856d6;"></span>
+                <span class="sidebar-name">安全与渗透</span>
+                <span class="sidebar-badge">6</span>
+            </a>
+        
+            <a href="#政务服务" class="sidebar-item" data-target="政务服务">
+                <span class="sidebar-dot" style="background-color: #ff3b30;"></span>
+                <span class="sidebar-name">政务服务</span>
+                <span class="sidebar-badge">6</span>
+            </a>
+        
+            <a href="#直播与短视频" class="sidebar-item" data-target="直播与短视频">
+                <span class="sidebar-dot" style="background-color: #ff3b30;"></span>
+                <span class="sidebar-name">直播与短视频</span>
+                <span class="sidebar-badge">6</span>
+            </a>
+        
+            <a href="#App数据与IPA" class="sidebar-item" data-target="App数据与IPA">
+                <span class="sidebar-dot" style="background-color: #34c759;"></span>
+                <span class="sidebar-name">App数据与IPA</span>
+                <span class="sidebar-badge">9</span>
+            </a>
+        
+            <a href="#社区与问答" class="sidebar-item" data-target="社区与问答">
+                <span class="sidebar-dot" style="background-color: #e91e63;"></span>
+                <span class="sidebar-name">社区与问答</span>
+                <span class="sidebar-badge">9</span>
+            </a>
+        
+            <a href="#参考手册与文档" class="sidebar-item" data-target="参考手册与文档">
+                <span class="sidebar-dot" style="background-color: #5ac8fa;"></span>
+                <span class="sidebar-name">参考手册与文档</span>
+                <span class="sidebar-badge">6</span>
+            </a>
+        
+            <a href="#开发与云平台" class="sidebar-item" data-target="开发与云平台">
+                <span class="sidebar-dot" style="background-color: #795548;"></span>
+                <span class="sidebar-name">开发与云平台</span>
+                <span class="sidebar-badge">5</span>
+            </a>
+        
+            <a href="#前端与UI" class="sidebar-item" data-target="前端与UI">
+                <span class="sidebar-dot" style="background-color: #795548;"></span>
+                <span class="sidebar-name">前端与UI</span>
+                <span class="sidebar-badge">5</span>
+            </a>
+        
+            <a href="#技术社区" class="sidebar-item" data-target="技术社区">
+                <span class="sidebar-dot" style="background-color: #9c27b0;"></span>
+                <span class="sidebar-name">技术社区</span>
+                <span class="sidebar-badge">5</span>
+            </a>
+        
+            <a href="#开放平台" class="sidebar-item" data-target="开放平台">
+                <span class="sidebar-dot" style="background-color: #00c7be;"></span>
+                <span class="sidebar-name">开放平台</span>
+                <span class="sidebar-badge">5</span>
+            </a>
+        
+            <a href="#生活服务" class="sidebar-item" data-target="生活服务">
+                <span class="sidebar-dot" style="background-color: #ff2d55;"></span>
+                <span class="sidebar-name">生活服务</span>
+                <span class="sidebar-badge">2</span>
+            </a>
+        
+            <a href="#壁纸" class="sidebar-item" data-target="壁纸">
+                <span class="sidebar-dot" style="background-color: #ff6f00;"></span>
+                <span class="sidebar-name">壁纸</span>
+                <span class="sidebar-badge">2</span>
+            </a>
+        
+        </nav>
+
+        <div class="sidebar-footer">
+        </div>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+        <div class="search-engines-wrapper">
+            <span class="search-engines-label">🔎 搜索：</span>
+            
+            <button class="search-engine-btn" data-engine="https://cn.bing.com/search?q=" title="Bing">
+                <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/13/f6/f2/13f6f204-d41c-e87e-9f2d-6763eed5c453/AppIcon-0-1x_U007epad-0-1-0-0-85-220-0.png/48x48ia-75.webp" alt="Bing" class="search-engine-icon">
+                <span class="search-engine-name">Bing</span>
+            </button>
+        
+            <button class="search-engine-btn" data-engine="https://www.google.com/search?q=" title="Google">
+                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/1f/cb/2a/1fcb2aab-332d-b5ed-bdec-11843b22480c/Placeholder.mill/48x48bb-75.webp" alt="Google" class="search-engine-icon">
+                <span class="search-engine-name">Google</span>
+            </button>
+        
+            <button class="search-engine-btn" data-engine="https://kaifa.baidu.com/searchPage?wd=" title="Baidu">
+                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/e3/04/c0/e304c0f9-4b3f-aee6-ffb8-e2ae744aa68d/Placeholder.mill/48x48bb-75.webp" alt="Baidu" class="search-engine-icon">
+                <span class="search-engine-name">Baidu</span>
+            </button>
+        
+            <button class="search-engine-btn" data-engine="https://search.bilibili.com/all?keyword=" title="Bilibili">
+                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/45/4a/a4/454aa417-3492-b28f-a23d-3600a8683ce7/Placeholder.mill/48x48bb-75.webp" alt="Bilibili" class="search-engine-icon">
+                <span class="search-engine-name">Bilibili</span>
+            </button>
+        
+            <button class="search-engine-btn" data-engine="https://www.so.com/s?q=" title="360">
+                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/5c/a7/65/5ca76510-f08f-cc65-d48e-142514798cf8/Placeholder.mill/48x48bb-75.webp" alt="360" class="search-engine-icon">
+                <span class="search-engine-name">360</span>
+            </button>
+        
+            <button class="search-engine-btn" data-engine="https://www.sogou.com/web?query=" title="搜狗">
+                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/00/c4/55/00c45594-e917-7a3c-bab9-9b5760fcd3d4/Placeholder.mill/48x48bb-75.webp" alt="搜狗" class="search-engine-icon">
+                <span class="search-engine-name">搜狗</span>
+            </button>
+        
+            <button class="search-engine-btn" data-engine="https://m.sm.cn/s?q=" title="神马">
+                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/c3/02/27/c3022784-4735-ade3-9aa1-48da3038687a/Placeholder.mill/48x48bb-75.webp" alt="神马" class="search-engine-icon">
+                <span class="search-engine-name">神马</span>
+            </button>
+        
+            <button class="search-engine-btn" data-engine="https://github.com/search?q=" title="Github">
+                <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e5/24/6e/e5246ef1-4139-5811-732c-96b935c52715/AppIcon-0-0-1x_U007emarketing-0-9-0-0-sRGB-85-220.png/48x48ia-75.webp" alt="Github" class="search-engine-icon">
+                <span class="search-engine-name">Github</span>
+            </button>
+        
+            <button class="search-engine-btn" data-engine="https://www.secrss.com/search?keywords=" title="安全内参">
+                <img src="data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;24&#x27; height=&#x27;24&#x27; viewBox=&#x27;0 0 24 24&#x27; fill=&#x27;none&#x27; stroke=&#x27;%23999&#x27; stroke-width=&#x27;2&#x27;%3E%3Crect x=&#x27;3&#x27; y=&#x27;3&#x27; width=&#x27;18&#x27; height=&#x27;18&#x27; rx=&#x27;4&#x27;/%3E%3Ctext x=&#x27;12&#x27; y=&#x27;16&#x27; text-anchor=&#x27;middle&#x27; font-size=&#x27;12&#x27; fill=&#x27;%23999&#x27;%3E安%3C/text%3E%3C/svg%3E" alt="安全内参" class="search-engine-icon">
+                <span class="search-engine-name">安全内参</span>
+            </button>
+        
+        </div>
+
+        <div class="main-search-wrapper">
+            <input type="text" class="search-input" id="searchInput" placeholder="搜索书签..." autocomplete="off">
+            <span class="search-shortcut">⌘K</span>
         </div>
 
         <div id="bookmarksContainer">
             
-            <div class="category-section" id="常用网站">
-                <h2 class="category-title">常用网站</h2>
+            <section class="content-section" id="常用网站">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #ff6b6b;"></span>
+                    常用网站
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="http://www.bilibili.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
                     <div class="bookmark-item">
                         <img class="bookmark-favicon" src="https://favicon.im/bilibili.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
                         <span class="bookmark-title">哔哩哔哩</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/keep" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">shouku-keep</span>
                     </div>
                 </a>
             
@@ -378,20 +889,6 @@
                     <div class="bookmark-item">
                         <img class="bookmark-favicon" src="https://favicon.im/jyshare.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
                         <span class="bookmark-title">菜鸟工具-search</span>
-                    </div>
-                </a>
-            
-                <a href="https://movie.douban.com/explore" class="bookmark-link" target="_blank" rel="noopener noreferrer">
-                    <div class="bookmark-item">
-                        <img class="bookmark-favicon" src="https://favicon.im/movie.douban.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
-                        <span class="bookmark-title">豆瓣电影</span>
-                    </div>
-                </a>
-            
-                <a href="https://sealos.run/?s=首页" class="bookmark-link" target="_blank" rel="noopener noreferrer">
-                    <div class="bookmark-item">
-                        <img class="bookmark-favicon" src="https://favicon.im/sealos.run" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
-                        <span class="bookmark-title">sealos开发系统</span>
                     </div>
                 </a>
             
@@ -417,10 +914,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="SEO与工具">
-                <h2 class="category-title">SEO与工具</h2>
+            <section class="content-section" id="SEO与工具">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #3f51b5;"></span>
+                    SEO与工具
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://www.jyshare.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -487,10 +987,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="下载-Root-Tool">
-                <h2 class="category-title">下载-Root-Tool</h2>
+            <section class="content-section" id="下载-Root-Tool">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #ff9500;"></span>
+                    下载-Root-Tool
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://reqable.com/zh-CN/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -564,10 +1067,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="浏览器与插件">
-                <h2 class="category-title">浏览器与插件</h2>
+            <section class="content-section" id="浏览器与插件">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #9c27b0;"></span>
+                    浏览器与插件
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://www.crxsoso.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -592,10 +1098,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="游戏（云顶/LOL）">
-                <h2 class="category-title">游戏（云顶/LOL）</h2>
+            <section class="content-section" id="游戏（云顶/LOL）">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #007aff;"></span>
+                    游戏（云顶/LOL）
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://www.datatft.com/explorer" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -654,13 +1163,6 @@
                     </div>
                 </a>
             
-                <a href="https://lol.dzzdz.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
-                    <div class="bookmark-item">
-                        <img class="bookmark-favicon" src="https://favicon.im/lol.dzzdz.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
-                        <span class="bookmark-title">海克斯大乱斗</span>
-                    </div>
-                </a>
-            
                 <a href="https://shouku123.com/pub/gotoUrl.do?id=1399878" class="bookmark-link" target="_blank" rel="noopener noreferrer">
                     <div class="bookmark-item">
                         <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
@@ -676,10 +1178,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="Windows与系统设置">
-                <h2 class="category-title">Windows与系统设置</h2>
+            <section class="content-section" id="Windows与系统设置">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #e91e63;"></span>
+                    Windows与系统设置
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="notepad X:\网络游戏\英雄联盟\Game\config\PersistedSettings.json" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -697,10 +1202,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="学习资源">
-                <h2 class="category-title">学习资源</h2>
+            <section class="content-section" id="学习资源">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #3f51b5;"></span>
+                    学习资源
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://book.sciencereading.cn/shop/main/Login/shopFrame.do" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -858,12 +1366,22 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="开发与代码">
-                <h2 class="category-title">开发与代码</h2>
+            <section class="content-section" id="开发与代码">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #5856d6;"></span>
+                    开发与代码
+                </h2>
                 <div class="bookmarks-grid">
                     
+                <a href="https://sealos.run/?s=首页" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/sealos.run" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">sealos开发系统</span>
+                    </div>
+                </a>
+            
                 <a href="https://soft.3dmgame.com/down/198331.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
                     <div class="bookmark-item">
                         <img class="bookmark-favicon" src="https://favicon.im/soft.3dmgame.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
@@ -935,10 +1453,65 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="GitHub与镜像">
-                <h2 class="category-title">GitHub与镜像</h2>
+            <section class="content-section" id="彩票与娱乐">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #00c7be;"></span>
+                    彩票与娱乐
+                </h2>
+                <div class="bookmarks-grid">
+                    
+                <a href="https://www.lottery.gov.cn/dlt/index.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/lottery.gov.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">超级大乐透</span>
+                    </div>
+                </a>
+            
+                <a href="https://zx.500.com/zc/?zkid=157" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/zx.500.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">14场胜平负</span>
+                    </div>
+                </a>
+            
+                <a href="https://www.17500.cn/tool/pl5-ylzx.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/17500.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">P5和值</span>
+                    </div>
+                </a>
+            
+                <a href="https://m.17500.cn/zq/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/m.17500.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">足球竞彩</span>
+                    </div>
+                </a>
+            
+                <a href="https://caipiao.ip138.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/caipiao.ip138.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">IP138彩票</span>
+                    </div>
+                </a>
+            
+                <a href="https://shouku123.com/pub/gotoUrl.do?id=1400156" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">彩票</span>
+                    </div>
+                </a>
+            
+                </div>
+            </section>
+        
+            <section class="content-section" id="GitHub与镜像">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #607d8b;"></span>
+                    GitHub与镜像
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://www.moretools.app/zh-CN/github-proxy" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -977,10 +1550,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="PCB与硬件">
-                <h2 class="category-title">PCB与硬件</h2>
+            <section class="content-section" id="PCB与硬件">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #f7c948;"></span>
+                    PCB与硬件
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://oshwhub.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -990,11 +1566,21 @@
                     </div>
                 </a>
             
+                <a href="https://oshwhub.com/yc_chen/wireless-wifi-to-wired-routing" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/oshwhub.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">无线WIFI转有线路由</span>
+                    </div>
+                </a>
+            
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="Android与Root">
-                <h2 class="category-title">Android与Root</h2>
+            <section class="content-section" id="Android与Root">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #34c759;"></span>
+                    Android与Root
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://mirrors.tuna.tsinghua.edu.cn/help/fdroid/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1082,10 +1668,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="邮箱与临时邮箱">
-                <h2 class="category-title">邮箱与临时邮箱</h2>
+            <section class="content-section" id="邮箱与临时邮箱">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #9c27b0;"></span>
+                    邮箱与临时邮箱
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://mail.qq.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1131,10 +1720,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="新闻与资讯">
-                <h2 class="category-title">新闻与资讯</h2>
+            <section class="content-section" id="新闻与资讯">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #795548;"></span>
+                    新闻与资讯
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="http://www.toutiao.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1187,10 +1779,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="音乐">
-                <h2 class="category-title">音乐</h2>
+            <section class="content-section" id="音乐">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #009688;"></span>
+                    音乐
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://www.gequbao.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1236,10 +1831,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="网购">
-                <h2 class="category-title">网购</h2>
+            <section class="content-section" id="网购">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #4caf50;"></span>
+                    网购
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://www.taobao.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1278,10 +1876,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="安全与渗透">
-                <h2 class="category-title">安全与渗透</h2>
+            <section class="content-section" id="安全与渗透">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #5856d6;"></span>
+                    安全与渗透
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://www.shentoushi.top/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1327,10 +1928,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="政务服务">
-                <h2 class="category-title">政务服务</h2>
+            <section class="content-section" id="政务服务">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #ff3b30;"></span>
+                    政务服务
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://gjzwfw.www.gov.cn/index.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1376,10 +1980,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="直播与短视频">
-                <h2 class="category-title">直播与短视频</h2>
+            <section class="content-section" id="直播与短视频">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #ff3b30;"></span>
+                    直播与短视频
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="http://www.bilibili.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1425,10 +2032,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="App数据与IPA">
-                <h2 class="category-title">App数据与IPA</h2>
+            <section class="content-section" id="App数据与IPA">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #34c759;"></span>
+                    App数据与IPA
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://shouku123.com/pub/gotoUrl.do?id=1399876" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1487,11 +2097,21 @@
                     </div>
                 </a>
             
+                <a href="https://apps.apple.com/us/app/vpn-faster-vpn/id1345301170" class="bookmark-link" target="_blank" rel="noopener noreferrer">
+                    <div class="bookmark-item">
+                        <img class="bookmark-favicon" src="https://favicon.im/apps.apple.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
+                        <span class="bookmark-title">jisu--vpn</span>
+                    </div>
+                </a>
+            
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="社区与问答">
-                <h2 class="category-title">社区与问答</h2>
+            <section class="content-section" id="社区与问答">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #e91e63;"></span>
+                    社区与问答
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://www.zhihu.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1558,10 +2178,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="参考手册与文档">
-                <h2 class="category-title">参考手册与文档</h2>
+            <section class="content-section" id="参考手册与文档">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #5ac8fa;"></span>
+                    参考手册与文档
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://shouku123.com/pub/gotoUrl.do?id=1399827" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1607,10 +2230,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="开发与云平台">
-                <h2 class="category-title">开发与云平台</h2>
+            <section class="content-section" id="开发与云平台">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #795548;"></span>
+                    开发与云平台
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://shouku123.com/pub/gotoUrl.do?id=1399807" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1649,10 +2275,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="前端与UI">
-                <h2 class="category-title">前端与UI</h2>
+            <section class="content-section" id="前端与UI">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #795548;"></span>
+                    前端与UI
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://shouku123.com/pub/gotoUrl.do?id=1399832" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1691,10 +2320,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="技术社区">
-                <h2 class="category-title">技术社区</h2>
+            <section class="content-section" id="技术社区">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #9c27b0;"></span>
+                    技术社区
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://shouku123.com/pub/gotoUrl.do?id=1399822" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1733,10 +2365,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="开放平台">
-                <h2 class="category-title">开放平台</h2>
+            <section class="content-section" id="开放平台">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #00c7be;"></span>
+                    开放平台
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://shouku123.com/pub/gotoUrl.do?id=1399842" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1775,59 +2410,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="彩票与娱乐">
-                <h2 class="category-title">彩票与娱乐</h2>
-                <div class="bookmarks-grid">
-                    
-                <a href="https://www.lottery.gov.cn/dlt/index.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
-                    <div class="bookmark-item">
-                        <img class="bookmark-favicon" src="https://favicon.im/lottery.gov.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
-                        <span class="bookmark-title">超级大乐透</span>
-                    </div>
-                </a>
-            
-                <a href="https://zx.500.com/zc/?zkid=157" class="bookmark-link" target="_blank" rel="noopener noreferrer">
-                    <div class="bookmark-item">
-                        <img class="bookmark-favicon" src="https://favicon.im/zx.500.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
-                        <span class="bookmark-title">14场胜平负</span>
-                    </div>
-                </a>
-            
-                <a href="https://www.17500.cn/tool/pl5-ylzx.html" class="bookmark-link" target="_blank" rel="noopener noreferrer">
-                    <div class="bookmark-item">
-                        <img class="bookmark-favicon" src="https://favicon.im/17500.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
-                        <span class="bookmark-title">P5和值</span>
-                    </div>
-                </a>
-            
-                <a href="https://m.17500.cn/zq/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
-                    <div class="bookmark-item">
-                        <img class="bookmark-favicon" src="https://favicon.im/m.17500.cn" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
-                        <span class="bookmark-title">足球竞彩</span>
-                    </div>
-                </a>
-            
-                <a href="https://caipiao.ip138.com/" class="bookmark-link" target="_blank" rel="noopener noreferrer">
-                    <div class="bookmark-item">
-                        <img class="bookmark-favicon" src="https://favicon.im/caipiao.ip138.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
-                        <span class="bookmark-title">IP138彩票</span>
-                    </div>
-                </a>
-            
-                <a href="https://shouku123.com/pub/gotoUrl.do?id=1400156" class="bookmark-link" target="_blank" rel="noopener noreferrer">
-                    <div class="bookmark-item">
-                        <img class="bookmark-favicon" src="https://favicon.im/shouku123.com" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'%3E%3C/path%3E%3Cpolyline points='22,6 12,13 2,6'%3E%3C/polyline%3E%3C/svg%3E'">
-                        <span class="bookmark-title">彩票</span>
-                    </div>
-                </a>
-            
-                </div>
-            </div>
-        
-            <div class="category-section" id="生活服务">
-                <h2 class="category-title">生活服务</h2>
+            <section class="content-section" id="生活服务">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #ff2d55;"></span>
+                    生活服务
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://passport.meituan.com/account/unitivelogin" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1845,10 +2434,13 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
-            <div class="category-section" id="壁纸">
-                <h2 class="category-title">壁纸</h2>
+            <section class="content-section" id="壁纸">
+                <h2 class="section-title">
+                    <span class="section-dot" style="background-color: #ff6f00;"></span>
+                    壁纸
+                </h2>
                 <div class="bookmarks-grid">
                     
                 <a href="https://www.applewalls.com/zh/macos-wallpapers" class="bookmark-link" target="_blank" rel="noopener noreferrer">
@@ -1866,14 +2458,10 @@
                 </a>
             
                 </div>
-            </div>
+            </section>
         
         </div>
-    </div>
-
-    <div class="footer">
-        <p>© 2026 我的导航页 · 个性化网址导航</p>
-    </div>
+    </main>
 
     <div class="back-to-top" id="backToTop">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1882,122 +2470,236 @@
     </div>
 
     <script>
-        // 搜索功能
-        const searchInput = document.getElementById('searchInput');
-        const categories = document.querySelectorAll('.category-section');
-        
-        function searchBookmarks() {
-            const keyword = searchInput.value.toLowerCase().trim();
-            let totalMatches = 0;
-            
-            categories.forEach(category => {
-                const bookmarks = category.querySelectorAll('.bookmark-link');
-                let categoryMatches = 0;
-                
-                bookmarks.forEach(bookmark => {
-                    const title = bookmark.querySelector('.bookmark-title').textContent.toLowerCase();
-                    if (keyword === '' || title.includes(keyword)) {
-                        bookmark.classList.remove('hidden');
-                        categoryMatches++;
-                    } else {
-                        bookmark.classList.add('hidden');
+        (function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const menuToggle = document.getElementById('menuToggle');
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('show');
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            }
+
+            if (menuToggle) {
+                menuToggle.addEventListener('click', toggleSidebar);
+            }
+            if (overlay) {
+                overlay.addEventListener('click', closeSidebar);
+            }
+
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    if (window.innerWidth <= 820) {
+                        closeSidebar();
                     }
                 });
-                
-                totalMatches += categoryMatches;
-                
-                // 如果分类下有匹配结果则显示分类，否则隐藏
-                if (keyword === '' || categoryMatches > 0) {
-                    category.style.display = 'block';
-                } else {
-                    category.style.display = 'none';
-                }
             });
-            
-            // 显示无结果提示
-            let noResultsDiv = document.getElementById('noResults');
-            if (totalMatches === 0 && keyword !== '') {
-                if (!noResultsDiv) {
-                    noResultsDiv = document.createElement('div');
-                    noResultsDiv.id = 'noResults';
-                    noResultsDiv.className = 'no-results';
-                    noResultsDiv.innerHTML = '<p>🔍 没有找到相关书签</p><p style="font-size: 14px;">试试其他关键词</p>';
-                    document.getElementById('bookmarksContainer').appendChild(noResultsDiv);
-                }
-            } else if (noResultsDiv) {
-                noResultsDiv.remove();
-            }
-        }
-        
-        searchInput.addEventListener('input', searchBookmarks);
-        
-        // 快捷键 Ctrl+K / Cmd+K 聚焦搜索框
-        document.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                searchInput.focus();
-            }
-            // ESC 清空搜索
-            if (e.key === 'Escape') {
-                searchInput.value = '';
-                searchBookmarks();
-                searchInput.blur();
-            }
-        });
-        
-        // 返回顶部按钮
-        const backToTop = document.getElementById('backToTop');
-        
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTop.classList.add('show');
-            } else {
-                backToTop.classList.remove('show');
-            }
-        });
-        
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-        
-        // 平滑滚动到分类
-        document.querySelectorAll('.nav-item').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    const navBarHeight = document.querySelector('.nav-bar').offsetHeight;
-                    const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - navBarHeight - 20;
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
+
+            const sidebarSearch = document.getElementById('sidebarSearch');
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+
+            if (sidebarSearch) {
+                sidebarSearch.addEventListener('input', function() {
+                    const keyword = this.value.toLowerCase().trim();
+                    sidebarItems.forEach(item => {
+                        const name = item.querySelector('.sidebar-name').textContent.toLowerCase();
+                        if (keyword === '' || name.includes(keyword)) {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = 'none';
+                        }
                     });
+                });
+            }
+
+            const searchInput = document.getElementById('searchInput');
+            const sections = document.querySelectorAll('.content-section');
+
+            function searchBookmarks() {
+                const keyword = searchInput.value.toLowerCase().trim();
+                let totalMatches = 0;
+
+                sections.forEach(section => {
+                    const bookmarks = section.querySelectorAll('.bookmark-link');
+                    let sectionMatches = 0;
+
+                    bookmarks.forEach(bookmark => {
+                        const title = bookmark.querySelector('.bookmark-title').textContent.toLowerCase();
+                        if (keyword === '' || title.includes(keyword)) {
+                            bookmark.classList.remove('hidden');
+                            sectionMatches++;
+                        } else {
+                            bookmark.classList.add('hidden');
+                        }
+                    });
+
+                    totalMatches += sectionMatches;
+
+                    if (keyword === '' || sectionMatches > 0) {
+                        section.classList.remove('hidden');
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+
+                let noResultsDiv = document.getElementById('noResults');
+                if (totalMatches === 0 && keyword !== '') {
+                    if (!noResultsDiv) {
+                        noResultsDiv = document.createElement('div');
+                        noResultsDiv.id = 'noResults';
+                        noResultsDiv.className = 'no-results';
+                        noResultsDiv.innerHTML = '<p>🔍 没有找到相关书签</p><p style="font-size: 14px; color: var(--text-muted);">试试其他关键词</p>';
+                        document.getElementById('bookmarksContainer').appendChild(noResultsDiv);
+                    }
+                } else if (noResultsDiv) {
+                    noResultsDiv.remove();
+                }
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', searchBookmarks);
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    if (searchInput) {
+                        searchInput.focus();
+                        searchInput.select();
+                    }
+                }
+                if (e.key === 'Escape') {
+                    if (searchInput) {
+                        searchInput.value = '';
+                        searchBookmarks();
+                        searchInput.blur();
+                    }
                 }
             });
-        });
-        
-        // 懒加载favicon（可选）
-        const observerOptions = {
-            rootMargin: '50px'
-        };
-        
-        const imageObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src || img.src;
-                    imageObserver.unobserve(img);
+
+            const engineBtns = document.querySelectorAll('.search-engine-btn');
+            let currentEngine = 'https://cn.bing.com/search?q=';
+
+            try {
+                const saved = localStorage.getItem('selectedEngine');
+                if (saved) {
+                    currentEngine = saved;
+                }
+            } catch(e) {}
+
+            engineBtns.forEach(btn => {
+                const engineUrl = btn.dataset.engine;
+                if (engineUrl === currentEngine) {
+                    btn.classList.add('active');
+                }
+
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const url = this.dataset.engine;
+                    if (url) {
+                        currentEngine = url;
+                        try {
+                            localStorage.setItem('selectedEngine', url);
+                        } catch(ex) {}
+                        engineBtns.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+
+                        if (searchInput && searchInput.value.trim()) {
+                            const query = searchInput.value.trim();
+                            window.open(currentEngine + encodeURIComponent(query), '_blank');
+                        }
+                    }
+                });
+            });
+
+            if (searchInput) {
+                searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        const query = searchInput.value.trim();
+                        if (query) {
+                            window.open(currentEngine + encodeURIComponent(query), '_blank');
+                        }
+                    }
+                });
+            }
+
+            const navItems = document.querySelectorAll('.sidebar-item');
+
+            function highlightNav() {
+                let currentId = '';
+                const scrollY = window.scrollY + 100;
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    const top = rect.top + window.scrollY;
+                    if (scrollY >= top) {
+                        currentId = section.id;
+                    }
+                });
+
+                navItems.forEach(item => {
+                    const target = item.dataset.target;
+                    item.classList.toggle('active', target === currentId);
+                });
+            }
+
+            window.addEventListener('scroll', highlightNav);
+            setTimeout(highlightNav, 100);
+
+            const backToTop = document.getElementById('backToTop');
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTop.classList.add('show');
+                } else {
+                    backToTop.classList.remove('show');
                 }
             });
-        }, observerOptions);
-        
-        document.querySelectorAll('.bookmark-favicon').forEach(img => {
-            imageObserver.observe(img);
-        });
+
+            if (backToTop) {
+                backToTop.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const targetId = item.dataset.target;
+                    if (targetId) {
+                        const targetElement = document.getElementById(targetId);
+                        if (targetElement) {
+                            e.preventDefault();
+                            const offset = 20;
+                            const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - offset;
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+
+            if ('IntersectionObserver' in window) {
+                const observerOptions = { rootMargin: '100px' };
+                const imageObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src || img.src;
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                }, observerOptions);
+                document.querySelectorAll('.bookmark-favicon').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            }
+        })();
     </script>
 </body>
 </html>
