@@ -1,50 +1,84 @@
 import re
 import html
+import requests
+from bs4 import BeautifulSoup
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Optional
 
-def parse_markdown_bookmarks(content: str) -> List[Dict]:
-    """解析Markdown格式的书签文件"""
-    bookmarks = []
-    current_category = ""
+def get_app_icon(term: str) -> Optional[str]:
+    """
+    从 Apple App Store 获取应用图标
+    返回图标 URL，如果获取失败则返回 None
+    """
+    try:
+        url = "https://apps.apple.com/cn/iphone/search"
+        params = {'term': term.strip()}
+        headers = {
+            'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",
+            'Accept': "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+            'Accept-Language': "zh-CN,zh;q=0.9",
+            'Accept-Encoding': "gzip, deflate, br",
+            'sec-ch-ua': '"Google Chrome";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+            'sec-ch-ua-mobile': "?0",
+            'sec-ch-ua-platform': '"Windows"',
+            'upgrade-insecure-requests': "1",
+            'sec-fetch-site': "same-origin",
+            'sec-fetch-mode': "navigate",
+            'sec-fetch-user': "?1",
+            'sec-fetch-dest': "document",
+            'referer': "https://apps.apple.com/",
+        }
+        
+        response = requests.get(url, params=params, headers=headers, timeout=10)
+        response.raise_for_status()
+        
+        # 使用 BeautifulSoup 解析 HTML
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        # 查找第一个应用图标
+        # Apple Store 使用 webfeatures 组件，图标通常以 webp 格式出现
+        # 方法1: 查找带有 webp 图标的 img 标签
+        icons = soup.find_all('img', src=re.compile(r'\.webp$'))
+        
+        for img in icons:
+            src = img.get('src')
+            if src and 'Purple' in src and '48x48' in src:
+                # 确保是完整的 URL
+                if src.startswith('//'):
+                    src = 'https:' + src
+                elif src.startswith('/'):
+                    src = 'https://is1-ssl.mzstatic.com' + src
+                return src
+        
+        # 方法2: 查找 picture 标签中的 webp 源
+        picture_tags = soup.find_all('picture')
+        for picture in picture_tags:
+            source = picture.find('source', {'type': 'image/webp'})
+            if source:
+                srcset = source.get('srcset', '')
+                if srcset:
+                    # 取第一个 URL
+                    first_url = srcset.split(',')[0].strip().split()[0]
+                    if first_url.startswith('//'):
+                        first_url = 'https:' + first_url
+                    return first_url
+        
+        # 方法3: 查找任意包含 icon 的 img
+        icons = soup.find_all('img', src=re.compile(r'(icon|logo|app)'))
+        for img in icons:
+            src = img.get('src')
+            if src and ('is1-ssl.mzstatic.com' in src or 'is2-ssl.mzstatic.com' in src):
+                if src.startswith('//'):
+                    src = 'https:' + src
+                return src
+                
+    except Exception as e:
+        print(f"获取 {term} 图标失败: {e}")
     
-    lines = content.split('\n')
-    i = 0
-    while i < len(lines):
-        line = lines[i].strip()
-        
-        if line.startswith('## '):
-            current_category = line[3:].strip()
-        
-        elif line.startswith('- ['):
-            match = re.match(r'- \[([^\]]+)\]\(([^)]+)\)', line)
-            if match and current_category:
-                title, url = match.groups()
-                bookmarks.append({
-                    'category': current_category,
-                    'title': title,
-                    'url': url
-                })
-        
-        elif line.startswith('-') and not line.startswith('- [') and current_category:
-            if i + 1 < len(lines) and '](' in lines[i+1]:
-                combined = line + ' ' + lines[i+1].strip()
-                match = re.match(r'- \[([^\]]+)\]\(([^)]+)\)', combined)
-                if match:
-                    title, url = match.groups()
-                    bookmarks.append({
-                        'category': current_category,
-                        'title': title,
-                        'url': url
-                    })
-                    i += 1
-        
-        i += 1
-    
-    return bookmarks
+    return None
 
 def get_favicon_url(url: str) -> str:
-    """获取网站favicon URL"""
+    """获取网站 favicon URL（保留原方法作为备用）"""
     try:
         if '://' in url:
             domain = url.split('/')[2]
@@ -55,6 +89,42 @@ def get_favicon_url(url: str) -> str:
     except:
         return ""
 
+def enrich_search_engines_with_icons(search_engines: List[Dict]) -> List[Dict]:
+    """
+    为搜索引擎列表添加从 App Store 获取的图标
+    如果获取失败，使用 emoji 作为备用
+    """
+    enriched = []
+    
+    for engine in search_engines:
+        name = engine['name']
+        print(f"正在获取 {name} 的图标...")
+        
+        # 尝试从 App Store 获取图标
+        icon_url = get_app_icon(name)
+        
+        if icon_url:
+            print(f"  ✅ 获取到 {name} 图标: {icon_url[:80]}...")
+            enriched.append({
+                'name': name,
+                'url': engine['url'],
+                'icon': icon_url  # 使用真实的图片 URL
+            })
+        else:
+            print(f"  ⚠️ 使用备用 emoji 图标: {engine['icon']}")
+            # 如果获取失败，使用原有的 emoji 或生成占位
+            if engine['icon']:
+                enriched.append(engine)
+            else:
+                # 如果原本没有 emoji，使用首字母作为占位
+                enriched.append({
+                    'name': name,
+                    'url': engine['url'],
+                    'icon': f"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Crect x='3' y='3' width='18' height='18' rx='4'/%3E%3Ctext x='12' y='16' text-anchor='middle' font-size='12' fill='%23999'%3E{name[0].upper()}%3C/text%3E%3C/svg%3E"
+                })
+    
+    return enriched
+
 def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
     """生成苹果风格导航HTML页面"""
     
@@ -64,23 +134,28 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             categories[bm['category']] = []
         categories[bm['category']].append(bm)
     
-    # 搜索引擎配置
-    search_engines = [
-        {'name': 'Bing', 'url': 'https://cn.bing.com/search?q=', 'icon': '🔍'},
+    # 搜索引擎配置 - 先定义基础配置
+    base_search_engines = [
         {'name': 'Google', 'url': 'https://www.google.com/search?q=', 'icon': '🌐'},
+        {'name': 'Bing', 'url': 'https://cn.bing.com/search?q=', 'icon': '🔍'},
+        {'name': 'Baidu', 'url': 'https://kaifa.baidu.com/searchPage?wd=', 'icon': ''},
         {'name': '搜狗', 'url': 'https://www.sogou.com/web?query=', 'icon': ''},
         {'name': 'Github', 'url': 'https://github.com/search?q=', 'icon': ''},
-        {'name': 'Baidu', 'url': 'https://kaifa.baidu.com/searchPage?wd=', 'icon': ''},
         {'name': 'Bilibili', 'url': 'https://search.bilibili.com/all?keyword=', 'icon': ''},
         {'name': '360', 'url': 'https://www.so.com/s?q=', 'icon': ''},
         {'name': '神马', 'url': 'https://m.sm.cn/s?q=', 'icon': ''},
         {'name': '安全内参', 'url': 'https://www.secrss.com/search?keywords=', 'icon': ''},
     ]
     
-    # 生成分类区域（左侧边栏风格 + 右侧内容）
+    # 从 App Store 获取真实图标
+    print("\n=== 开始获取搜索引擎图标 ===")
+    search_engines = enrich_search_engines_with_icons(base_search_engines)
+    print("=== 图标获取完成 ===\n")
+    
+    # 生成分类区域
     category_list = list(categories.items())
     
-    # 生成左侧分类导航 - 取消sidebar-nav-label样式
+    # 生成左侧分类导航
     sidebar_items = []
     for idx, (cat_name, cat_bookmarks) in enumerate(category_list):
         count = len(cat_bookmarks)
@@ -115,13 +190,28 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             </section>
         ''')
     
-    # 生成搜索引擎按钮
-    search_buttons = '\n'.join([
-        f'<button class="search-engine-btn" data-engine="{html.escape(engine["url"])}" title="{html.escape(engine["name"])}">{engine["icon"]} {html.escape(engine["name"])}</button>'
-        for engine in search_engines
-    ])
+    # 生成搜索引擎按钮 - 使用图片图标
+    search_buttons = []
+    for engine in search_engines:
+        icon = engine['icon']
+        # 如果是 URL 图片，使用 img 标签
+        if icon.startswith('http') or icon.startswith('data:'):
+            icon_html = f'<img src="{html.escape(icon)}" alt="{html.escape(engine["name"])}" style="width:20px;height:20px;border-radius:4px;vertical-align:middle;">'
+        else:
+            icon_html = html.escape(icon)
+        
+        search_buttons.append(f'''
+            <button class="search-engine-btn" data-engine="{html.escape(engine['url'])}" title="{html.escape(engine['name'])}">
+                {icon_html}
+                <span style="margin-left:4px;">{html.escape(engine['name'])}</span>
+            </button>
+        ''')
     
-    # 苹果风格HTML模板 - 参考App Store左侧设计
+    search_buttons_html = ''.join(search_buttons)
+    
+    # ... 后续 HTML 模板代码保持不变 ...
+    # (使用之前的 HTML 模板，但需要更新 search_engines 相关部分)
+    
     html_template = f'''<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -131,6 +221,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>{html.escape(title)}</title>
     <style>
+        /* ... 所有样式保持不变 ... */
         * {{
             margin: 0;
             padding: 0;
@@ -167,7 +258,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             min-height: 100vh;
         }}
 
-        /* ===== 左侧边栏 - App Store风格 ===== */
         .sidebar {{
             position: fixed;
             top: 0;
@@ -206,7 +296,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             font-weight: 400;
         }}
 
-        /* 侧边栏搜索框 */
         .sidebar-search {{
             padding: 12px 16px;
             flex-shrink: 0;
@@ -234,7 +323,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             color: var(--text-muted);
         }}
 
-        /* 侧边栏导航列表 - 取消sidebar-nav-label样式 */
         .sidebar-nav {{
             flex: 1;
             overflow-y: auto;
@@ -299,14 +387,12 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             color: var(--accent-color);
         }}
 
-        /* 侧边栏底部 - 移除footer，搜索引擎移到主区域 */
         .sidebar-footer {{
             padding: 12px 12px 8px;
             border-top: 1px solid var(--border-color);
             flex-shrink: 0;
         }}
 
-        /* ===== 右侧主内容 ===== */
         .main-content {{
             margin-left: var(--sidebar-width);
             flex: 1;
@@ -314,7 +400,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             min-height: 100vh;
         }}
 
-        /* 顶部标题 */
         .content-header {{
             padding: 8px 0 24px;
             border-bottom: 1px solid var(--border-color);
@@ -334,7 +419,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             margin-top: 4px;
         }}
 
-        /* 搜索引擎 - 在搜索框上方横向展示 */
         .search-engines-wrapper {{
             display: flex;
             align-items: center;
@@ -351,6 +435,8 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
         }}
 
         .search-engine-btn {{
+            display: inline-flex;
+            align-items: center;
             padding: 6px 14px;
             font-size: 12px;
             font-family: inherit;
@@ -361,6 +447,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.15s ease;
+            gap: 4px;
         }}
 
         .search-engine-btn:hover {{
@@ -375,7 +462,13 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             color: #fff;
         }}
 
-        /* 搜索框 - 主内容区域顶部 */
+        .search-engine-btn img {{
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            vertical-align: middle;
+        }}
+
         .main-search-wrapper {{
             display: flex;
             align-items: center;
@@ -418,7 +511,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             white-space: nowrap;
         }}
 
-        /* 内容区域 - 分类 */
         .content-section {{
             margin-bottom: 40px;
             scroll-margin-top: 20px;
@@ -438,7 +530,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             display: inline-block;
         }}
 
-        /* 书签网格 */
         .bookmarks-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -490,7 +581,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             color: var(--accent-color);
         }}
 
-        /* 隐藏状态 */
         .bookmark-link.hidden {{
             display: none;
         }}
@@ -510,7 +600,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             font-weight: 500;
         }}
 
-        /* 返回顶部 */
         .back-to-top {{
             position: fixed;
             bottom: 24px;
@@ -548,7 +637,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             stroke-width: 2;
         }}
 
-        /* ===== 滚动条美化 ===== */
+        /* 滚动条美化 */
         .sidebar::-webkit-scrollbar,
         .sidebar-nav::-webkit-scrollbar {{
             width: 4px;
@@ -583,7 +672,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             background: #86868b;
         }}
 
-        /* ===== 响应式 ===== */
+        /* 响应式 */
         @media (max-width: 1024px) {{
             :root {{
                 --sidebar-width: 220px;
@@ -668,7 +757,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             background: rgba(255,255,255,1);
         }}
 
-        /* 移动端遮罩 */
         .sidebar-overlay {{
             display: none;
             position: fixed;
@@ -689,11 +777,9 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
     </style>
 </head>
 <body>
-    <!-- 移动端菜单按钮 -->
     <button class="menu-toggle" id="menuToggle" aria-label="切换侧边栏">☰</button>
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ===== 左侧边栏 ===== -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h1>📖 {html.escape(title)}</h1>
@@ -709,31 +795,25 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
         </nav>
 
         <div class="sidebar-footer">
-            <!-- 侧边栏底部保留，但搜索引擎已移到主区域 -->
         </div>
     </aside>
 
-    <!-- ===== 右侧主内容 ===== -->
     <main class="main-content" id="mainContent">
-        <!-- 搜索引擎 - 在搜索框上方横向展示 -->
         <div class="search-engines-wrapper">
             <span class="search-engines-label">🔎 搜索：</span>
-            {search_buttons}
+            {search_buttons_html}
         </div>
 
-        <!-- 搜索区域 -->
         <div class="main-search-wrapper">
             <input type="text" class="search-input" id="searchInput" placeholder="搜索书签..." autocomplete="off">
             <span class="search-shortcut">⌘K</span>
         </div>
 
-        <!-- 内容 -->
         <div id="bookmarksContainer">
             {''.join(sections_html)}
         </div>
     </main>
 
-    <!-- 返回顶部 -->
     <div class="back-to-top" id="backToTop">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="18 15 12 9 6 15"></polyline>
@@ -742,7 +822,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
 
     <script>
         (function() {{
-            // ===== 侧边栏切换（移动端） =====
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
             const menuToggle = document.getElementById('menuToggle');
@@ -764,7 +843,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
                 overlay.addEventListener('click', closeSidebar);
             }}
 
-            // 点击侧边栏链接后关闭（移动端）
             document.querySelectorAll('.sidebar-item').forEach(item => {{
                 item.addEventListener('click', () => {{
                     if (window.innerWidth <= 820) {{
@@ -773,7 +851,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
                 }});
             }});
 
-            // ===== 侧边栏分类搜索 =====
             const sidebarSearch = document.getElementById('sidebarSearch');
             const sidebarItems = document.querySelectorAll('.sidebar-item');
 
@@ -791,7 +868,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
                 }});
             }}
 
-            // ===== 书签搜索 =====
             const searchInput = document.getElementById('searchInput');
             const sections = document.querySelectorAll('.content-section');
 
@@ -822,7 +898,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
                     }}
                 }});
 
-                // 显示无结果
                 let noResultsDiv = document.getElementById('noResults');
                 if (totalMatches === 0 && keyword !== '') {{
                     if (!noResultsDiv) {{
@@ -841,7 +916,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
                 searchInput.addEventListener('input', searchBookmarks);
             }}
 
-            // ===== 快捷键 =====
             document.addEventListener('keydown', (e) => {{
                 if ((e.ctrlKey || e.metaKey) && e.key === 'k') {{
                     e.preventDefault();
@@ -859,11 +933,9 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
                 }}
             }});
 
-            // ===== 搜索引擎切换 =====
             const engineBtns = document.querySelectorAll('.search-engine-btn');
             let currentEngine = 'https://cn.bing.com/search?q=';
 
-            // 从localStorage恢复
             try {{
                 const saved = localStorage.getItem('selectedEngine');
                 if (saved) {{
@@ -888,7 +960,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
                         engineBtns.forEach(b => b.classList.remove('active'));
                         this.classList.add('active');
 
-                        // 如果搜索框有内容，立即用新引擎搜索
                         if (searchInput && searchInput.value.trim()) {{
                             const query = searchInput.value.trim();
                             window.open(currentEngine + encodeURIComponent(query), '_blank');
@@ -897,7 +968,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
                 }});
             }});
 
-            // ===== 回车搜索 =====
             if (searchInput) {{
                 searchInput.addEventListener('keydown', (e) => {{
                     if (e.key === 'Enter') {{
@@ -909,7 +979,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
                 }});
             }}
 
-            // ===== 侧边栏高亮 =====
             const navItems = document.querySelectorAll('.sidebar-item');
 
             function highlightNav() {{
@@ -932,7 +1001,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             window.addEventListener('scroll', highlightNav);
             setTimeout(highlightNav, 100);
 
-            // ===== 返回顶部 =====
             const backToTop = document.getElementById('backToTop');
 
             window.addEventListener('scroll', () => {{
@@ -949,7 +1017,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
                 }});
             }}
 
-            // ===== 平滑滚动到分类 =====
             navItems.forEach(item => {{
                 item.addEventListener('click', (e) => {{
                     const targetId = item.dataset.target;
@@ -968,7 +1035,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
                 }});
             }});
 
-            // ===== Favicon懒加载 =====
             if ('IntersectionObserver' in window) {{
                 const observerOptions = {{ rootMargin: '100px' }};
                 const imageObserver = new IntersectionObserver((entries) => {{
@@ -990,6 +1056,46 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
 </html>'''
     
     return html_template
+
+def parse_markdown_bookmarks(content: str) -> List[Dict]:
+    """解析Markdown格式的书签文件"""
+    bookmarks = []
+    current_category = ""
+    
+    lines = content.split('\n')
+    i = 0
+    while i < len(lines):
+        line = lines[i].strip()
+        
+        if line.startswith('## '):
+            current_category = line[3:].strip()
+        
+        elif line.startswith('- ['):
+            match = re.match(r'- \[([^\]]+)\]\(([^)]+)\)', line)
+            if match and current_category:
+                title, url = match.groups()
+                bookmarks.append({
+                    'category': current_category,
+                    'title': title,
+                    'url': url
+                })
+        
+        elif line.startswith('-') and not line.startswith('- [') and current_category:
+            if i + 1 < len(lines) and '](' in lines[i+1]:
+                combined = line + ' ' + lines[i+1].strip()
+                match = re.match(r'- \[([^\]]+)\]\(([^)]+)\)', combined)
+                if match:
+                    title, url = match.groups()
+                    bookmarks.append({
+                        'category': current_category,
+                        'title': title,
+                        'url': url
+                    })
+                    i += 1
+        
+        i += 1
+    
+    return bookmarks
 
 def main():
     """主函数"""
