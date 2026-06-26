@@ -1,9 +1,8 @@
 ##  常用网站
 - [哔哩哔哩](http://www.bilibili.com/)
+- [shouku-keep](https://shouku123.com/keep)
 - [书签地球](https://www.bookmarkearth.cn/)
 - [菜鸟工具-search](https://www.jyshare.com/)
-- [豆瓣电影](https://movie.douban.com/explore)
-- [sealos开发系统](https://sealos.run/?s=首页)
 - [IP138](https://www.ip138.com/)
 - [17500](https://www.17500.cn)
 - [FlowUs 息流](https://flowus.cn/)
@@ -86,6 +85,7 @@
 - [校园网联合镜像站](https://mirrors.cernet.edu.cn/about)
 
 ##  开发与代码
+- [sealos开发系统](https://sealos.run/?s=首页)
 - [VMware](https://soft.3dmgame.com/down/198331.html)
 - [BT专用工具](https://soft.3dmgame.com/down/347894.html)
 - [iCloud](https://www.icloud.com.cn/)
