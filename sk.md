@@ -45,7 +45,6 @@
 - [datatft英雄数据](https://www.datatft.com/units)
 - [metatft](https://www.metatft.com/comps)
 - [LOL攻略资料](https://101.qq.com/#/hero-rank-fight)
-- [海克斯大乱斗](https://lol.dzzdz.com/)
 - [TapTap](https://shouku123.com/pub/gotoUrl.do?id=1399878)
 - [MetaTFT](https://www.metatft.com/comps)
 
@@ -98,6 +97,14 @@
 - [Windows镜像下载](https://msdn.itellyou.cn/)
 - [技术站文章](https://jishuzhan.net/article/1965957555249266689)
 
+##  彩票与娱乐
+- [超级大乐透](https://www.lottery.gov.cn/dlt/index.html)
+- [14场胜平负](https://zx.500.com/zc/?zkid=157)
+- [P5和值](https://www.17500.cn/tool/pl5-ylzx.html)
+- [足球竞彩](https://m.17500.cn/zq/)
+- [IP138彩票](https://caipiao.ip138.com/)
+- [彩票](https://shouku123.com/pub/gotoUrl.do?id=1400156)
+
 ##  GitHub与镜像
 - [GitHub镜像站](https://www.moretools.app/zh-CN/github-proxy)
 - [清华镜像站](https://mirrors.tuna.tsinghua.edu.cn/help/fdroid/)
@@ -107,6 +114,7 @@
 
 ##  PCB与硬件
 - [嘉立创开源广场](https://oshwhub.com/)
+- [无线WIFI转有线路由](https://oshwhub.com/yc_chen/wireless-wifi-to-wired-routing)
 
 ##  Android与Root
 - [Fdroid清华源](https://mirrors.tuna.tsinghua.edu.cn/help/fdroid/)
@@ -187,6 +195,8 @@
 - [IPA下载](https://ipadump.com/#/home)
 - [Notion - App Store](https://apps.apple.com/us/app/notion-notes-tasks-ai/id1232780281)
 - [尝鲜派](https://betahub.cn/)
+- [jisu--vpn](https://apps.apple.com/us/app/vpn-faster-vpn/id1345301170)
+
 
 ##  社区与问答
 - [知乎](https://www.zhihu.com/)
@@ -234,14 +244,6 @@
 - [蚂蚁金服开放平台](https://shouku123.com/pub/gotoUrl.do?id=1399844)
 - [新浪微博开放平台](https://shouku123.com/pub/gotoUrl.do?id=1399845)
 - [Apple Developer](https://shouku123.com/pub/gotoUrl.do?id=1399846)
-
-##  彩票与娱乐
-- [超级大乐透](https://www.lottery.gov.cn/dlt/index.html)
-- [14场胜平负](https://zx.500.com/zc/?zkid=157)
-- [P5和值](https://www.17500.cn/tool/pl5-ylzx.html)
-- [足球竞彩](https://m.17500.cn/zq/)
-- [IP138彩票](https://caipiao.ip138.com/)
-- [彩票](https://shouku123.com/pub/gotoUrl.do?id=1400156)
 
 ##  生活服务
 - [美团](https://passport.meituan.com/account/unitivelogin)
