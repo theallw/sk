@@ -1,3 +1,12 @@
+## 常用网站（个人常用 / 快捷）
+- [哔哩哔哩](http://www.bilibili.com/)
+- [shouku-keep](https://shouku123.com/keep)
+- [书签地球](https://www.bookmarkearth.cn/)
+- [菜鸟工具-search](https://www.jyshare.com/)
+- [IP138](https://www.ip138.com/)
+- [17500](https://www.17500.cn)
+- [FlowUs 息流](https://flowus.cn/)
+- [MMP](https://bmm.lccl.cc/)
 
 ## 开发平台、代码托管与协作
 - [GitHub](https://github.com/)
@@ -365,15 +374,6 @@
 - [AppleWalls](https://www.applewalls.com/)
 - [PhWalls](https://phwalls.com/zh)
 
-## 常用网站（个人常用 / 快捷）
-- [哔哩哔哩](http://www.bilibili.com/)
-- [shouku-keep](https://shouku123.com/keep)
-- [书签地球](https://www.bookmarkearth.cn/)
-- [菜鸟工具-search](https://www.jyshare.com/)
-- [IP138](https://www.ip138.com/)
-- [17500](https://www.17500.cn)
-- [FlowUs 息流](https://flowus.cn/)
-- [MMP](https://bmm.lccl.cc/)
 
 ## 站点导航 / 书签 / 导航类
 - [36k导航](https://36kdh.com/)
