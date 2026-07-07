@@ -293,6 +293,7 @@
 - [Xget全球加速](https://xuc.xi-xu.me/?utm_source=opensource.zone)
 - [蓝奏云](https://www.lanzoui.com/)
 - [UU在线tool](https://uutool.cn/phone-batch/)
+- [在线CyberChef编码](https://gchq.github.io/CyberChef/)
 
 ## 安全 / 渗透 / 威胁情报
 - [安全内参](https://www.secrss.com/)
