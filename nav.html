@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>书签导航生成器 · BMM 风格</title>
     <style>
         /* ============================================================
@@ -20,6 +22,7 @@
             --bg-secondary: rgba(255, 255, 255, 0.04);
             --bg-card: rgba(255, 255, 255, 0.06);
             --bg-card-hover: rgba(255, 255, 255, 0.10);
+            --bg-card-active: rgba(79, 70, 229, 0.12);
             --bg-sidebar: rgba(255, 255, 255, 0.04);
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.65);
@@ -373,6 +376,10 @@
             gap: 10px;
             font-size: 13px;
             font-weight: 450;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
         }
         .sidebar-tag:hover {
             background: rgba(255, 255, 255, 0.06);
@@ -544,7 +551,36 @@
         .category-section {
             margin-bottom: 28px;
             scroll-margin-top: 12px;
+            transition: opacity 0.3s ease;
         }
+        .category-section.targeted {
+            animation: highlightPulse 1.2s ease;
+        }
+        .category-section.hidden {
+            display: none;
+        }
+
+        @keyframes highlightPulse {
+            0% {
+                opacity: 1;
+            }
+            20% {
+                opacity: 0.3;
+            }
+            40% {
+                opacity: 1;
+            }
+            60% {
+                opacity: 0.5;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
         .category-header {
             display: flex;
             align-items: center;
@@ -592,6 +628,11 @@
         }
         .bookmark-card.hidden {
             display: none;
+        }
+        .bookmark-card.highlight {
+            background: var(--bg-card-active);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.15);
         }
 
         .card-link {
@@ -866,12 +907,11 @@
         }
 
         function md5(str) {
-            // Simple hash for color generation (non-crypto, just for consistency)
             let hash = 0;
             for (let i = 0; i < str.length; i++) {
                 const char = str.charCodeAt(i);
                 hash = ((hash << 5) - hash) + char;
-                hash = hash & hash; // Convert to 32bit integer
+                hash = hash & hash;
             }
             return Math.abs(hash).toString(16).padStart(8, '0');
         }
@@ -917,7 +957,6 @@
             const el = document.getElementById('toast');
             el.textContent = msg;
             el.className = 'toast ' + (type || '');
-            // force reflow
             void el.offsetWidth;
             el.classList.add('show');
             clearTimeout(el._timer);
@@ -925,7 +964,7 @@
         }
 
         // ================================================================
-        //  MARKDOWN PARSER (same logic as Python version)
+        //  MARKDOWN PARSER
         // ================================================================
         function parseMarkdownBookmarks(content) {
             const lines = content.split(/\r?\n/);
@@ -935,13 +974,11 @@
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i].trim();
 
-                // ## Category
                 if (line.startsWith('## ')) {
                     currentCategory = line.slice(3).trim();
                     continue;
                 }
 
-                // - [Title](URL)
                 if (line.startsWith('- [')) {
                     const match = line.match(/- \[([^\]]+)\]\(([^)]+)\)/);
                     if (match && currentCategory) {
@@ -954,7 +991,6 @@
                     }
                 }
 
-                // Handle multi-line: "-" on one line, "[Title](URL)" on next
                 if (line === '-' && i + 1 < lines.length) {
                     const next = lines[i + 1].trim();
                     const match = next.match(/\[([^\]]+)\]\(([^)]+)\)/);
@@ -969,7 +1005,6 @@
                     }
                 }
 
-                // Also handle "- Title (URL)" style? Not in original, but let's be lenient
                 const altMatch = line.match(/^-?\s*\[([^\]]+)\]\(([^)]+)\)/);
                 if (altMatch && currentCategory) {
                     bookmarks.push({
@@ -984,44 +1019,44 @@
         }
 
         // ================================================================
-        //  SEARCH ENGINES (preset with icons)
+        //  SEARCH ENGINES — 与 nav.html 完全一致
         // ================================================================
         const BASE_SEARCH_ENGINES = [{
             name: 'Google',
             url: 'https://www.google.com/search?q=',
-            icon: 'https://www.google.com/s2/favicons?domain=google.com'
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/1f/cb/2a/1fcb2aab-332d-b5ed-bdec-11843b22480c/Placeholder.mill/48x48bb-75.webp'
         }, {
             name: 'Bing',
             url: 'https://cn.bing.com/search?q=',
-            icon: 'https://www.google.com/s2/favicons?domain=bing.com'
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/13/f6/f2/13f6f204-d41c-e87e-9f2d-6763eed5c453/AppIcon-0-1x_U007epad-0-1-0-0-85-220-0.png/48x48ia-75.webp'
         }, {
             name: 'Baidu',
             url: 'https://kaifa.baidu.com/searchPage?wd=',
-            icon: 'https://www.google.com/s2/favicons?domain=baidu.com'
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/b2/15/dd/b215ddb6-7657-6d5d-be18-a1d4ae5ffcfa/Placeholder.mill/48x48bb-75.webp'
         }, {
             name: 'Sogou',
             url: 'https://www.sogou.com/web?query=',
-            icon: 'https://www.google.com/s2/favicons?domain=sogou.com'
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/b8/48/94/b8489437-920c-196e-9b16-1c2945c65b09/Placeholder.mill/48x48bb-75.webp'
         }, {
             name: 'Github',
             url: 'https://github.com/search?q=',
-            icon: 'https://www.google.com/s2/favicons?domain=github.com'
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e5/24/6e/e5246ef1-4139-5811-732c-96b935c52715/AppIcon-0-0-1x_U007emarketing-0-9-0-0-sRGB-85-220.png/48x48ia-75.webp'
         }, {
             name: 'Bilibili',
             url: 'https://search.bilibili.com/all?keyword=',
-            icon: 'https://www.google.com/s2/favicons?domain=bilibili.com'
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/94/56/7c/94567ccc-e458-328c-0974-3700f75c4cd1/Placeholder.mill/48x48bb-75.webp'
         }, {
             name: '360',
             url: 'https://www.so.com/s?q=',
-            icon: 'https://www.google.com/s2/favicons?domain=so.com'
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/fa/5e/fb/fa5efbaa-173e-e17c-550b-644ab8717da9/Placeholder.mill/48x48bb-75.webp'
         }, {
             name: 'Shenma',
             url: 'https://m.sm.cn/s?q=',
-            icon: 'https://www.google.com/s2/favicons?domain=sm.cn'
+            icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/27/d0/06/27d00645-422a-21e2-c434-a6d581257b78/Placeholder.mill/48x48bb-75.webp'
         }, {
             name: 'SecRSS',
             url: 'https://www.secrss.com/search?keywords=',
-            icon: 'https://www.google.com/s2/favicons?domain=secrss.com'
+            icon: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23999\' stroke-width=\'2\'%3E%3Crect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'4\'/%3E%3Ctext x=\'12\' y=\'16\' text-anchor=\'middle\' font-size=\'12\' fill=\'%23999\'%3E安%3C/text%3E%3C/svg%3E'
         }, ];
 
         // ================================================================
@@ -1032,13 +1067,72 @@
         let selectedEngine = localStorage.getItem('selectedEngine') || 'https://cn.bing.com/search?q=';
 
         // ================================================================
+        //  JUMP TO CATEGORY - 核心跳转功能
+        // ================================================================
+        function jumpToCategory(categoryName, fromTag) {
+            // 1. 清除所有高亮
+            document.querySelectorAll('.bookmark-card.highlight').forEach(el => el.classList.remove('highlight'));
+            document.querySelectorAll('.category-section.targeted').forEach(el => el.classList.remove('targeted'));
+
+            // 2. 查找目标分类
+            const targetId = 'cat-' + categoryName;
+            const targetSection = document.getElementById(targetId);
+
+            if (!targetSection) {
+                showToast('[Info] 分类 "' + categoryName + '" 未找到', 'error');
+                return;
+            }
+
+            // 3. 清除搜索框
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+                filterBookmarks('');
+            }
+
+            // 4. 确保分类可见（如果有隐藏的，强制显示）
+            targetSection.classList.remove('hidden');
+            // 确保所有卡片在该分类下可见
+            const cards = targetSection.querySelectorAll('.bookmark-card');
+            cards.forEach(card => card.classList.remove('hidden'));
+
+            // 5. 高亮该分类下的所有卡片
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('highlight');
+                }, index * 80);
+            });
+
+            // 6. 添加动画效果
+            targetSection.classList.add('targeted');
+
+            // 7. 滚动到目标位置
+            const offset = 20;
+            const top = targetSection.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+
+            // 8. 更新侧边栏激活状态
+            document.querySelectorAll('.sidebar-tag').forEach(tag => {
+                tag.classList.toggle('active', tag.dataset.category === categoryName);
+            });
+
+            // 9. 5秒后自动移除高亮
+            setTimeout(() => {
+                cards.forEach(card => card.classList.remove('highlight'));
+            }, 5000);
+
+            // 显示提示
+            const count = cards.length;
+            showToast('[Jump] 跳转到 "' + categoryName + '" (' + count + ' 个书签)', 'success');
+        }
+
+        // ================================================================
         //  RENDER NAVIGATION
         // ================================================================
         function renderNavigation(bookmarks, title) {
             currentBookmarks = bookmarks;
             currentTitle = title || '我的导航';
 
-            // ---- Group by category ----
             const categories = {};
             for (const bm of bookmarks) {
                 if (!categories[bm.category]) categories[bm.category] = [];
@@ -1050,22 +1144,22 @@
                 categoryColors[cat] = getColorForCategory(cat);
             }
 
-            // ---- Update stats ----
+            // Update stats
             document.getElementById('statsBar').innerHTML =
                 `[Bookmarks] ${bookmarks.length} 个书签  [Categories] ${categoryNames.length} 个分类`;
             document.getElementById('sidebarBadge').textContent = `${bookmarks.length} 个书签`;
             document.getElementById('sidebarFooter').textContent = `${categoryNames.length} 个分类`;
             document.getElementById('sidebarTitle').textContent = title;
 
-            // ---- Sidebar tags ----
+            // ---------- Sidebar tags: use <a> with href ----------
             const sidebarTags = document.getElementById('sidebarTags');
             sidebarTags.innerHTML = '';
             for (const cat of categoryNames) {
                 const count = categories[cat].length;
                 const color = categoryColors[cat];
                 const a = document.createElement('a');
-                a.href = '#';
                 a.className = 'sidebar-tag';
+                a.href = '#cat-' + encodeURIComponent(cat);
                 a.dataset.category = cat;
                 a.innerHTML = `
                     <span class="tag-dot" style="background-color:${color}"></span>
@@ -1074,21 +1168,13 @@
                 `;
                 a.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const target = document.getElementById('cat-' + CSS.escape(cat));
-                    if (target) {
-                        const offset = 16;
-                        const top = target.getBoundingClientRect().top + window.scrollY - offset;
-                        window.scrollTo({ top, behavior: 'smooth' });
-                    }
-                    document.querySelectorAll('.sidebar-tag').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    document.getElementById('searchInput').value = '';
-                    filterBookmarks('');
+                    const category = this.dataset.category;
+                    jumpToCategory(category, this);
                 });
                 sidebarTags.appendChild(a);
             }
 
-            // ---- Search Engines ----
+            // Search Engines
             const enginesContainer = document.getElementById('searchEngines');
             enginesContainer.innerHTML = '<span class="label">[Search] 搜索：</span>';
             for (const eng of BASE_SEARCH_ENGINES) {
@@ -1112,10 +1198,20 @@
                     };
                     iconWrap.appendChild(img);
                 } else {
-                    const fb = document.createElement('span');
-                    fb.className = 'si-fallback';
-                    fb.textContent = eng.name[0].toUpperCase();
-                    iconWrap.appendChild(fb);
+                    // data:image or fallback
+                    const img = document.createElement('img');
+                    img.className = 'search-icon';
+                    img.src = eng.icon || '';
+                    img.alt = eng.name;
+                    img.onerror = function() {
+                        this.style.display = 'none';
+                        const fb = document.createElement('span');
+                        fb.className = 'si-fallback';
+                        fb.textContent = eng.name[0].toUpperCase();
+                        this.parentNode.appendChild(fb);
+                    };
+                    if (eng.icon) img.src = eng.icon;
+                    iconWrap.appendChild(img);
                 }
                 btn.appendChild(iconWrap);
 
@@ -1140,7 +1236,7 @@
                 enginesContainer.appendChild(btn);
             }
 
-            // ---- Bookmarks content ----
+            // Bookmarks content
             const container = document.getElementById('bookmarksContainer');
             container.innerHTML = '';
 
@@ -1210,24 +1306,32 @@
                 container.appendChild(section);
             }
 
-            // ---- Show preview, hide upload ----
+            // Show preview, hide upload
             document.getElementById('uploadZone').style.display = 'none';
             document.getElementById('navPreview').classList.add('visible');
             document.getElementById('exportBtn').disabled = false;
 
-            // ---- Re-run filter ----
+            // Re-run filter
             filterBookmarks('');
 
-            // ---- Highlight first tag ----
+            // Highlight first tag
             const firstTag = document.querySelector('.sidebar-tag');
             if (firstTag) firstTag.classList.add('active');
 
-            // ---- Scroll to top ----
+            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Setup dataset for filtering
+            document.querySelectorAll('.bookmark-card').forEach(card => {
+                const titleEl = card.querySelector('.card-title');
+                const domainEl = card.querySelector('.card-domain');
+                if (titleEl) card.dataset.title = titleEl.textContent.toLowerCase();
+                if (domainEl) card.dataset.domain = domainEl.textContent.toLowerCase();
+            });
         }
 
         // ================================================================
-        //  FILTER BOOKMARKS (search)
+        //  FILTER BOOKMARKS
         // ================================================================
         function filterBookmarks(keyword) {
             const kw = keyword.toLowerCase().trim();
@@ -1248,7 +1352,6 @@
                 section.classList.toggle('hidden', kw !== '' && sectionMatches === 0);
             }
 
-            // No results message
             let noResults = document.getElementById('noResults');
             if (totalMatches === 0 && kw !== '') {
                 if (!noResults) {
@@ -1264,7 +1367,7 @@
         }
 
         // ================================================================
-        //  EXPORT HTML (generates full standalone page)
+        //  EXPORT HTML
         // ================================================================
         function exportHTML() {
             if (!currentBookmarks.length) {
@@ -1272,8 +1375,6 @@
                 return;
             }
 
-            // Re-use the same rendering logic but generate a full HTML string.
-            // We'll build the HTML from scratch using the same data.
             const html = generateFullHTML(currentBookmarks, currentTitle);
             const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
             const url = URL.createObjectURL(blob);
@@ -1288,7 +1389,6 @@
         }
 
         function generateFullHTML(bookmarks, title) {
-            // Group
             const categories = {};
             for (const bm of bookmarks) {
                 if (!categories[bm.category]) categories[bm.category] = [];
@@ -1300,13 +1400,13 @@
                 categoryColors[cat] = getColorForCategory(cat);
             }
 
-            // Sidebar items
+            // Sidebar items with <a>
             let sidebarItems = '';
             for (const cat of categoryNames) {
                 const count = categories[cat].length;
                 const color = categoryColors[cat];
                 sidebarItems += `
-                    <a href="#cat-${escapeHTML(cat)}" class="sidebar-tag" data-category="${escapeHTML(cat)}">
+                    <a href="#cat-${escapeHTML(cat)}" class="sidebar-tag" data-category="${escapeHTML(cat)}" onclick="jumpToCategory('${escapeHTML(cat)}')">
                         <span class="tag-dot" style="background-color:${color}"></span>
                         <span class="tag-name">${escapeHTML(cat)}</span>
                         <span class="tag-count">${count}</span>
@@ -1314,7 +1414,7 @@
                 `;
             }
 
-            // Content sections
+            // Bookmarks content
             let contentHTML = '';
             for (const cat of categoryNames) {
                 const items = categories[cat];
@@ -1351,10 +1451,10 @@
                 `;
             }
 
-            // Search engines
+            // Search engines buttons (same icons)
             let searchButtons = '';
             for (const eng of BASE_SEARCH_ENGINES) {
-                const iconHTML = eng.icon && eng.icon.startsWith('http') ?
+                const iconHTML = eng.icon ?
                     `<img src="${escapeHTML(eng.icon)}" alt="${escapeHTML(eng.name)}" class="search-icon" onerror="this.style.display='none';this.parentElement.innerHTML+='<span class=\\'si-fallback\\'>${eng.name[0].toUpperCase()}</span>'">` :
                     `<span class="si-fallback">${eng.name[0].toUpperCase()}</span>`;
                 searchButtons += `
@@ -1365,7 +1465,6 @@
                 `;
             }
 
-            // Build full HTML (self-contained)
             return `<!DOCTYPE html>
         <html lang="zh-CN" class="dark">
         <head>
@@ -1376,22 +1475,28 @@
             <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
             <title>${escapeHTML(title)}</title>
             <style>
-                /* ===== same styles as main page ===== */
                 ${document.querySelector('style').textContent}
-                /* override: no toolbar in exported page */
                 .toolbar { display: none !important; }
                 .app-container { padding-top: 16px; }
                 .upload-zone { display: none !important; }
                 .nav-preview { display: flex !important; }
                 .sidebar { height: calc(100vh - 40px); }
                 .main-content { max-height: calc(100vh - 40px); }
+                .sidebar-tag { border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; }
+                .bookmark-card.highlight { background: rgba(79,70,229,0.12); border-color: #4f46e5; }
+                .category-section.targeted { animation: highlightPulse 1.2s ease; }
+                @keyframes highlightPulse {
+                    0% { opacity: 1; }
+                    20% { opacity: 0.3; }
+                    40% { opacity: 1; }
+                    60% { opacity: 0.5; }
+                    80% { opacity: 1; }
+                    100% { opacity: 1; }
+                }
             </style>
         </head>
         <body>
-            <div class="bg-effects">
-                <div class="glow1"></div>
-                <div class="glow2"></div>
-            </div>
+            <div class="bg-effects"><div class="glow1"></div><div class="glow2"></div></div>
             <div class="app-container">
                 <div class="nav-preview visible">
                     <div class="nav-body">
@@ -1425,141 +1530,153 @@
                 </div>
             </div>
             <script>
-                // minimal inline script for interactivity
-                (function() {
-                    const sidebarSearch = document.getElementById('sidebarSearch');
-                    const sidebarTags = document.querySelectorAll('.sidebar-tag');
+                // 跳转函数（与预览相同）
+                function jumpToCategory(categoryName) {
+                    document.querySelectorAll('.bookmark-card.highlight').forEach(el => el.classList.remove('highlight'));
+                    document.querySelectorAll('.category-section.targeted').forEach(el => el.classList.remove('targeted'));
+
+                    const targetId = 'cat-' + categoryName;
+                    const targetSection = document.getElementById(targetId);
+                    if (!targetSection) return;
+
                     const searchInput = document.getElementById('searchInput');
-                    const engineBtns = document.querySelectorAll('.search-btn');
+                    if (searchInput) { searchInput.value = ''; filterBookmarks(''); }
+
+                    targetSection.classList.remove('hidden');
+                    const cards = targetSection.querySelectorAll('.bookmark-card');
+                    cards.forEach(card => card.classList.remove('hidden'));
+
+                    cards.forEach((card, index) => {
+                        setTimeout(() => { card.classList.add('highlight'); }, index * 80);
+                    });
+
+                    targetSection.classList.add('targeted');
+                    const offset = 20;
+                    const top = targetSection.getBoundingClientRect().top + window.scrollY - offset;
+                    window.scrollTo({ top, behavior: 'smooth' });
+
+                    document.querySelectorAll('.sidebar-tag').forEach(tag => {
+                        tag.classList.toggle('active', tag.dataset.category === categoryName);
+                    });
+
+                    setTimeout(() => {
+                        cards.forEach(card => card.classList.remove('highlight'));
+                    }, 5000);
+                }
+
+                // 过滤函数
+                function filterBookmarks(kw) {
+                    const keyword = kw.toLowerCase().trim();
                     const sections = document.querySelectorAll('.category-section');
-
-                    let currentEngine = localStorage.getItem('selectedEngine') || 'https://cn.bing.com/search?q=';
-
-                    // Sidebar filter
-                    if (sidebarSearch) {
-                        sidebarSearch.addEventListener('input', function() {
-                            const kw = this.value.toLowerCase().trim();
-                            sidebarTags.forEach(tag => {
-                                const name = tag.querySelector('.tag-name').textContent.toLowerCase();
-                                tag.style.display = (kw === '' || name.includes(kw)) ? 'flex' : 'none';
-                            });
+                    let total = 0;
+                    sections.forEach(section => {
+                        const cards = section.querySelectorAll('.bookmark-card');
+                        let matches = 0;
+                        cards.forEach(card => {
+                            const title = (card.dataset.title || '').toLowerCase();
+                            const domain = (card.dataset.domain || '').toLowerCase();
+                            const match = keyword === '' || title.includes(keyword) || domain.includes(keyword);
+                            card.classList.toggle('hidden', !match);
+                            if (match) matches++;
                         });
-                    }
+                        total += matches;
+                        section.classList.toggle('hidden', keyword !== '' && matches === 0);
+                    });
+                    let noResults = document.getElementById('noResults');
+                    if (total === 0 && keyword !== '') {
+                        if (!noResults) {
+                            noResults = document.createElement('div');
+                            noResults.id = 'noResults';
+                            noResults.className = 'no-results';
+                            noResults.innerHTML = '<span class="icon">[S]</span><p>没有找到匹配的书签</p>';
+                            document.getElementById('bookmarksContainer').appendChild(noResults);
+                        }
+                    } else if (noResults) { noResults.remove(); }
+                }
 
-                    // Sidebar click
-                    sidebarTags.forEach(tag => {
-                        tag.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            const cat = this.dataset.category;
-                            const target = document.getElementById('cat-' + cat);
-                            if (target) {
-                                const top = target.getBoundingClientRect().top + window.scrollY - 16;
-                                window.scrollTo({ top, behavior: 'smooth' });
+                // 侧边栏搜索
+                const sidebarSearch = document.getElementById('sidebarSearch');
+                if (sidebarSearch) {
+                    sidebarSearch.addEventListener('input', function() {
+                        const kw = this.value.toLowerCase().trim();
+                        document.querySelectorAll('.sidebar-tag').forEach(tag => {
+                            const name = tag.querySelector('.tag-name').textContent.toLowerCase();
+                            tag.style.display = (kw === '' || name.includes(kw)) ? 'flex' : 'none';
+                        });
+                    });
+                }
+
+                // 主搜索
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() { filterBookmarks(this.value); });
+                    searchInput.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') {
+                            const q = this.value.trim();
+                            if (q) {
+                                const engine = localStorage.getItem('selectedEngine') || 'https://cn.bing.com/search?q=';
+                                window.open(engine + encodeURIComponent(q), '_blank');
                             }
-                            sidebarTags.forEach(t => t.classList.remove('active'));
+                        }
+                    });
+                }
+
+                // 搜索引擎切换
+                const engineBtns = document.querySelectorAll('.search-btn');
+                let currentEngine = localStorage.getItem('selectedEngine') || 'https://cn.bing.com/search?q=';
+                engineBtns.forEach(btn => {
+                    if (btn.dataset.engine === currentEngine) btn.classList.add('active');
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const url = this.dataset.engine;
+                        if (url) {
+                            currentEngine = url;
+                            localStorage.setItem('selectedEngine', url);
+                            engineBtns.forEach(b => b.classList.remove('active'));
                             this.classList.add('active');
-                            if (searchInput) { searchInput.value = ''; filterBookmarks(''); }
-                        });
-                    });
-
-                    // Scroll highlight
-                    function highlightTag() {
-                        let currentId = '';
-                        const scrollY = window.scrollY + 80;
-                        sections.forEach(section => {
-                            const rect = section.getBoundingClientRect();
-                            if (rect.top + window.scrollY <= scrollY) currentId = section.id;
-                        });
-                        sidebarTags.forEach(tag => {
-                            tag.classList.toggle('active', tag.dataset.category === currentId.replace('cat-', ''));
-                        });
-                    }
-                    window.addEventListener('scroll', highlightTag);
-                    setTimeout(highlightTag, 100);
-
-                    // Filter bookmarks
-                    function filterBookmarks(kw) {
-                        const keyword = kw.toLowerCase().trim();
-                        let total = 0;
-                        sections.forEach(section => {
-                            const cards = section.querySelectorAll('.bookmark-card');
-                            let matches = 0;
-                            cards.forEach(card => {
-                                const title = (card.dataset.title || '').toLowerCase();
-                                const domain = (card.dataset.domain || '').toLowerCase();
-                                const match = keyword === '' || title.includes(keyword) || domain.includes(keyword);
-                                card.classList.toggle('hidden', !match);
-                                if (match) matches++;
-                            });
-                            total += matches;
-                            section.classList.toggle('hidden', keyword !== '' && matches === 0);
-                        });
-                        let noResults = document.getElementById('noResults');
-                        if (total === 0 && keyword !== '') {
-                            if (!noResults) {
-                                noResults = document.createElement('div');
-                                noResults.id = 'noResults';
-                                noResults.className = 'no-results';
-                                noResults.innerHTML = '<span class="icon">[S]</span><p>没有找到匹配的书签</p>';
-                                document.getElementById('bookmarksContainer').appendChild(noResults);
+                            if (searchInput && searchInput.value.trim()) {
+                                window.open(currentEngine + encodeURIComponent(searchInput.value.trim()), '_blank');
                             }
-                        } else if (noResults) { noResults.remove(); }
-                    }
-
-                    if (searchInput) {
-                        searchInput.addEventListener('input', function() { filterBookmarks(this.value); });
-                    }
-
-                    // Keyboard shortcuts
-                    document.addEventListener('keydown', function(e) {
-                        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                            e.preventDefault();
-                            if (searchInput) { searchInput.focus(); searchInput.select(); }
-                        }
-                        if (e.key === 'Escape' && searchInput) {
-                            searchInput.value = '';
-                            filterBookmarks('');
-                            searchInput.blur();
                         }
                     });
+                });
 
-                    // Search engines
-                    engineBtns.forEach(btn => {
-                        const url = btn.dataset.engine;
-                        if (url === currentEngine) btn.classList.add('active');
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const u = this.dataset.engine;
-                            if (u) {
-                                currentEngine = u;
-                                localStorage.setItem('selectedEngine', u);
-                                engineBtns.forEach(b => b.classList.remove('active'));
-                                this.classList.add('active');
-                                if (searchInput && searchInput.value.trim()) {
-                                    window.open(currentEngine + encodeURIComponent(searchInput.value.trim()), '_blank');
-                                }
-                            }
-                        });
-                    });
-
-                    // Enter search
-                    if (searchInput) {
-                        searchInput.addEventListener('keydown', function(e) {
-                            if (e.key === 'Enter') {
-                                const q = this.value.trim();
-                                if (q) window.open(currentEngine + encodeURIComponent(q), '_blank');
-                            }
-                        });
+                // 快捷键
+                document.addEventListener('keydown', function(e) {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                        e.preventDefault();
+                        if (searchInput) { searchInput.focus(); searchInput.select(); }
                     }
+                    if (e.key === 'Escape' && searchInput) {
+                        searchInput.value = '';
+                        filterBookmarks('');
+                        searchInput.blur();
+                    }
+                });
 
-                    // Store title/domain in dataset for filtering
-                    document.querySelectorAll('.bookmark-card').forEach(card => {
-                        const titleEl = card.querySelector('.card-title');
-                        const domainEl = card.querySelector('.card-domain');
-                        if (titleEl) card.dataset.title = titleEl.textContent.toLowerCase();
-                        if (domainEl) card.dataset.domain = domainEl.textContent.toLowerCase();
+                // 设置 dataset
+                document.querySelectorAll('.bookmark-card').forEach(card => {
+                    const titleEl = card.querySelector('.card-title');
+                    const domainEl = card.querySelector('.card-domain');
+                    if (titleEl) card.dataset.title = titleEl.textContent.toLowerCase();
+                    if (domainEl) card.dataset.domain = domainEl.textContent.toLowerCase();
+                });
+
+                // 滚动高亮标签
+                const sections = document.querySelectorAll('.category-section');
+                function highlightTag() {
+                    let currentId = '';
+                    const scrollY = window.scrollY + 80;
+                    sections.forEach(section => {
+                        const rect = section.getBoundingClientRect();
+                        if (rect.top + window.scrollY <= scrollY) currentId = section.id;
                     });
-                })();
+                    document.querySelectorAll('.sidebar-tag').forEach(tag => {
+                        tag.classList.toggle('active', tag.dataset.category === currentId.replace('cat-', ''));
+                    });
+                }
+                window.addEventListener('scroll', highlightTag);
+                setTimeout(highlightTag, 100);
             <\/script>
         </body>
         </html>`;
@@ -1610,12 +1727,10 @@
             const searchInput = document.getElementById('searchInput');
             const sidebarSearch = document.getElementById('sidebarSearch');
 
-            // Upload button
             uploadBtn.addEventListener('click', function() {
                 fileInput.click();
             });
 
-            // File input
             fileInput.addEventListener('change', function(e) {
                 if (this.files && this.files.length > 0) {
                     handleFile(this.files[0]);
@@ -1623,7 +1738,6 @@
                 this.value = '';
             });
 
-            // Drag & drop
             uploadZone.addEventListener('dragover', function(e) {
                 e.preventDefault();
                 this.classList.add('dragover');
@@ -1644,10 +1758,8 @@
                 fileInput.click();
             });
 
-            // Export
             exportBtn.addEventListener('click', exportHTML);
 
-            // Search (main)
             if (searchInput) {
                 searchInput.addEventListener('input', function() {
                     filterBookmarks(this.value);
@@ -1662,7 +1774,6 @@
                 });
             }
 
-            // Sidebar search
             if (sidebarSearch) {
                 sidebarSearch.addEventListener('input', function() {
                     const kw = this.value.toLowerCase().trim();
@@ -1673,7 +1784,6 @@
                 });
             }
 
-            // Keyboard shortcuts
             document.addEventListener('keydown', function(e) {
                 if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                     e.preventDefault();
@@ -1691,22 +1801,6 @@
                 }
             });
 
-            // Store title/domain in dataset for filtering (after render)
-            // We'll re-run this after each render via a MutationObserver or just in render function.
-            // Let's patch renderNavigation to also set dataset.
-            const origRender = renderNavigation;
-            renderNavigation = function(bookmarks, title) {
-                origRender(bookmarks, title);
-                // After render, set dataset for filtering
-                document.querySelectorAll('.bookmark-card').forEach(card => {
-                    const titleEl = card.querySelector('.card-title');
-                    const domainEl = card.querySelector('.card-domain');
-                    if (titleEl) card.dataset.title = titleEl.textContent.toLowerCase();
-                    if (domainEl) card.dataset.domain = domainEl.textContent.toLowerCase();
-                });
-            };
-
-            // Check if there's any initial data? No, wait for upload.
             console.log('[Bookmark] 书签导航生成器已加载，请上传 .md 文件');
         });
     </script>
