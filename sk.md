@@ -7,6 +7,7 @@
 - [17500](https://www.17500.cn)
 - [FlowUs 息流](https://flowus.cn/)
 - [MMP](https://bmm.lccl.cc/)
+- [ATK HUB](https://hub.atk.pro/)
 
 ## 开发平台、代码托管与协作
 - [GitHub](https://github.com/)
@@ -169,12 +170,14 @@
 
 ## 下载 / 文件传输 / 临时分享工具
 - [FilePizza](https://file.pizza/)
+- [360_chrome](https://baoku.360.cn/soft/show/appid/2000004411?channel=9510140&channel=9510140)
+- [qinanxin_thonny](https://pc.soft.qianxin.com/search/thonny)
+- [yunlogin-browser](https://www.yunlogin.com/oldversion.html?platform=windows)
 - [Reqable](https://reqable.com/zh-CN/)
 - [Convertio](https://convertio.co/zh/)
 - [Filebase](https://filebase.com/)
 - [iCloud](https://www.icloud.com.cn/)
 - [IPA下载](https://ipadump.com/#/home)
-- [Temp Mail](https://temp-mail.io/zh)
 - [GreenVideo视频下载工具](https://greenvideo.cc/)
 - [163客户端](https://d8.music.126.net/dmusic2/NeteaseCloudMusic_Music_official_3.1.30.205130_64.exe)
 
@@ -268,17 +271,6 @@
 - [IP138彩票](https://caipiao.ip138.com/)
 - [彩票](https://shouku123.com/pub/gotoUrl.do?id=1400156)
 
-## 影视 / 在线播放 / 资源
-- [哔哩哔哩](https://www.bilibili.com/)
-- [低调影视](https://ddys.app)
-- [电影天堂](https://www.dygod.net/)
-- [麦田影院](https://mtyy.tv/)
-- [奈飞工厂](https://www.netflixgc.com/)
-- [影视森林](https://549.fr/)
-- [可乐影视导航地址页](https://www.klyingshi.top/)
-- [小蜜蜂影院](https://www.xmfyy.com/)
-- [柯南影视](https://knvod.me/)
-- [追剧狂人](https://www.zjkrmv.com/)
 
 ## 游戏 / 竞技 / 云顶 / LOL 工具
 - [OP.GG](https://op.gg/zh-cn/lol/modes/aram)
@@ -298,13 +290,11 @@
 - [IP138](https://www.ip138.com/)
 - [SimilarSites](https://similarsites.com/)
 - [SimilarSiteSearch](https://www.similarsitesearch.com/)
-- [DeepSeek](https://chat.deepseek.com/)
 - [Xget全球加速](https://xuc.xi-xu.me/?utm_source=opensource.zone)
 - [蓝奏云](https://www.lanzoui.com/)
-- [ATK HUB](https://hub.atk.pro/)
+- [UU在线tool](https://uutool.cn/phone-batch/)
 
 ## 安全 / 渗透 / 威胁情报
-- [渗透导航](https://www.shentoushi.top/)
 - [安全内参](https://www.secrss.com/)
 - [Freebuf](https://www.freebuf.com/)
 - [看雪论坛](https://bbs.kanxue.com/)
@@ -372,10 +362,10 @@
 - [macOS Wallpapers](https://www.applewalls.com/zh/macos-wallpapers)
 - [Phone Wallpaper](https://phwalls.com/zh)
 - [AppleWalls](https://www.applewalls.com/)
-- [PhWalls](https://phwalls.com/zh)
 
 
 ## 站点导航 / 书签 / 导航类
+- [渗透导航](https://www.shentoushi.top/)
 - [36k导航](https://36kdh.com/)
 - [书签地球](https://www.bookmarkearth.cn/)
 - [龙轩导航](http://ilxdh.com/)
@@ -484,27 +474,17 @@
 - [Z-Library](https://go-to-library.sk/)
 - [Zed](https://zed.dev/)
 - [Zoom Earth](https://zoom.earth/)
-- [不想看片](https://bxkp.org/)
-- [东方财富网](https://www.eastmoney.com/)
 - [中文技术文档写作风格指南](https://zh-style-guide.readthedocs.io/)
 - [什么值得买](https://www.smzdm.com/)
 - [今日热榜](https://tophub.today/)
-- [低调影视](https://ddys.app)
 - [佛系软件](https://foxirj.com/)
-- [侠盗猎车:罪恶都市网页版](https://gtavc.heheda.cn/)
-- [全球宽带速度测试](https://www.speedtest.net/)
 - [历史价格查询](http://www.lsjgcx.com/)
-- [可乐影视导航地址页](https://www.klyingshi.top/)
-- [吉卜力作品介绍](https://www.ghibli.jp/works/)
 - [吾爱破解](https://www.52pojie.cn/)
 - [在线拼图工具](https://www.online-collage-maker.com/)
 - [多平台视频图片去水印工具](https://dy.kukutool.com/)
 - [奈飞工厂](https://www.netflixgc.com/)
 - [孙志锋](http://www.deathghost.cn/)
-- [小蜜蜂影院](https://www.xmfyy.com/)
 - [幕布](https://mubu.com/)
-- [影视森林](https://549.fr/)
-- [懒人之家](https://www.lanrenzhijia.com/)
 - [扣子](https://www.coze.cn/overview?invite_code=dde937fe02a6436f9b1bbe115a7c471a)
 - [提示词优化器](https://prompt.always200.com/)
 - [文叔叔云存储](https://www.wenshushu.cn/)
@@ -513,8 +493,6 @@
 - [沉浸式翻译](https://immersivetranslate.com/)
 - [流行软件的开源替代方案](https://openalternative.co/)
 - [火山引擎](https://www.volcengine.com/)
-- [爱达杂货铺](https://adzhp.cn/)
-- [电影天堂](https://www.dygod.net/)
 - [百宝箱](https://www.tbox.cn/)
 - [硅基流动](https://cloud.siliconflow.cn/i/kfJQIZKo)
 - [站长之家](https://www.chinaz.com/)
