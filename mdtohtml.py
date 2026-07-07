@@ -7,41 +7,40 @@ from typing import List, Dict, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
 import hashlib
-#pip install beautifulsoup4 lxml requests
-#安装所需模块
-# 颜色调色板 - 用于分类圆点
-CATEGORY_COLORS = [
-    '#007aff',  # 蓝色
-    '#34c759',  # 绿色
-    '#ff9500',  # 橙色
-    '#ff3b30',  # 红色
-    '#5856d6',  # 紫色
-    '#ff2d55',  # 粉色
-    '#00c7be',  # 青色
-    '#ff6b6b',  # 珊瑚红
-    '#f7c948',  # 金色
-    '#5ac8fa',  # 浅蓝
-    '#4caf50',  # 翠绿
-    '#ff6f00',  # 琥珀
-    '#e91e63',  # 玫红
-    '#9c27b0',  # 深紫
-    '#3f51b5',  # 靛蓝
-    '#009688',  # 墨绿
-    '#795548',  # 棕色
-    '#607d8b',  # 灰蓝
-]
+
+# 尝试导入chardet，如果不存在则使用简单编码检测
+try:
+    import chardet
+    HAS_CHARDET = True
+except ImportError:
+    HAS_CHARDET = False
+
+def detect_encoding(file_path: Path) -> str:
+    """检测文件编码"""
+    if HAS_CHARDET:
+        with open(file_path, 'rb') as f:
+            raw_data = f.read()
+            result = chardet.detect(raw_data)
+            return result['encoding'] or 'utf-8'
+    return 'utf-8'
 
 def get_color_for_category(category: str) -> str:
-    """根据分类名称生成一致的颜色"""
+    """根据分类名称生成一致的颜色 - BMM风格配色"""
+    CATEGORY_COLORS = [
+        '#ff1494', '#33bbff', '#ff2e2e', '#a442fa', '#b638ff', '#ebcb63',
+        '#0066ff', '#eeefff', '#069b05', '#00ffcb', '#bfbfbf', '#191919',
+        '#ffcc14', '#ffb13b', '#f0f0f0', '#fff3e0', '#13ae4f', '#ffffff',
+        '#424cff', '#00d8ff', '#41b883', '#fbfbfb', '#f7df1e', '#e43718',
+        '#9e9e9e', '#f0bb6e', '#1a97ef', '#e0feff', '#35bfce', '#c70000',
+        '#a647ff', '#24a2ff', '#ffaa00', '#3f3fff', '#00ff00', '#ff00a8',
+        '#75ffed', '#616161',
+    ]
     hash_val = hashlib.md5(category.encode('utf-8')).hexdigest()
     index = int(hash_val[:8], 16) % len(CATEGORY_COLORS)
     return CATEGORY_COLORS[index]
 
 def get_app_icon(term: str, timeout: int = 5) -> Tuple[Optional[str], bool]:
-    """
-    从 Apple App Store 获取应用图标
-    返回 (图标URL, 是否成功)
-    """
+    """从 Apple App Store 获取应用图标"""
     try:
         url = "https://apps.apple.com/cn/iphone/search"
         params = {'term': term.strip()}
@@ -49,16 +48,6 @@ def get_app_icon(term: str, timeout: int = 5) -> Tuple[Optional[str], bool]:
             'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",
             'Accept': "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
             'Accept-Language': "zh-CN,zh;q=0.9",
-            'Accept-Encoding': "gzip, deflate, br",
-            'sec-ch-ua': '"Google Chrome";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
-            'sec-ch-ua-mobile': "?0",
-            'sec-ch-ua-platform': '"Windows"',
-            'upgrade-insecure-requests': "1",
-            'sec-fetch-site': "same-origin",
-            'sec-fetch-mode': "navigate",
-            'sec-fetch-user': "?1",
-            'sec-fetch-dest': "document",
-            'referer': "https://apps.apple.com/",
         }
         
         response = requests.get(url, params=params, headers=headers, timeout=timeout)
@@ -66,16 +55,12 @@ def get_app_icon(term: str, timeout: int = 5) -> Tuple[Optional[str], bool]:
         
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        # 查找第一个应用图标
         icons = soup.find_all('img', src=re.compile(r'\.webp$'))
-        
         for img in icons:
             src = img.get('src')
             if src and 'Purple' in src and '48x48' in src:
                 if src.startswith('//'):
                     src = 'https:' + src
-                elif src.startswith('/'):
-                    src = 'https://is1-ssl.mzstatic.com' + src
                 return src, True
         
         picture_tags = soup.find_all('picture')
@@ -89,22 +74,18 @@ def get_app_icon(term: str, timeout: int = 5) -> Tuple[Optional[str], bool]:
                         first_url = 'https:' + first_url
                     return first_url, True
                 
-    except Exception as e:
+    except Exception:
         pass
     
     return None, False
 
 def enrich_search_engines_with_icons(search_engines: List[Dict], max_workers: int = 5) -> List[Dict]:
-    """
-    使用多线程为搜索引擎列表获取图标
-    """
+    """使用多线程为搜索引擎列表获取图标"""
     print(f"\n=== 开始获取搜索引擎图标 (使用 {max_workers} 个线程) ===")
     start_time = time.time()
     
     enriched = []
     
-    # 准备任务列表
-    tasks = []
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_engine = {}
         for engine in search_engines:
@@ -112,7 +93,6 @@ def enrich_search_engines_with_icons(search_engines: List[Dict], max_workers: in
             future = executor.submit(get_app_icon, name)
             future_to_engine[future] = engine
         
-        # 收集结果
         completed = 0
         total = len(search_engines)
         for future in as_completed(future_to_engine):
@@ -131,33 +111,27 @@ def enrich_search_engines_with_icons(search_engines: List[Dict], max_workers: in
                     })
                 else:
                     print(f"  [{completed}/{total}] ⚠️ 使用备用图标: {name}")
-                    # 使用备用的 emoji 或文字图标
-                    if engine['icon']:
-                        enriched.append(engine)
-                    else:
-                        enriched.append({
-                            'name': name,
-                            'url': engine['url'],
-                            'icon': f"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Crect x='3' y='3' width='18' height='18' rx='4'/%3E%3Ctext x='12' y='16' text-anchor='middle' font-size='12' fill='%23999'%3E{name[0].upper()}%3C/text%3E%3C/svg%3E"
-                        })
-            except Exception as e:
-                print(f"  [{completed}/{total}] ❌ 获取 {name} 图标失败: {str(e)}")
-                if engine['icon']:
-                    enriched.append(engine)
-                else:
                     enriched.append({
                         'name': name,
                         'url': engine['url'],
                         'icon': f"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Crect x='3' y='3' width='18' height='18' rx='4'/%3E%3Ctext x='12' y='16' text-anchor='middle' font-size='12' fill='%23999'%3E{name[0].upper()}%3C/text%3E%3C/svg%3E"
                     })
+            except Exception as e:
+                print(f"  [{completed}/{total}] ❌ 获取 {name} 图标失败: {str(e)}")
+                enriched.append({
+                    'name': name,
+                    'url': engine['url'],
+                    'icon': f"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Crect x='3' y='3' width='18' height='18' rx='4'/%3E%3Ctext x='12' y='16' text-anchor='middle' font-size='12' fill='%23999'%3E{name[0].upper()}%3C/text%3E%3C/svg%3E"
+                })
     
     elapsed = time.time() - start_time
     print(f"=== 图标获取完成，耗时 {elapsed:.2f} 秒 ===\n")
     return enriched
 
 def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
-    """生成苹果风格导航HTML页面"""
+    """生成BMM风格书签导航HTML页面"""
     
+    # 按分类分组
     categories = {}
     for bm in bookmarks:
         if bm['category'] not in categories:
@@ -167,7 +141,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
     # 为每个分类生成颜色
     category_colors = {cat: get_color_for_category(cat) for cat in categories.keys()}
     
-    # 搜索引擎配置 - 先定义基础配置
+    # 搜索引擎配置
     base_search_engines = [
         {'name': 'Google', 'url': 'https://www.google.com/search?q=', 'icon': ''},
         {'name': 'Bing', 'url': 'https://cn.bing.com/search?q=', 'icon': ''},
@@ -180,73 +154,84 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
         {'name': '安全内参', 'url': 'https://www.secrss.com/search?keywords=', 'icon': ''},
     ]
     
-    # 从 App Store 获取真实图标 (多线程)
+    # 从 App Store 获取真实图标
     search_engines = enrich_search_engines_with_icons(base_search_engines, max_workers=8)
     
-    # 生成分类区域
+    # 生成分类标签（左侧标签池）
     category_list = list(categories.items())
     
-    # 生成左侧分类导航 - 添加彩色圆点
+    # 生成左侧标签导航
     sidebar_items = []
-    for idx, (cat_name, cat_bookmarks) in enumerate(category_list):
+    for cat_name, cat_bookmarks in category_list:
         count = len(cat_bookmarks)
         color = category_colors.get(cat_name, '#007aff')
         sidebar_items.append(f'''
-            <a href="#{html.escape(cat_name)}" class="sidebar-item" data-target="{html.escape(cat_name)}">
-                <span class="sidebar-dot" style="background-color: {color};"></span>
-                <span class="sidebar-name">{html.escape(cat_name)}</span>
-                <span class="sidebar-badge">{count}</span>
+            <a href="#{html.escape(cat_name)}" class="sidebar-tag" data-category="{html.escape(cat_name)}">
+                <span class="tag-dot" style="background-color: {color};"></span>
+                <span class="tag-name">{html.escape(cat_name)}</span>
+                <span class="tag-count">{count}</span>
             </a>
         ''')
     
-    # 生成右侧内容
-    sections_html = []
+    # 生成右侧书签卡片
+    content_html = []
     for cat_name, cat_bookmarks in category_list:
-        links_html = []
+        cards_html = []
         for bm in cat_bookmarks:
             favicon = get_favicon_url(bm['url'])
-            links_html.append(f'''
-                <a href="{html.escape(bm['url'])}" class="bookmark-link" target="_blank" rel="noopener noreferrer">
-                    <div class="bookmark-item">
-                        <img class="bookmark-favicon" src="{favicon}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23999\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z\'%3E%3C/path%3E%3Cpolyline points=\'22,6 12,13 2,6\'%3E%3C/polyline%3E%3C/svg%3E'">
-                        <span class="bookmark-title">{html.escape(bm['title'])}</span>
-                    </div>
-                </a>
+            # 截取域名作为副标题
+            try:
+                domain = bm['url'].split('/')[2] if '://' in bm['url'] else bm['url'].split('/')[0]
+                domain = domain.replace('www.', '')
+            except:
+                domain = ''
+            cards_html.append(f'''
+                <div class="bookmark-card">
+                    <a href="{html.escape(bm['url'])}" target="_blank" rel="noopener noreferrer" class="card-link">
+                        <div class="card-icon">
+                            <img src="{favicon}" alt="" onerror="this.parentElement.innerHTML='<span class=\'fallback-icon\'>🌐</span>'">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">{html.escape(bm['title'])}</div>
+                            <div class="card-domain">{html.escape(domain)}</div>
+                        </div>
+                    </a>
+                </div>
             ''')
         
-        sections_html.append(f'''
-            <section class="content-section" id="{html.escape(cat_name)}">
-                <h2 class="section-title">
-                    <span class="section-dot" style="background-color: {category_colors.get(cat_name, '#007aff')};"></span>
-                    {html.escape(cat_name)}
-                </h2>
+        content_html.append(f'''
+            <section class="category-section" id="{html.escape(cat_name)}">
+                <div class="category-header">
+                    <span class="category-dot" style="background-color: {category_colors.get(cat_name, '#007aff')};"></span>
+                    <h2 class="category-title">{html.escape(cat_name)}</h2>
+                    <span class="category-count">{len(cat_bookmarks)} 个书签</span>
+                </div>
                 <div class="bookmarks-grid">
-                    {''.join(links_html)}
+                    {''.join(cards_html)}
                 </div>
             </section>
         ''')
     
-    # 生成搜索引擎按钮 - 使用图片图标
+    # 生成搜索引擎按钮
     search_buttons = []
     for engine in search_engines:
         icon = engine['icon']
-        # 如果是 URL 图片，使用 img 标签
         if icon.startswith('http') or icon.startswith('data:'):
-            icon_html = f'<img src="{html.escape(icon)}" alt="{html.escape(engine["name"])}" class="search-engine-icon">'
+            icon_html = f'<img src="{html.escape(icon)}" alt="{html.escape(engine["name"])}" class="search-icon">'
         else:
             icon_html = html.escape(icon)
         
         search_buttons.append(f'''
-            <button class="search-engine-btn" data-engine="{html.escape(engine['url'])}" title="{html.escape(engine['name'])}">
+            <button class="search-btn" data-engine="{html.escape(engine['url'])}" title="{html.escape(engine['name'])}">
                 {icon_html}
-                <span class="search-engine-name">{html.escape(engine['name'])}</span>
+                <span>{html.escape(engine['name'])}</span>
             </button>
         ''')
     
     search_buttons_html = ''.join(search_buttons)
     
     html_template = f'''<!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="dark" style="color-scheme: dark;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -254,749 +239,674 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>{html.escape(title)}</title>
     <style>
+        /* ===== CSS Variables - BMM Style ===== */
+        :root {{
+            --bg-primary: #06111b;
+            --bg-secondary: rgba(255,255,255,0.04);
+            --bg-card: rgba(255,255,255,0.06);
+            --bg-card-hover: rgba(255,255,255,0.10);
+            --bg-sidebar: rgba(255,255,255,0.04);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255,255,255,0.65);
+            --text-muted: rgba(255,255,255,0.45);
+            --border-color: rgba(255,255,255,0.08);
+            --shadow-card: 0 4px 12px rgba(0,0,0,0.3);
+            --radius-card: 16px;
+            --radius-btn: 8px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --accent: #4f46e5;
+            --accent-hover: #4338ca;
+            --sidebar-width: 240px;
+        }}
+
+        /* ===== Reset ===== */
         * {{
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }}
 
-        :root {{
-            --sidebar-width: 260px;
-            --header-height: 60px;
-            --radius: 14px;
-            --bg-primary: #f5f5f7;
-            --bg-secondary: #ffffff;
-            --bg-sidebar: #f8f8fa;
-            --text-primary: #1d1c1f;
-            --text-secondary: #6e6e73;
-            --text-muted: #8e8e93;
-            --border-color: #e5e5ea;
-            --accent-color: #007aff;
-            --accent-hover: #0066d9;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
-            --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
-        }}
-
         body {{
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", 
-                         "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", 
+                         "PingFang SC", "Microsoft YaHei", sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.5;
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            display: flex;
             min-height: 100vh;
         }}
 
-        .sidebar {{
+        /* ===== Background Effects ===== */
+        .bg-effects {{
             position: fixed;
-            top: 0;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }}
+        .bg-effects .glow1 {{
+            position: absolute;
+            top: -6vmin;
+            right: -8vmin;
+            width: 52vmin;
+            height: 52vmin;
+            background: radial-gradient(circle at center, rgba(167,139,250,0.12), transparent 66%);
+        }}
+        .bg-effects .glow2 {{
+            position: absolute;
+            bottom: 0;
             left: 0;
+            width: 62vmin;
+            height: 62vmin;
+            transform: translate(-25%, 25%);
+            background: radial-gradient(circle at center, rgba(45,212,191,0.08), transparent 68%);
+        }}
+
+        /* ===== Layout ===== */
+        .app-container {{
+            position: relative;
+            z-index: 1;
+            display: flex;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 20px 20px;
+        }}
+
+        /* ===== Sidebar ===== */
+        .sidebar {{
+            position: sticky;
+            top: 16px;
             width: var(--sidebar-width);
-            height: 100vh;
+            height: calc(100vh - 32px);
+            flex-shrink: 0;
             background: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            padding: 20px 0 30px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 16px 12px;
             overflow-y: auto;
-            z-index: 100;
+            margin-right: 20px;
             display: flex;
             flex-direction: column;
         }}
 
+        .sidebar::-webkit-scrollbar {{
+            width: 3px;
+        }}
+        .sidebar::-webkit-scrollbar-thumb {{
+            background: var(--border-color);
+            border-radius: 2px;
+        }}
+
         .sidebar-header {{
-            padding: 0 20px 16px;
+            padding: 0 8px 16px;
             border-bottom: 1px solid var(--border-color);
             flex-shrink: 0;
         }}
 
-        .sidebar-header h1 {{
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-            background: linear-gradient(135deg, #1d1c1f 0%, #3a3a3e 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }}
-
-        .sidebar-header p {{
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
-            font-weight: 400;
-        }}
-
-        .sidebar-search {{
-            padding: 12px 16px;
-            flex-shrink: 0;
-        }}
-
-        .sidebar-search input {{
-            width: 100%;
-            padding: 10px 14px;
-            font-size: 14px;
-            font-family: inherit;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            background: var(--bg-secondary);
-            transition: all 0.2s ease;
-            outline: none;
-            color: var(--text-primary);
-        }}
-
-        .sidebar-search input:focus {{
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.08);
-        }}
-
-        .sidebar-search input::placeholder {{
-            color: var(--text-muted);
-        }}
-
-        .sidebar-nav {{
-            flex: 1;
-            overflow-y: auto;
-            padding: 8px 12px;
-        }}
-
-        /* ===== 侧边栏项目 - 带彩色圆点 ===== */
-        .sidebar-item {{
-            display: flex;
-            align-items: center;
-            padding: 10px 14px;
-            border-radius: 10px;
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.15s ease;
-            cursor: pointer;
-            gap: 12px;
-            font-size: 14px;
-            font-weight: 450;
-            position: relative;
-        }}
-
-        .sidebar-item:hover {{
-            background: rgba(0, 0, 0, 0.04);
-        }}
-
-        .sidebar-item.active {{
-            background: rgba(0, 122, 255, 0.08);
-            color: var(--accent-color);
-        }}
-
-        /* 彩色圆点样式 - 类似 GitHub */
-        .sidebar-dot {{
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            display: inline-block;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-        }}
-
-        .sidebar-item:hover .sidebar-dot {{
-            transform: scale(1.15);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }}
-
-        .sidebar-item.active .sidebar-dot {{
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
-        }}
-
-        .sidebar-name {{
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }}
-
-        .sidebar-badge {{
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--text-muted);
-            background: rgba(0,0,0,0.05);
-            padding: 2px 10px;
-            border-radius: 12px;
-            flex-shrink: 0;
-        }}
-
-        .sidebar-item.active .sidebar-badge {{
-            background: rgba(0, 122, 255, 0.12);
-            color: var(--accent-color);
-        }}
-
-        .sidebar-footer {{
-            padding: 12px 12px 8px;
-            border-top: 1px solid var(--border-color);
-            flex-shrink: 0;
-        }}
-
-        /* ===== 主内容区域 ===== */
-        .main-content {{
-            margin-left: var(--sidebar-width);
-            flex: 1;
-            padding: 30px 40px 60px;
-            min-height: 100vh;
-        }}
-
-        .content-header {{
-            padding: 8px 0 24px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 32px;
-        }}
-
-        .content-header h2 {{
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-            color: var(--text-primary);
-        }}
-
-        .content-header p {{
-            font-size: 15px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }}
-
-        /* ===== 搜索引擎区域 ===== */
-        .search-engines-wrapper {{
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }}
-
-        .search-engines-label {{
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-muted);
-            margin-right: 4px;
-        }}
-
-        .search-engine-btn {{
-            display: inline-flex;
-            align-items: center;
-            padding: 6px 14px;
-            font-size: 12px;
-            font-family: inherit;
-            font-weight: 500;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.15s ease;
-            gap: 6px;
-        }}
-
-        .search-engine-btn:hover {{
-            background: rgba(0, 122, 255, 0.06);
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-            transform: translateY(-1px);
-        }}
-
-        .search-engine-btn.active {{
-            background: var(--accent-color);
-            border-color: var(--accent-color);
-            color: #fff;
-        }}
-
-        .search-engine-btn .search-engine-icon {{
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            vertical-align: middle;
-            object-fit: cover;
-        }}
-
-        .search-engine-btn .search-engine-name {{
-            margin-left: 2px;
-        }}
-
-        /* ===== 搜索框 ===== */
-        .main-search-wrapper {{
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }}
-
-        .main-search-wrapper .search-input {{
-            flex: 1;
-            min-width: 200px;
-            padding: 12px 18px;
-            font-size: 15px;
-            font-family: inherit;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            background: var(--bg-secondary);
-            transition: all 0.2s ease;
-            outline: none;
-            color: var(--text-primary);
-        }}
-
-        .main-search-wrapper .search-input:focus {{
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.08);
-        }}
-
-        .main-search-wrapper .search-input::placeholder {{
-            color: var(--text-muted);
-        }}
-
-        .search-shortcut {{
-            font-size: 12px;
-            color: var(--text-muted);
-            background: rgba(0,0,0,0.04);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            white-space: nowrap;
-        }}
-
-        /* ===== 内容分类 - 修改后的样式 ===== */
-        .content-section {{
-            margin-bottom: 40px;
-            scroll-margin-top: 20px;
-        }}
-
-        .content-section:last-child {{
-            margin-bottom: 0;
-        }}
-
-        .section-title {{
+        .sidebar-header .logo {{
             display: flex;
             align-items: center;
             gap: 10px;
             font-size: 20px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--border-color);
-            position: relative;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }}
+        .sidebar-header .logo span {{
+            background: linear-gradient(135deg, #fff 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }}
+        .sidebar-header .badge {{
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            padding-left: 2px;
         }}
 
-        .section-title::after {{
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: var(--accent-color);
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }}
-
-        .section-title:hover::after {{
-            width: 100px;
-        }}
-
-        .section-dot {{
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            display: inline-block;
+        .sidebar-search {{
+            padding: 12px 0 8px;
             flex-shrink: 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }}
+        .sidebar-search input {{
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-family: inherit;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.04);
+            color: var(--text-primary);
+            outline: none;
+            transition: var(--transition);
+        }}
+        .sidebar-search input:focus {{
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.08);
+        }}
+        .sidebar-search input::placeholder {{
+            color: var(--text-muted);
         }}
 
-        /* ===== 书签网格 ===== */
-        .bookmarks-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 10px;
+        .sidebar-tags {{
+            flex: 1;
+            overflow-y: auto;
+            padding: 4px 0;
         }}
 
-        .bookmark-link {{
-            text-decoration: none;
-            display: block;
-        }}
-
-        .bookmark-item {{
+        .sidebar-tag {{
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1);
-            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: var(--transition);
             cursor: pointer;
-        }}
-
-        .bookmark-item:hover {{
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-            border-color: transparent;
-        }}
-
-        .bookmark-favicon {{
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-            border-radius: 4px;
-        }}
-
-        .bookmark-title {{
-            font-size: 14px;
+            gap: 10px;
+            font-size: 13px;
             font-weight: 450;
+        }}
+        .sidebar-tag:hover {{
+            background: rgba(255,255,255,0.06);
             color: var(--text-primary);
-            line-height: 1.3;
+            transform: translateX(2px);
+        }}
+        .sidebar-tag.active {{
+            background: rgba(79,70,229,0.15);
+            color: var(--text-primary);
+        }}
+
+        .tag-dot {{
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }}
+        .tag-name {{
+            flex: 1;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }}
+        .tag-count {{
+            font-size: 11px;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.06);
+            padding: 0 8px;
+            border-radius: 10px;
+            line-height: 18px;
+            flex-shrink: 0;
+        }}
+
+        .sidebar-footer {{
+            padding: 12px 8px 0;
+            border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+            font-size: 11px;
+            color: var(--text-muted);
+        }}
+
+        /* ===== Main Content ===== */
+        .main-content {{
             flex: 1;
+            min-width: 0;
+            padding: 0 0 40px;
         }}
 
-        .bookmark-item:hover .bookmark-title {{
-            color: var(--accent-color);
+        /* ===== Header ===== */
+        .main-header {{
+            padding: 8px 0 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }}
+        .main-header h1 {{
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }}
+        .main-header p {{
+            font-size: 14px;
+            color: var(--text-secondary);
         }}
 
-        .bookmark-link.hidden {{
-            display: none;
+        /* ===== Search Engines ===== */
+        .search-engines {{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }}
+        .search-engines .label {{
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-right: 4px;
+        }}
+        .search-btn {{
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            font-size: 12px;
+            font-family: inherit;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-btn);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }}
+        .search-btn:hover {{
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.15);
+            color: var(--text-primary);
+        }}
+        .search-btn.active {{
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }}
+        .search-btn .search-icon {{
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            object-fit: cover;
         }}
 
-        .content-section.hidden {{
-            display: none;
+        /* ===== Search Input ===== */
+        .search-wrapper {{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0 20px;
+        }}
+        .search-wrapper input {{
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-family: inherit;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.04);
+            color: var(--text-primary);
+            outline: none;
+            transition: var(--transition);
+        }}
+        .search-wrapper input:focus {{
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.08);
+        }}
+        .search-wrapper input::placeholder {{
+            color: var(--text-muted);
+        }}
+        .search-wrapper .shortcut {{
+            font-size: 11px;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.04);
+            padding: 2px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
         }}
 
+        /* ===== Category Section ===== */
+        .category-section {{
+            margin-bottom: 32px;
+            scroll-margin-top: 16px;
+        }}
+        .category-header {{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }}
+        .category-dot {{
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }}
+        .category-title {{
+            font-size: 18px;
+            font-weight: 600;
+        }}
+        .category-count {{
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-left: auto;
+        }}
+
+        /* ===== Bookmarks Grid ===== */
+        .bookmarks-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }}
+
+        /* ===== Bookmark Card - BMM Style ===== */
+        .bookmark-card {{
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-card);
+            transition: var(--transition);
+            overflow: hidden;
+        }}
+        .bookmark-card:hover {{
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.15);
+            box-shadow: var(--shadow-card);
+        }}
+
+        .card-link {{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            text-decoration: none;
+            color: inherit;
+        }}
+
+        .card-icon {{
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }}
+        .card-icon img {{
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }}
+        .card-icon .fallback-icon {{
+            font-size: 18px;
+        }}
+
+        .card-content {{
+            flex: 1;
+            min-width: 0;
+        }}
+        .card-title {{
+            font-size: 14px;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }}
+        .card-domain {{
+            font-size: 11px;
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }}
+
+        /* ===== No Results ===== */
         .no-results {{
             text-align: center;
             padding: 60px 20px;
             color: var(--text-muted);
+            grid-column: 1 / -1;
+        }}
+        .no-results .icon {{
+            font-size: 40px;
+            display: block;
+            margin-bottom: 12px;
         }}
 
-        .no-results p:first-child {{
-            font-size: 18px;
-            font-weight: 500;
-        }}
-
-        /* ===== 返回顶部 ===== */
-        .back-to-top {{
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 44px;
-            height: 44px;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.2s ease;
-            box-shadow: var(--shadow-md);
-            border: 1px solid rgba(0,0,0,0.04);
-            cursor: pointer;
-            z-index: 99;
-        }}
-
-        .back-to-top.show {{
-            opacity: 1;
-        }}
-
-        .back-to-top:hover {{
-            transform: scale(1.05);
-        }}
-
-        .back-to-top svg {{
-            width: 20px;
-            height: 20px;
-            stroke: var(--text-primary);
-            stroke-width: 2;
-        }}
-
-        /* ===== 滚动条 ===== */
-        .sidebar::-webkit-scrollbar,
-        .sidebar-nav::-webkit-scrollbar {{
-            width: 4px;
-        }}
-
-        .sidebar::-webkit-scrollbar-track,
-        .sidebar-nav::-webkit-scrollbar-track {{
-            background: transparent;
-        }}
-
-        .sidebar::-webkit-scrollbar-thumb,
-        .sidebar-nav::-webkit-scrollbar-thumb {{
-            background: var(--border-color);
-            border-radius: 4px;
-        }}
-
-        ::-webkit-scrollbar {{
-            width: 8px;
-            height: 8px;
-        }}
-        
-        ::-webkit-scrollbar-track {{
-            background: var(--bg-primary);
-        }}
-        
-        ::-webkit-scrollbar-thumb {{
-            background: #c6c6c8;
-            border-radius: 4px;
-        }}
-        
-        ::-webkit-scrollbar-thumb:hover {{
-            background: #86868b;
-        }}
-
-        /* ===== 响应式 ===== */
+        /* ===== Responsive ===== */
         @media (max-width: 1024px) {{
-            :root {{
-                --sidebar-width: 220px;
-            }}
-            .main-content {{
-                padding: 20px 24px 40px;
+            .sidebar {{
+                width: 200px;
+                margin-right: 16px;
             }}
         }}
 
         @media (max-width: 820px) {{
-            .sidebar {{
-                transform: translateX(-100%);
-                transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
-                width: 280px;
-            }}
-            .sidebar.open {{
-                transform: translateX(0);
-            }}
-            .main-content {{
-                margin-left: 0;
-                padding: 16px 20px 40px;
-            }}
-            .menu-toggle {{
-                display: flex !important;
-            }}
-        }}
-
-        @media (max-width: 640px) {{
-            .bookmarks-grid {{
-                grid-template-columns: 1fr 1fr;
-            }}
-            .main-search-wrapper {{
+            .app-container {{
                 flex-direction: column;
-                align-items: stretch;
+                padding: 12px 16px;
             }}
-            .search-shortcut {{
-                align-self: flex-end;
+            .sidebar {{
+                position: relative;
+                top: 0;
+                width: 100%;
+                height: auto;
+                max-height: 300px;
+                margin-right: 0;
+                margin-bottom: 16px;
+                border-radius: 16px;
             }}
-            .search-engines-wrapper {{
-                gap: 6px;
-            }}
-            .search-engine-btn {{
-                padding: 4px 10px;
-                font-size: 11px;
+            .bookmarks-grid {{
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             }}
         }}
 
         @media (max-width: 480px) {{
             .bookmarks-grid {{
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
             }}
-            .main-content {{
-                padding: 12px 14px 30px;
+            .main-header h1 {{
+                font-size: 22px;
             }}
-            .search-engines-wrapper {{
+            .search-wrapper {{
+                flex-direction: column;
+                align-items: stretch;
+            }}
+            .search-wrapper .shortcut {{
+                align-self: flex-end;
+            }}
+            .search-engines {{
                 justify-content: center;
             }}
         }}
 
-        .menu-toggle {{
-            display: none;
-            position: fixed;
-            top: 12px;
-            left: 12px;
-            z-index: 200;
-            width: 44px;
-            height: 44px;
-            background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 50%;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 20px;
-        }}
-
-        .menu-toggle:hover {{
-            background: rgba(255,255,255,1);
-        }}
-
-        .sidebar-overlay {{
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.2);
-            z-index: 99;
-        }}
-
-        .sidebar-overlay.show {{
-            display: block;
-        }}
-
-        @media (max-width: 820px) {{
-            .sidebar-overlay.show {{
-                display: block;
+        @media (max-width: 380px) {{
+            .bookmarks-grid {{
+                grid-template-columns: 1fr;
             }}
+        }}
+
+        /* ===== Utility ===== */
+        .hidden {{
+            display: none !important;
+        }}
+
+        /* ===== Scrollbar Global ===== */
+        ::-webkit-scrollbar {{
+            width: 6px;
+            height: 6px;
+        }}
+        ::-webkit-scrollbar-track {{
+            background: transparent;
+        }}
+        ::-webkit-scrollbar-thumb {{
+            background: rgba(255,255,255,0.15);
+            border-radius: 3px;
+        }}
+        ::-webkit-scrollbar-thumb:hover {{
+            background: rgba(255,255,255,0.25);
         }}
     </style>
 </head>
 <body>
-    <button class="menu-toggle" id="menuToggle" aria-label="切换侧边栏">☰</button>
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <!-- 背景光晕 -->
+    <div class="bg-effects">
+        <div class="glow1"></div>
+        <div class="glow2"></div>
+    </div>
 
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h1>📖 {html.escape(title)}</h1>
-            <p>{len(bookmarks)} 个网站</p>
-        </div>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span>📑</span>
+                    <span>{html.escape(title)}</span>
+                </div>
+                <div class="badge">{len(bookmarks)} 个书签</div>
+            </div>
 
-        <div class="sidebar-search">
-            <input type="text" id="sidebarSearch" placeholder="搜索分类..." autocomplete="off">
-        </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebarSearch" placeholder="过滤标签..." autocomplete="off">
+            </div>
 
-        <nav class="sidebar-nav">
-            {''.join(sidebar_items)}
-        </nav>
+            <nav class="sidebar-tags" id="sidebarTags">
+                {''.join(sidebar_items)}
+            </nav>
 
-        <div class="sidebar-footer">
-        </div>
-    </aside>
+            <div class="sidebar-footer">
+                共 {len(categories)} 个分类
+            </div>
+        </aside>
 
-    <main class="main-content" id="mainContent">
-        <div class="search-engines-wrapper">
-            <span class="search-engines-label">🔎 搜索：</span>
-            {search_buttons_html}
-        </div>
+        <!-- 主内容 -->
+        <main class="main-content" id="mainContent">
+            <div class="main-header">
+                <h1>📚 我的书签</h1>
+                <p>收纳、分享、探索优质网站</p>
+            </div>
 
-        <div class="main-search-wrapper">
-            <input type="text" class="search-input" id="searchInput" placeholder="搜索书签..." autocomplete="off">
-            <span class="search-shortcut">⌘K</span>
-        </div>
+            <!-- 搜索引擎 -->
+            <div class="search-engines">
+                <span class="label">🔍 搜索：</span>
+                {search_buttons_html}
+            </div>
 
-        <div id="bookmarksContainer">
-            {''.join(sections_html)}
-        </div>
-    </main>
+            <!-- 搜索框 -->
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="搜索书签..." autocomplete="off">
+                <span class="shortcut">⌘K</span>
+            </div>
 
-    <div class="back-to-top" id="backToTop">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
+            <!-- 书签内容 -->
+            <div id="bookmarksContainer">
+                {''.join(content_html)}
+            </div>
+        </main>
     </div>
 
     <script>
         (function() {{
+            'use strict';
+
+            // ===== DOM 引用 =====
             const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const menuToggle = document.getElementById('menuToggle');
+            const sidebarSearch = document.getElementById('sidebarSearch');
+            const sidebarTags = document.querySelectorAll('.sidebar-tag');
+            const searchInput = document.getElementById('searchInput');
+            const engineBtns = document.querySelectorAll('.search-btn');
+            const sections = document.querySelectorAll('.category-section');
 
-            function toggleSidebar() {{
-                sidebar.classList.toggle('open');
-                overlay.classList.toggle('show');
+            // ===== 侧边栏标签搜索 =====
+            if (sidebarSearch) {{
+                sidebarSearch.addEventListener('input', function() {{
+                    const keyword = this.value.toLowerCase().trim();
+                    sidebarTags.forEach(tag => {{
+                        const name = tag.querySelector('.tag-name').textContent.toLowerCase();
+                        tag.style.display = (keyword === '' || name.includes(keyword)) ? 'flex' : 'none';
+                    }});
+                }});
             }}
 
-            function closeSidebar() {{
-                sidebar.classList.remove('open');
-                overlay.classList.remove('show');
-            }}
-
-            if (menuToggle) {{
-                menuToggle.addEventListener('click', toggleSidebar);
-            }}
-            if (overlay) {{
-                overlay.addEventListener('click', closeSidebar);
-            }}
-
-            document.querySelectorAll('.sidebar-item').forEach(item => {{
-                item.addEventListener('click', () => {{
-                    if (window.innerWidth <= 820) {{
-                        closeSidebar();
+            // ===== 标签点击 - 滚动到对应分类 =====
+            sidebarTags.forEach(tag => {{
+                tag.addEventListener('click', function(e) {{
+                    e.preventDefault();
+                    const category = this.dataset.category;
+                    const target = document.getElementById(category);
+                    if (target) {{
+                        const offset = 20;
+                        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+                        window.scrollTo({{ top, behavior: 'smooth' }});
+                    }}
+                    // 更新激活状态
+                    sidebarTags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    // 清空搜索
+                    if (searchInput) {{
+                        searchInput.value = '';
+                        filterBookmarks('');
                     }}
                 }});
             }});
 
-            const sidebarSearch = document.getElementById('sidebarSearch');
-            const sidebarItems = document.querySelectorAll('.sidebar-item');
-
-            if (sidebarSearch) {{
-                sidebarSearch.addEventListener('input', function() {{
-                    const keyword = this.value.toLowerCase().trim();
-                    sidebarItems.forEach(item => {{
-                        const name = item.querySelector('.sidebar-name').textContent.toLowerCase();
-                        if (keyword === '' || name.includes(keyword)) {{
-                            item.style.display = 'flex';
-                        }} else {{
-                            item.style.display = 'none';
-                        }}
-                    }});
+            // ===== 滚动高亮标签 =====
+            function highlightTag() {{
+                let currentId = '';
+                const scrollY = window.scrollY + 100;
+                sections.forEach(section => {{
+                    const rect = section.getBoundingClientRect();
+                    const top = rect.top + window.scrollY;
+                    if (scrollY >= top) {{
+                        currentId = section.id;
+                    }}
+                }});
+                sidebarTags.forEach(tag => {{
+                    tag.classList.toggle('active', tag.dataset.category === currentId);
                 }});
             }}
+            window.addEventListener('scroll', highlightTag);
+            setTimeout(highlightTag, 100);
 
-            const searchInput = document.getElementById('searchInput');
-            const sections = document.querySelectorAll('.content-section');
-
-            function searchBookmarks() {{
-                const keyword = searchInput.value.toLowerCase().trim();
+            // ===== 书签搜索 =====
+            function filterBookmarks(keyword) {{
+                const keywordLower = keyword.toLowerCase().trim();
                 let totalMatches = 0;
 
                 sections.forEach(section => {{
-                    const bookmarks = section.querySelectorAll('.bookmark-link');
+                    const cards = section.querySelectorAll('.bookmark-card');
                     let sectionMatches = 0;
 
-                    bookmarks.forEach(bookmark => {{
-                        const title = bookmark.querySelector('.bookmark-title').textContent.toLowerCase();
-                        if (keyword === '' || title.includes(keyword)) {{
-                            bookmark.classList.remove('hidden');
-                            sectionMatches++;
-                        }} else {{
-                            bookmark.classList.add('hidden');
-                        }}
+                    cards.forEach(card => {{
+                        const title = card.querySelector('.card-title').textContent.toLowerCase();
+                        const domain = card.querySelector('.card-domain').textContent.toLowerCase();
+                        const isMatch = keywordLower === '' || title.includes(keywordLower) || domain.includes(keywordLower);
+                        card.classList.toggle('hidden', !isMatch);
+                        if (isMatch) sectionMatches++;
                     }});
 
                     totalMatches += sectionMatches;
-
-                    if (keyword === '' || sectionMatches > 0) {{
-                        section.classList.remove('hidden');
-                    }} else {{
-                        section.classList.add('hidden');
-                    }}
+                    section.classList.toggle('hidden', keywordLower !== '' && sectionMatches === 0);
                 }});
 
-                let noResultsDiv = document.getElementById('noResults');
-                if (totalMatches === 0 && keyword !== '') {{
-                    if (!noResultsDiv) {{
-                        noResultsDiv = document.createElement('div');
-                        noResultsDiv.id = 'noResults';
-                        noResultsDiv.className = 'no-results';
-                        noResultsDiv.innerHTML = '<p>🔍 没有找到相关书签</p><p style="font-size: 14px; color: var(--text-muted);">试试其他关键词</p>';
-                        document.getElementById('bookmarksContainer').appendChild(noResultsDiv);
+                // 无结果提示
+                let noResults = document.getElementById('noResults');
+                if (totalMatches === 0 && keywordLower !== '') {{
+                    if (!noResults) {{
+                        noResults = document.createElement('div');
+                        noResults.id = 'noResults';
+                        noResults.className = 'no-results';
+                        noResults.innerHTML = '<span class="icon">🔍</span><p>没有找到匹配的书签</p>';
+                        document.getElementById('bookmarksContainer').appendChild(noResults);
                     }}
-                }} else if (noResultsDiv) {{
-                    noResultsDiv.remove();
+                }} else if (noResults) {{
+                    noResults.remove();
                 }}
             }}
 
             if (searchInput) {{
-                searchInput.addEventListener('input', searchBookmarks);
+                searchInput.addEventListener('input', function() {{
+                    filterBookmarks(this.value);
+                }});
             }}
 
-            document.addEventListener('keydown', (e) => {{
+            // ===== 快捷键 =====
+            document.addEventListener('keydown', function(e) {{
                 if ((e.ctrlKey || e.metaKey) && e.key === 'k') {{
                     e.preventDefault();
                     if (searchInput) {{
@@ -1007,127 +917,44 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
                 if (e.key === 'Escape') {{
                     if (searchInput) {{
                         searchInput.value = '';
-                        searchBookmarks();
+                        filterBookmarks('');
                         searchInput.blur();
                     }}
                 }}
             }});
 
-            const engineBtns = document.querySelectorAll('.search-engine-btn');
-            let currentEngine = 'https://cn.bing.com/search?q=';
-
-            try {{
-                const saved = localStorage.getItem('selectedEngine');
-                if (saved) {{
-                    currentEngine = saved;
-                }}
-            }} catch(e) {{}}
+            // ===== 搜索引擎切换 =====
+            let currentEngine = localStorage.getItem('selectedEngine') || 'https://cn.bing.com/search?q=';
 
             engineBtns.forEach(btn => {{
                 const engineUrl = btn.dataset.engine;
                 if (engineUrl === currentEngine) {{
                     btn.classList.add('active');
                 }}
-
                 btn.addEventListener('click', function(e) {{
                     e.stopPropagation();
                     const url = this.dataset.engine;
                     if (url) {{
                         currentEngine = url;
-                        try {{
-                            localStorage.setItem('selectedEngine', url);
-                        }} catch(ex) {{}}
+                        localStorage.setItem('selectedEngine', url);
                         engineBtns.forEach(b => b.classList.remove('active'));
                         this.classList.add('active');
-
                         if (searchInput && searchInput.value.trim()) {{
-                            const query = searchInput.value.trim();
-                            window.open(currentEngine + encodeURIComponent(query), '_blank');
+                            window.open(currentEngine + encodeURIComponent(searchInput.value.trim()), '_blank');
                         }}
                     }}
                 }});
             }});
 
+            // ===== Enter 搜索 =====
             if (searchInput) {{
-                searchInput.addEventListener('keydown', (e) => {{
+                searchInput.addEventListener('keydown', function(e) {{
                     if (e.key === 'Enter') {{
-                        const query = searchInput.value.trim();
+                        const query = this.value.trim();
                         if (query) {{
                             window.open(currentEngine + encodeURIComponent(query), '_blank');
                         }}
                     }}
-                }});
-            }}
-
-            const navItems = document.querySelectorAll('.sidebar-item');
-
-            function highlightNav() {{
-                let currentId = '';
-                const scrollY = window.scrollY + 100;
-                sections.forEach(section => {{
-                    const rect = section.getBoundingClientRect();
-                    const top = rect.top + window.scrollY;
-                    if (scrollY >= top) {{
-                        currentId = section.id;
-                    }}
-                }});
-
-                navItems.forEach(item => {{
-                    const target = item.dataset.target;
-                    item.classList.toggle('active', target === currentId);
-                }});
-            }}
-
-            window.addEventListener('scroll', highlightNav);
-            setTimeout(highlightNav, 100);
-
-            const backToTop = document.getElementById('backToTop');
-
-            window.addEventListener('scroll', () => {{
-                if (window.scrollY > 300) {{
-                    backToTop.classList.add('show');
-                }} else {{
-                    backToTop.classList.remove('show');
-                }}
-            }});
-
-            if (backToTop) {{
-                backToTop.addEventListener('click', () => {{
-                    window.scrollTo({{ top: 0, behavior: 'smooth' }});
-                }});
-            }}
-
-            navItems.forEach(item => {{
-                item.addEventListener('click', (e) => {{
-                    const targetId = item.dataset.target;
-                    if (targetId) {{
-                        const targetElement = document.getElementById(targetId);
-                        if (targetElement) {{
-                            e.preventDefault();
-                            const offset = 20;
-                            const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - offset;
-                            window.scrollTo({{
-                                top: targetPosition,
-                                behavior: 'smooth'
-                            }});
-                        }}
-                    }}
-                }});
-            }});
-
-            if ('IntersectionObserver' in window) {{
-                const observerOptions = {{ rootMargin: '100px' }};
-                const imageObserver = new IntersectionObserver((entries) => {{
-                    entries.forEach(entry => {{
-                        if (entry.isIntersecting) {{
-                            const img = entry.target;
-                            img.src = img.dataset.src || img.src;
-                            imageObserver.unobserve(img);
-                        }}
-                    }});
-                }}, observerOptions);
-                document.querySelectorAll('.bookmark-favicon').forEach(img => {{
-                    imageObserver.observe(img);
                 }});
             }}
         }})();
@@ -1145,7 +972,8 @@ def get_favicon_url(url: str) -> str:
         else:
             domain = url.split('/')[0]
         domain = domain.replace('www.', '')
-        return f"https://favicon.im/{domain}"
+        # 使用更稳定的favicon服务
+        return f"https://api.lcll.cc/favicon?host={domain}"
     except:
         return ""
 
@@ -1189,6 +1017,29 @@ def parse_markdown_bookmarks(content: str) -> List[Dict]:
     
     return bookmarks
 
+def read_file_with_fallback(file_path: Path) -> str:
+    """使用多种编码尝试读取文件"""
+    encodings = ['utf-8', 'gbk', 'gb2312', 'gb18030', 'utf-8-sig', 'latin-1']
+    
+    # 尝试检测编码
+    try:
+        detected = detect_encoding(file_path)
+        if detected:
+            encodings.insert(0, detected)
+    except:
+        pass
+    
+    for enc in encodings:
+        try:
+            with open(file_path, 'r', encoding=enc) as f:
+                return f.read()
+        except (UnicodeDecodeError, LookupError):
+            continue
+    
+    # 最后尝试忽略错误
+    with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+        return f.read()
+
 def main():
     """主函数"""
     input_file = Path(r"C:\Users\Administrator\Downloads\sk.md")
@@ -1199,8 +1050,7 @@ def main():
         return
     
     print(f"正在读取文件: {input_file}")
-    with open(input_file, 'r', encoding='utf-8') as f:
-        content = f.read()
+    content = read_file_with_fallback(input_file)
     
     print("正在解析书签文件...")
     bookmarks = parse_markdown_bookmarks(content)
@@ -1213,7 +1063,7 @@ def main():
     categories = set(bm['category'] for bm in bookmarks)
     print(f"共 {len(categories)} 个分类")
     
-    print("正在生成HTML页面...")
+    print("正在生成BMM风格HTML页面...")
     html_content = generate_html(bookmarks, title="我的导航页")
     
     with open(output_file, 'w', encoding='utf-8') as f:
