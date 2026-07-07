@@ -58,6 +58,11 @@
 - [MCP Flow](https://mcpflow.io/)
 
 ## 人工智能 / 模型 / AIGC 平台与工具
+- [DeepSeek](https://chat.deepseek.com/)
+- [腾讯元宝](https://yuanbao.tencent.com/)
+- [千问](https://www.qianwen.com/)
+- [腾讯混元](https://hunyuan.tencent.com/)
+- [豆包](https://www.doubao.com/chat/)
 - [Chatbox AI](https://chatboxai.app/)
 - [Claude Code深度教程](https://claudecode.tangshuang.net/)
 - [Google AI Studio](https://aistudio.google.com/)
@@ -167,7 +172,6 @@
 ## 搜索 / 相似站点 / 推荐
 - [SimilarSites](https://similarsites.com/)
 - [SimilarSiteSearch](https://www.similarsitesearch.com/)
-- [DeepSeek](https://chat.deepseek.com/)
 - [Get Emoji](https://getemoji.com/)
 - [CopyChar](https://copychar.cc/)
 
@@ -489,7 +493,6 @@
 - [佛系软件](https://foxirj.com/)
 - [侠盗猎车:罪恶都市网页版](https://gtavc.heheda.cn/)
 - [全球宽带速度测试](https://www.speedtest.net/)
-- [千问](https://www.qianwen.com/)
 - [历史价格查询](http://www.lsjgcx.com/)
 - [可乐影视导航地址页](https://www.klyingshi.top/)
 - [吉卜力作品介绍](https://www.ghibli.jp/works/)
@@ -516,11 +519,8 @@
 - [硅基流动](https://cloud.siliconflow.cn/i/kfJQIZKo)
 - [站长之家](https://www.chinaz.com/)
 - [素材SoSo](https://clipso.agilestudio.cn/)
-- [腾讯元宝](https://yuanbao.tencent.com/)
-- [腾讯混元](https://hunyuan.tencent.com/)
 - [讨论区 | JIKE](https://jike.info/)
 - [诗泉](https://poetry.palemoky.com/)
-- [豆包](https://www.doubao.com/chat/)
 - [追剧狂人](https://www.zjkrmv.com/)
 - [野草云](https://my.yecaoyun.com/aff.php?aff=4815)
 - [长桥 Web 版](https://trade.longbridge.com/)
