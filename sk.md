@@ -20,6 +20,7 @@
 - [iCloud](https://www.icloud.com.cn/)
 - [IPA下载](https://ipadump.com/#/home)
 - [GreenVideo视频下载工具](https://greenvideo.cc/)
+- [Localsend](https://localsend.org/zh-CN/download)
 - [163客户端](https://d8.music.126.net/dmusic2/NeteaseCloudMusic_Music_official_3.1.30.205130_64.exe)
 - [Yaak-离线api客户端](https://github.com/mountain-loop/yaak/releases/download/v2026.4.0/Yaak_2026.4.0_x64-setup.exe)
 
