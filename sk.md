@@ -13,24 +13,25 @@
 
 ## 下载文件
 - [FilePizza](https://file.pizza/)
-- [360_chrome](https://baoku.360.cn/soft/show/appid/2000004411?channel=9510140&channel=9510140)
-- [qinanxin_thonny](https://pc.soft.qianxin.com/search/thonny)
+- [360软件-chrome](https://baoku.360.cn/soft/show/appid/2000004411?channel=9510140&channel=9510140)
+- [奇安信软件-thonny](https://pc.soft.qianxin.com/search/thonny)
+- [QQ软件-vivaldi](https://pc.qq.com/search.html#!keyword=viva)
 - [yunlogin-browser](https://www.yunlogin.com/oldversion.html?platform=windows)
-- [Reqable](https://reqable.com/zh-CN/)
+- [Reqable-download](https://reqable.com/zh-CN/)
 - [steampp-download](https://wwn.lanzouy.com/b01v4iz1g)
 - [Convertio](https://convertio.co/zh/)
 - [Filebase](https://filebase.com/)
-- [iCloud](https://www.icloud.com.cn/)
-- [IPA下载](https://ipadump.com/#/home)
-- [GreenVideo视频下载工具](https://greenvideo.cc/)
-- [Localsend](https://localsend.org/zh-CN/download)
-- [163客户端](https://d8.music.126.net/dmusic2/NeteaseCloudMusic_Music_official_3.1.30.205130_64.exe)
+- [Apple-iCloud](https://www.icloud.com.cn/)
+- [Apple-IPA下载](https://ipadump.com/#/home)
+- [Localsend-FTP传输](https://localsend.org/zh-CN/download)
+- [163music客户端](https://d8.music.126.net/dmusic2/NeteaseCloudMusic_Music_official_3.1.30.205130_64.exe)
 - [Yaak-离线api客户端](https://github.com/mountain-loop/yaak/releases/download/v2026.4.0/Yaak_2026.4.0_x64-setup.exe)
 
 ## 开发代码托管
 - [GitHub](https://github.com/)
 - [Hellogithub](https://hellogithub.com/)
 - [Gitee](https://gitee.com)
+- [掘金热榜](https://juejin.cn/hot/articles)
 - [Replit](https://replit.com/)
 - [Stack Blitz](https://stackblitz.com/)
 - [Play with Docker](https://labs.play-with-docker.com/)
@@ -110,10 +111,12 @@
 - [MCP Flow](https://mcpflow.io/)
 
 ## AI模型
+- [Xget加速推理文档](https://github.com/xixu-me/xget/blob/main/README.zh-Hans.md#ai-%E6%8E%A8%E7%90%86%E6%8F%90%E4%BE%9B%E5%95%86)
 - [DeepSeek](https://chat.deepseek.com/)
 - [腾讯元宝](https://yuanbao.tencent.com/)
 - [千问](https://www.qianwen.com/)
 - [腾讯混元](https://hunyuan.tencent.com/)
+- [硅基流动](https://cloud.siliconflow.cn/i/kfJQIZKo)
 - [豆包](https://www.doubao.com/chat/)
 - [Chatbox AI](https://chatboxai.app/)
 - [Claude Code深度教程](https://claudecode.tangshuang.net/)
@@ -233,7 +236,7 @@
 - [InfoQ](https://shouku123.com/pub/gotoUrl.do?id=1399826)
 - [IBM中国](https://shouku123.com/pub/gotoUrl.do?id=1399822)
 
-## 新闻与热榜
+## 新闻热榜
 - [今日热榜](https://tophub.today/)
 - [今日头条](http://www.toutiao.com/)
 - [腾讯新闻](http://news.qq.com/)
@@ -352,19 +355,20 @@
 - [自然人税务申报](https://shouku123.com/pub/gotoUrl.do?id=1399873)
 
 ## 参考手册文档
+- [Python3.10文档](https://docs.pythonlang.cn/3.10/)
 - [HTML参考手册](https://shouku123.com/pub/gotoUrl.do?id=1399827)
 - [CSS参考手册](https://shouku123.com/pub/gotoUrl.do?id=1399828)
 - [JavaScript参考手册](https://shouku123.com/pub/gotoUrl.do?id=1399829)
 - [jQuery API中文文档](https://shouku123.com/pub/gotoUrl.do?id=1399830)
 - [Java SE文档](https://shouku123.com/pub/gotoUrl.do?id=1399831)
-- [Python3.12文档](https://docs.pythonlang.cn/3.10/)
+
 
 ## GitHub加速
 - [GitHub镜像站](https://www.moretools.app/zh-CN/github-proxy)
 - [清华镜像站](https://mirrors.tuna.tsinghua.edu.cn/help/fdroid/)
 - [GitHub加速-steampp](https://steampp.net/download)
 
-## PCB硬件
+## 硬件电路
 - [嘉立创开源广场](https://oshwhub.com/)
 - [无线WIFI转有线路由](https://oshwhub.com/yc_chen/wireless-wifi-to-wired-routing)
 
@@ -501,7 +505,6 @@
 - [沉浸式翻译](https://immersivetranslate.com/)
 - [流行软件的开源替代方案](https://openalternative.co/)
 - [火山引擎](https://www.volcengine.com/)
-- [硅基流动](https://cloud.siliconflow.cn/i/kfJQIZKo)
 - [站长之家](https://www.chinaz.com/)
 - [野草云](https://my.yecaoyun.com/aff.php?aff=4815)
 - [雪球](https://xueqiu.com/)
