@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>书签导航 · HelloGitHub 风格</title>
+    <title>书签导航</title>
     <style>
         /* ===== 全局重置 & 变量 ===== */
         * {
@@ -1028,7 +1028,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'nav.html';
+            a.download = 'md2html.html';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
