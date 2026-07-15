@@ -1,5 +1,7 @@
-## 常用网站
+## 常用
 - [哔哩哔哩](http://www.bilibili.com/)
+- [GitHub](https://github.com/)
+- [Deepspeak](https://chat.deepseek.com/)
 - [shouku-keep](https://shouku123.com/keep)
 - [书签地球](https://www.bookmarkearth.cn/)
 - [菜鸟工具-Search](https://www.jyshare.com/)
