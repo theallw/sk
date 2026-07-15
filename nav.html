@@ -2,15 +2,12 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>书签导航生成器 · BMM 风格</title>
+    <title>书签导航 · HelloGitHub 风格</title>
     <style>
-        /* ============================================================
-           GLOBAL RESET & VARIABLES
-           ============================================================ */
+        /* ===== 全局重置 & 变量 ===== */
         * {
             margin: 0;
             padding: 0;
@@ -18,172 +15,138 @@
         }
 
         :root {
-            --bg-primary: #06111b;
-            --bg-secondary: rgba(255, 255, 255, 0.04);
-            --bg-card: rgba(255, 255, 255, 0.06);
-            --bg-card-hover: rgba(255, 255, 255, 0.10);
-            --bg-card-active: rgba(79, 70, 229, 0.12);
-            --bg-sidebar: rgba(255, 255, 255, 0.04);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.65);
-            --text-muted: rgba(255, 255, 255, 0.45);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.3);
-            --radius-card: 16px;
-            --radius-btn: 8px;
-            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            --accent: #4f46e5;
-            --accent-hover: #4338ca;
-            --sidebar-width: 240px;
+            --bg-body: #f6f8fa;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f0f2f5;
+            --bg-sidebar: #ffffffcc;
+            --bg-sidebar-hover: #eef1f4;
+            --bg-tag-active: #e9ecf0;
+            --text-primary: #24292f;
+            --text-secondary: #57606a;
+            --text-muted: #8b949e;
+            --border-color: #d0d7de;
+            --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --accent: #2d7aff;
+            --accent-hover: #1c5ed6;
+            --radius-card: 10px;
+            --transition: 0.18s ease;
+            --sidebar-width: 200px;
+            --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        /* 暗色主题 */
+        [data-theme="dark"] {
+            --bg-body: #0d1117;
+            --bg-card: #161b22;
+            --bg-card-hover: #1c2333;
+            --bg-sidebar: #161b22cc;
+            --bg-sidebar-hover: #21262d;
+            --bg-tag-active: #30363d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #b1bac4;
+            --text-muted: #6e7681;
+            --border-color: #30363d;
+            --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.5);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
-                "PingFang SC", "Microsoft YaHei", sans-serif;
-            background: var(--bg-primary);
+            font-family: var(--font);
+            background: var(--bg-body);
             color: var(--text-primary);
-            line-height: 1.6;
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
-            overflow-x: hidden;
+            transition: background 0.2s, color 0.2s;
         }
 
-        /* ============================================================
-           SCROLLBAR
-           ============================================================ */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
         }
         ::-webkit-scrollbar-track {
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: var(--border-color);
+            border-radius: 8px;
         }
 
-        /* ============================================================
-           BG EFFECTS
-           ============================================================ */
-        .bg-effects {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .bg-effects .glow1 {
-            position: absolute;
-            top: -6vmin;
-            right: -8vmin;
-            width: 52vmin;
-            height: 52vmin;
-            background: radial-gradient(circle at center, rgba(167, 139, 250, 0.12), transparent 66%);
-        }
-        .bg-effects .glow2 {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 62vmin;
-            height: 62vmin;
-            transform: translate(-25%, 25%);
-            background: radial-gradient(circle at center, rgba(45, 212, 191, 0.08), transparent 68%);
-        }
-
-        /* ============================================================
-           APP CONTAINER
-           ============================================================ */
-        .app-container {
-            position: relative;
-            z-index: 1;
+        /* ===== 布局 ===== */
+        .app {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px 20px 24px;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 16px 20px 20px;
         }
 
-        /* ============================================================
-           TOOLBAR
-           ============================================================ */
-        .toolbar {
+        /* 头部 — 极简 */
+        .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 8px 0 16px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
             flex-wrap: wrap;
-            gap: 12px;
-            padding: 12px 18px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            margin-bottom: 16px;
-            flex-shrink: 0;
+            gap: 10px;
         }
-        .toolbar-left {
+        .header-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
-        }
-        .toolbar-left .brand {
-            font-size: 20px;
-            font-weight: 700;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 18px;
             letter-spacing: -0.3px;
-            background: linear-gradient(135deg, #fff 0%, #888 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
-        .toolbar-left .brand small {
-            font-weight: 400;
-            font-size: 13px;
-            -webkit-text-fill-color: var(--text-muted);
-            color: var(--text-muted);
-            margin-left: 6px;
+        .header-brand .logo {
+            background: var(--accent);
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
         }
-        .toolbar-stats {
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-actions .badge {
             font-size: 13px;
             color: var(--text-secondary);
-        }
-        .toolbar-stats span {
-            color: var(--text-muted);
-            margin: 0 2px;
-        }
-
-        .toolbar-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
+            background: var(--bg-card);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 7px 16px;
+            gap: 5px;
+            padding: 5px 14px;
             font-size: 13px;
-            font-family: inherit;
             font-weight: 500;
+            font-family: inherit;
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-btn);
-            background: var(--bg-secondary);
+            border-radius: 6px;
+            background: var(--bg-card);
             color: var(--text-secondary);
             cursor: pointer;
             transition: var(--transition);
             text-decoration: none;
             user-select: none;
-            white-space: nowrap;
         }
         .btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.15);
+            background: var(--bg-card-hover);
+            border-color: var(--text-muted);
             color: var(--text-primary);
         }
         .btn-primary {
@@ -196,97 +159,12 @@
             border-color: var(--accent-hover);
             color: #fff;
         }
-        .btn-success {
-            background: #0d9488;
-            border-color: #0d9488;
-            color: #fff;
-        }
-        .btn-success:hover {
-            background: #0f766e;
-            border-color: #0f766e;
-            color: #fff;
-        }
         .btn-icon {
             font-size: 16px;
-        }
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
+            line-height: 1;
         }
 
-        /* ============================================================
-           UPLOAD ZONE (visible when no bookmarks)
-           ============================================================ */
-        .upload-zone {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 480px;
-            border: 2px dashed var(--border-color);
-            border-radius: 24px;
-            background: var(--bg-secondary);
-            transition: var(--transition);
-            padding: 48px 24px;
-            text-align: center;
-            cursor: pointer;
-        }
-        .upload-zone:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.06);
-        }
-        .upload-zone.dragover {
-            border-color: var(--accent);
-            background: rgba(79, 70, 229, 0.08);
-        }
-        .upload-zone .icon-big {
-            font-size: 64px;
-            margin-bottom: 16px;
-            display: block;
-        }
-        .upload-zone h2 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .upload-zone p {
-            color: var(--text-secondary);
-            max-width: 400px;
-            margin-bottom: 4px;
-        }
-        .upload-zone .hint {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 8px;
-        }
-        .upload-zone .format {
-            font-size: 12px;
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.04);
-            padding: 4px 14px;
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-            margin-top: 12px;
-            display: inline-block;
-        }
-        .upload-zone input[type="file"] {
-            display: none;
-        }
-
-        /* ============================================================
-           NAVIGATION PREVIEW (visible when bookmarks loaded)
-           ============================================================ */
-        .nav-preview {
-            flex: 1;
-            display: none;
-            flex-direction: column;
-            min-height: 0;
-        }
-        .nav-preview.visible {
-            display: flex;
-        }
-
+        /* 主体：侧栏 + 内容 */
         .nav-body {
             display: flex;
             gap: 20px;
@@ -294,70 +172,60 @@
             min-height: 0;
         }
 
-        /* ---- Sidebar ---- */
+        /* ===== 侧栏 ===== */
         .sidebar {
             position: sticky;
-            top: 0;
+            top: 12px;
             width: var(--sidebar-width);
-            height: calc(100vh - 160px);
             flex-shrink: 0;
             background: var(--bg-sidebar);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 16px 12px;
+            border-radius: 12px;
+            padding: 14px 10px;
+            max-height: calc(100vh - 140px);
             overflow-y: auto;
             display: flex;
             flex-direction: column;
+            transition: background 0.2s;
         }
         .sidebar-header {
-            padding: 0 8px 14px;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--border-color);
             flex-shrink: 0;
         }
-        .sidebar-header .logo {
+        .sidebar-header .title {
+            font-weight: 600;
+            font-size: 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
+            gap: 6px;
         }
-        .sidebar-header .logo span {
-            background: linear-gradient(135deg, #fff 0%, #888 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .sidebar-header .badge {
-            font-size: 11px;
+        .sidebar-header .sub {
+            font-size: 12px;
             color: var(--text-muted);
             margin-top: 2px;
-            padding-left: 2px;
         }
         .sidebar-search {
-            padding: 12px 0 8px;
+            padding: 10px 0 6px;
             flex-shrink: 0;
         }
         .sidebar-search input {
             width: 100%;
-            padding: 7px 12px;
+            padding: 5px 10px;
             font-size: 13px;
             font-family: inherit;
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            background: var(--bg-card);
             color: var(--text-primary);
             outline: none;
             transition: var(--transition);
         }
         .sidebar-search input:focus {
             border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.08);
-        }
-        .sidebar-search input::placeholder {
-            color: var(--text-muted);
+            box-shadow: 0 0 0 3px rgba(45, 122, 255, 0.15);
         }
         .sidebar-tags {
             flex: 1;
@@ -367,32 +235,31 @@
         .sidebar-tag {
             display: flex;
             align-items: center;
-            padding: 7px 12px;
-            border-radius: 10px;
-            text-decoration: none;
-            color: var(--text-secondary);
-            transition: var(--transition);
-            cursor: pointer;
-            gap: 10px;
+            gap: 8px;
+            padding: 5px 10px;
+            border-radius: 8px;
             font-size: 13px;
-            font-weight: 450;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
             border: none;
             background: transparent;
             width: 100%;
             text-align: left;
+            font-weight: 450;
         }
         .sidebar-tag:hover {
-            background: rgba(255, 255, 255, 0.06);
+            background: var(--bg-sidebar-hover);
             color: var(--text-primary);
-            transform: translateX(2px);
         }
         .sidebar-tag.active {
-            background: rgba(79, 70, 229, 0.15);
+            background: var(--bg-tag-active);
             color: var(--text-primary);
+            font-weight: 500;
         }
         .tag-dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             flex-shrink: 0;
         }
@@ -405,59 +272,92 @@
         .tag-count {
             font-size: 11px;
             color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.06);
-            padding: 0 8px;
-            border-radius: 10px;
-            line-height: 18px;
+            background: var(--bg-card);
+            padding: 0 7px;
+            border-radius: 12px;
+            line-height: 17px;
             flex-shrink: 0;
+            border: 1px solid var(--border-color);
         }
         .sidebar-footer {
-            padding: 12px 8px 0;
+            padding-top: 10px;
             border-top: 1px solid var(--border-color);
-            flex-shrink: 0;
-            font-size: 11px;
+            font-size: 12px;
             color: var(--text-muted);
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
         }
 
-        /* ---- Main Content ---- */
+        /* ===== 主内容 ===== */
         .main-content {
             flex: 1;
             min-width: 0;
-            padding: 0 0 40px;
             overflow-y: auto;
-            max-height: calc(100vh - 160px);
-        }
-        .main-content::-webkit-scrollbar {
-            width: 4px;
-        }
-        .main-content::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 2px;
+            max-height: calc(100vh - 140px);
+            padding-right: 4px;
         }
 
         .main-header {
-            padding: 6px 0 18px;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--border-color);
-            margin-bottom: 20px;
         }
         .main-header h1 {
-            font-size: 26px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 2px;
+            font-size: 22px;
+            font-weight: 650;
+            letter-spacing: -0.3px;
         }
         .main-header p {
             font-size: 14px;
             color: var(--text-secondary);
         }
 
-        /* Search Engines */
+        /* 搜索栏 + 引擎 */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        .search-bar input {
+            flex: 1;
+            min-width: 160px;
+            padding: 7px 14px;
+            font-size: 14px;
+            font-family: inherit;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            outline: none;
+            transition: var(--transition);
+        }
+        .search-bar input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(45, 122, 255, 0.12);
+        }
+        .search-bar .shortcut {
+            font-size: 11px;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            padding: 2px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
         .search-engines {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             flex-wrap: wrap;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .search-engines .label {
             font-size: 12px;
@@ -468,21 +368,20 @@
         .search-btn {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
+            gap: 4px;
+            padding: 3px 10px;
             font-size: 12px;
             font-family: inherit;
-            font-weight: 500;
+            font-weight: 450;
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-btn);
-            background: var(--bg-secondary);
+            border-radius: 6px;
+            background: var(--bg-card);
             color: var(--text-secondary);
             cursor: pointer;
             transition: var(--transition);
         }
         .search-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.15);
+            background: var(--bg-card-hover);
             color: var(--text-primary);
         }
         .search-btn.active {
@@ -491,112 +390,56 @@
             color: #fff;
         }
         .search-btn .search-icon {
-            width: 18px;
-            height: 18px;
-            border-radius: 4px;
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
             object-fit: cover;
-            flex-shrink: 0;
         }
-        .search-btn .si-fallback {
-            width: 18px;
-            height: 18px;
-            border-radius: 4px;
+        .si-fallback {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 600;
-            background: rgba(255, 255, 255, 0.06);
+            background: var(--bg-card-hover);
             color: var(--text-muted);
-            flex-shrink: 0;
         }
 
-        /* Search Input */
-        .search-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 10px 0 18px;
-        }
-        .search-wrapper input {
-            flex: 1;
-            padding: 9px 16px;
-            font-size: 14px;
-            font-family: inherit;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--text-primary);
-            outline: none;
-            transition: var(--transition);
-        }
-        .search-wrapper input:focus {
-            border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.08);
-        }
-        .search-wrapper input::placeholder {
-            color: var(--text-muted);
-        }
-        .search-wrapper .shortcut {
-            font-size: 11px;
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.04);
-            padding: 2px 10px;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-            white-space: nowrap;
-        }
-
-        /* Category Section */
+        /* ===== 分类 & 卡片 (紧凑, 比例缩小) ===== */
         .category-section {
-            margin-bottom: 28px;
-            scroll-margin-top: 12px;
-            transition: opacity 0.3s ease;
+            margin-bottom: 24px;
+            scroll-margin-top: 10px;
+            transition: opacity 0.2s;
         }
         .category-section.targeted {
-            animation: highlightPulse 1.2s ease;
+            animation: pulse 0.9s ease;
         }
-        .category-section.hidden {
-            display: none;
-        }
-
-        @keyframes highlightPulse {
-            0% {
-                opacity: 1;
-            }
-            20% {
-                opacity: 0.3;
-            }
-            40% {
-                opacity: 1;
-            }
-            60% {
-                opacity: 0.5;
-            }
-            80% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 1;
-            }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            30% { opacity: 0.4; }
+            70% { opacity: 0.7; }
+            100% { opacity: 1; }
         }
 
         .category-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 14px;
-            padding-bottom: 8px;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding-bottom: 4px;
             border-bottom: 1px solid var(--border-color);
         }
         .category-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             flex-shrink: 0;
         }
         .category-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
         }
         .category-count {
@@ -605,655 +448,462 @@
             margin-left: auto;
         }
 
-        /* Bookmarks Grid */
+        /* 网格 — 更小更紧凑 */
         .bookmarks-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(156px, 1fr));
+            gap: 8px;
         }
 
-        /* Bookmark Card */
         .bookmark-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-card);
             transition: var(--transition);
             overflow: hidden;
+            box-shadow: var(--shadow-card);
         }
         .bookmark-card:hover {
             background: var(--bg-card-hover);
-            transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: var(--shadow-card);
+            transform: translateY(-1px);
+            border-color: var(--text-muted);
+            box-shadow: var(--shadow-hover);
+        }
+        .bookmark-card.highlight {
+            background: rgba(45, 122, 255, 0.08);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(45, 122, 255, 0.15);
         }
         .bookmark-card.hidden {
             display: none;
-        }
-        .bookmark-card.highlight {
-            background: var(--bg-card-active);
-            border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(79, 70, 229, 0.15);
         }
 
         .card-link {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 13px 16px;
+            gap: 10px;
+            padding: 10px 12px;
             text-decoration: none;
             color: inherit;
         }
         .card-icon {
-            width: 36px;
-            height: 36px;
+            width: 30px;
+            height: 30px;
             flex-shrink: 0;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            background: var(--bg-card-hover);
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
         }
         .card-icon img {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             object-fit: contain;
         }
         .card-icon .fallback-icon {
-            font-size: 18px;
+            font-size: 14px;
+            opacity: 0.6;
         }
         .card-content {
             flex: 1;
             min-width: 0;
         }
         .card-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
         .card-domain {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
-        /* No Results */
         .no-results {
             text-align: center;
-            padding: 48px 20px;
+            padding: 40px 16px;
             color: var(--text-muted);
             grid-column: 1 / -1;
         }
-        .no-results .icon {
-            font-size: 40px;
+
+        /* ===== 上传区 (初始) ===== */
+        .upload-zone {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            border: 2px dashed var(--border-color);
+            border-radius: 20px;
+            background: var(--bg-card);
+            transition: var(--transition);
+            padding: 32px 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .upload-zone:hover {
+            border-color: var(--accent);
+            background: var(--bg-card-hover);
+        }
+        .upload-zone .icon-big {
+            font-size: 48px;
             display: block;
             margin-bottom: 12px;
         }
-
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 200px;
-            }
+        .upload-zone h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .upload-zone p {
+            color: var(--text-secondary);
+            max-width: 360px;
+            font-size: 14px;
+        }
+        .upload-zone .hint {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+        .upload-zone .format {
+            font-size: 12px;
+            color: var(--text-muted);
+            background: var(--bg-body);
+            padding: 3px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            margin-top: 10px;
+        }
+        .upload-zone input[type="file"] {
+            display: none;
         }
 
-        @media (max-width: 820px) {
-            .app-container {
-                padding: 12px 16px;
-            }
-            .nav-body {
-                flex-direction: column;
-            }
-            .sidebar {
-                position: relative;
-                width: 100%;
-                height: auto;
-                max-height: 260px;
-                margin-bottom: 16px;
-                border-radius: 16px;
-            }
-            .main-content {
-                max-height: none;
-                padding-bottom: 20px;
-            }
-            .bookmarks-grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            }
-            .toolbar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .toolbar-actions {
-                justify-content: flex-start;
-            }
+        .nav-preview {
+            display: none;
+            flex: 1;
+            flex-direction: column;
         }
-
-        @media (max-width: 480px) {
-            .bookmarks-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .main-header h1 {
-                font-size: 22px;
-            }
-            .search-wrapper {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .search-wrapper .shortcut {
-                align-self: flex-end;
-            }
-            .search-engines {
-                justify-content: center;
-            }
-            .upload-zone {
-                min-height: 320px;
-                padding: 32px 16px;
-            }
-            .upload-zone .icon-big {
-                font-size: 48px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .bookmarks-grid {
-                grid-template-columns: 1fr;
-            }
+        .nav-preview.visible {
+            display: flex;
         }
 
         .hidden {
             display: none !important;
         }
 
-        /* ============================================================
-           TOAST
-           ============================================================ */
+        /* ===== 响应式 ===== */
+        @media (max-width: 820px) {
+            .app { padding: 12px 16px; }
+            .nav-body { flex-direction: column; }
+            .sidebar {
+                position: relative;
+                width: 100%;
+                max-height: 220px;
+                margin-bottom: 12px;
+                backdrop-filter: none;
+            }
+            .main-content {
+                max-height: none;
+                padding-right: 0;
+            }
+            .bookmarks-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            .header { flex-direction: column; align-items: stretch; gap: 8px; }
+            .header-actions { justify-content: flex-start; flex-wrap: wrap; }
+        }
+        @media (max-width: 480px) {
+            .bookmarks-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .main-header h1 { font-size: 19px; }
+            .search-bar { flex-direction: column; align-items: stretch; }
+            .search-bar .shortcut { align-self: flex-end; }
+            .upload-zone { min-height: 220px; padding: 24px 12px; }
+        }
+        @media (max-width: 380px) {
+            .bookmarks-grid { grid-template-columns: 1fr; }
+        }
+
+        /* toast 轻提示 */
         .toast {
             position: fixed;
-            bottom: 30px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 10px 24px;
-            border-radius: 12px;
-            font-size: 14px;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-size: 13px;
             font-weight: 500;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--border-color);
             color: var(--text-primary);
             z-index: 999;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.25s;
             pointer-events: none;
+            box-shadow: var(--shadow-hover);
             white-space: nowrap;
         }
         .toast.show {
             opacity: 1;
         }
-        .toast.error {
-            border-color: #ef4444;
-        }
-        .toast.success {
-            border-color: #22c55e;
-        }
     </style>
 </head>
 <body>
 
-    <!-- ===== BG EFFECTS ===== -->
-    <div class="bg-effects">
-        <div class="glow1"></div>
-        <div class="glow2"></div>
-    </div>
-
-    <!-- ===== TOAST ===== -->
     <div id="toast" class="toast"></div>
 
-    <!-- ===== APP ===== -->
-    <div class="app-container">
-
-        <!-- Toolbar -->
-        <div class="toolbar">
-            <div class="toolbar-left">
-                <div class="brand">
-                    [Bookmark] 书签导航
-                    <small>BMM 风格</small>
-                </div>
-                <div class="toolbar-stats" id="statsBar">
-                    <span>[INFO] 等待上传</span>
-                </div>
+    <div class="app" id="app">
+        <!-- 头部 -->
+        <header class="header">
+            <div class="header-brand">
+                <span class="logo">⌘</span>
+                <span>书签导航</span>
+                <span style="font-weight:400;font-size:13px;color:var(--text-muted);">· HelloGitHub 风格</span>
             </div>
-            <div class="toolbar-actions">
-                <button class="btn" id="uploadBtn" title="上传 Markdown 书签文件">
-                    <span class="btn-icon">[U]</span> 上传
-                </button>
-                <button class="btn btn-success" id="exportBtn" disabled>
-                    <span class="btn-icon">[D]</span> 导出 HTML
-                </button>
+            <div class="header-actions">
+                <span class="badge" id="statsBadge">等待上传</span>
+                <button class="btn" id="uploadBtn">📂 上传</button>
+                <button class="btn btn-primary" id="exportBtn" disabled>⬇ 导出</button>
+                <button class="btn" id="themeToggle" title="切换主题">🌓</button>
                 <input type="file" id="fileInput" accept=".md,.markdown" style="display:none" />
             </div>
-        </div>
+        </header>
 
-        <!-- Upload Zone (visible when no data) -->
+        <!-- 上传区 -->
         <div class="upload-zone" id="uploadZone">
-            <span class="icon-big">[F]</span>
-            <h2>上传 Markdown 书签文件</h2>
-            <p>拖拽文件到此处，或点击上传</p>
-            <p class="hint">支持 .md 或 .markdown</p>
-            <div class="format">
-                ## 分类名称  - [标题](链接)
-            </div>
+            <span class="icon-big">📄</span>
+            <h2>上传 Markdown 书签</h2>
+            <p>拖拽或点击上传 .md 文件</p>
+            <p class="hint">格式：## 分类  - [标题](链接)</p>
+            <div class="format">## 分类名  - [标题](url)</div>
         </div>
 
-        <!-- Navigation Preview (visible when data loaded) -->
+        <!-- 导航预览 -->
         <div class="nav-preview" id="navPreview">
             <div class="nav-body">
-                <!-- Sidebar -->
                 <aside class="sidebar" id="sidebar">
                     <div class="sidebar-header">
-                        <div class="logo">
-                            <span>[B]</span>
-                            <span id="sidebarTitle">我的导航</span>
-                        </div>
-                        <div class="badge" id="sidebarBadge">0 个书签</div>
+                        <div class="title">📑 <span id="sidebarTitle">我的导航</span></div>
+                        <div class="sub" id="sidebarBadge">0 个书签</div>
                     </div>
                     <div class="sidebar-search">
                         <input type="text" id="sidebarSearch" placeholder="过滤标签..." autocomplete="off" />
                     </div>
                     <nav class="sidebar-tags" id="sidebarTags"></nav>
-                    <div class="sidebar-footer" id="sidebarFooter">0 个分类</div>
+                    <div class="sidebar-footer">
+                        <span id="sidebarFooter">0 分类</span>
+                        <span>✨</span>
+                    </div>
                 </aside>
 
-                <!-- Main -->
                 <main class="main-content" id="mainContent">
                     <div class="main-header">
-                        <h1>[Star] 我的书签</h1>
-                        <p>收纳 · 分享 · 探索</p>
+                        <h1>⭐ 我的书签</h1>
+                        <p>收纳 · 探索 · 效率</p>
                     </div>
 
-                    <!-- Search Engines -->
                     <div class="search-engines" id="searchEngines">
-                        <span class="label">[Search] 搜索：</span>
+                        <span class="label">🔍 搜索：</span>
                     </div>
 
-                    <!-- Search Input -->
-                    <div class="search-wrapper">
-                        <input type="text" id="searchInput" placeholder="搜索书签..." autocomplete="off" />
-                        <span class="shortcut">[Cmd+K]</span>
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" placeholder="搜索书签标题或域名..." autocomplete="off" />
+                        <span class="shortcut">⌘K</span>
                     </div>
 
-                    <!-- Bookmarks Container -->
                     <div id="bookmarksContainer"></div>
                 </main>
             </div>
         </div>
-
     </div>
 
     <script>
         // ================================================================
-        //  UTILITY
+        //  工具函数
         // ================================================================
-        function escapeHTML(str) {
-            if (!str) return '';
-            const d = document.createElement('div');
-            d.textContent = str;
-            return d.innerHTML;
-        }
+        function escapeHTML(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
-        function md5(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash = hash & hash;
-            }
-            return Math.abs(hash).toString(16).padStart(8, '0');
-        }
+        function md5(str) { let h = 0; for (let i = 0; i < str.length; i++) { const c = str.charCodeAt(i); h = ((h << 5) - h) + c; h = h & h; } return Math.abs(h).toString(16).padStart(8, '0'); }
 
-        function getColorForCategory(category) {
-            const colors = [
-                '#ff1494', '#33bbff', '#ff2e2e', '#a442fa', '#b638ff', '#ebcb63',
-                '#0066ff', '#eeefff', '#069b05', '#00ffcb', '#bfbfbf', '#191919',
-                '#ffcc14', '#ffb13b', '#f0f0f0', '#fff3e0', '#13ae4f', '#ffffff',
-                '#424cff', '#00d8ff', '#41b883', '#fbfbfb', '#f7df1e', '#e43718',
-                '#9e9e9e', '#f0bb6e', '#1a97ef', '#e0feff', '#35bfce', '#c70000',
-                '#a647ff', '#24a2ff', '#ffaa00', '#3f3fff', '#00ff00', '#ff00a8',
-                '#75ffed', '#616161',
-            ];
-            const hash = md5(category);
-            const idx = parseInt(hash.slice(0, 8), 16) % colors.length;
+        function getColor(cat) {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffcc5c', '#ff6f69', '#88d8b0', '#b5a6e0', '#ffb347', '#5f9ea0', '#e07a5f', '#81b29a', '#f2cc8f', '#3d5a80', '#ee6c4d', '#6b4e71', '#2a9d8f', '#e76f51', '#f4a261', '#264653'];
+            const idx = parseInt(md5(cat).slice(0, 8), 16) % colors.length;
             return colors[idx];
         }
 
-        function getDomain(url) {
-            try {
-                const u = new URL(url);
-                let host = u.hostname;
-                if (host.startsWith('www.')) host = host.slice(4);
-                return host;
-            } catch {
-                return url.split('/')[0] || '';
-            }
-        }
+        function getDomain(url) { try { let h = new URL(url).hostname; if (h.startsWith('www.')) h = h.slice(4); return h; } catch { return url.split('/')[0] || ''; } }
 
-        function getFaviconUrl(url) {
-            try {
-                const u = new URL(url);
-                let host = u.hostname;
-                if (host.startsWith('www.')) host = host.slice(4);
-                return `https://api.lcll.cc/favicon?host=${host}`;
-            } catch {
-                return '';
-            }
-        }
+        function getFavicon(url) { try { let h = new URL(url).hostname; if (h.startsWith('www.')) h = h.slice(4); return `https://api.lcll.cc/favicon?host=${h}`; } catch { return ''; } }
 
         function showToast(msg, type) {
             const el = document.getElementById('toast');
             el.textContent = msg;
-            el.className = 'toast ' + (type || '');
+            el.className = 'toast' + (type === 'error' ? ' error' : '');
             void el.offsetWidth;
             el.classList.add('show');
-            clearTimeout(el._timer);
-            el._timer = setTimeout(() => el.classList.remove('show'), 2800);
+            clearTimeout(el._t);
+            el._t = setTimeout(() => el.classList.remove('show'), 2400);
         }
 
         // ================================================================
-        //  MARKDOWN PARSER
+        //  Markdown 解析
         // ================================================================
-        function parseMarkdownBookmarks(content) {
-            const lines = content.split(/\r?\n/);
-            const bookmarks = [];
-            let currentCategory = '';
-
+        function parseBookmarks(text) {
+            const lines = text.split(/\r?\n/);
+            const result = [];
+            let category = '';
             for (let i = 0; i < lines.length; i++) {
-                let line = lines[i].trim();
-
-                if (line.startsWith('## ')) {
-                    currentCategory = line.slice(3).trim();
-                    continue;
+                let l = lines[i].trim();
+                if (l.startsWith('## ')) { category = l.slice(3).trim(); continue; }
+                const m = l.match(/- \[([^\]]+)\]\(([^)]+)\)/);
+                if (m && category) { result.push({ category, title: m[1].trim(), url: m[2].trim() }); continue; }
+                if (l === '-' && i + 1 < lines.length) {
+                    const n = lines[i + 1].trim();
+                    const m2 = n.match(/\[([^\]]+)\]\(([^)]+)\)/);
+                    if (m2 && category) { result.push({ category, title: m2[1].trim(), url: m2[2].trim() }); i++; continue; }
                 }
-
-                if (line.startsWith('- [')) {
-                    const match = line.match(/- \[([^\]]+)\]\(([^)]+)\)/);
-                    if (match && currentCategory) {
-                        bookmarks.push({
-                            category: currentCategory,
-                            title: match[1].trim(),
-                            url: match[2].trim(),
-                        });
-                        continue;
-                    }
-                }
-
-                if (line === '-' && i + 1 < lines.length) {
-                    const next = lines[i + 1].trim();
-                    const match = next.match(/\[([^\]]+)\]\(([^)]+)\)/);
-                    if (match && currentCategory) {
-                        bookmarks.push({
-                            category: currentCategory,
-                            title: match[1].trim(),
-                            url: match[2].trim(),
-                        });
-                        i++;
-                        continue;
-                    }
-                }
-
-                const altMatch = line.match(/^-?\s*\[([^\]]+)\]\(([^)]+)\)/);
-                if (altMatch && currentCategory) {
-                    bookmarks.push({
-                        category: currentCategory,
-                        title: altMatch[1].trim(),
-                        url: altMatch[2].trim(),
-                    });
-                }
+                const alt = l.match(/^-?\s*\[([^\]]+)\]\(([^)]+)\)/);
+                if (alt && category) { result.push({ category, title: alt[1].trim(), url: alt[2].trim() }); }
             }
-
-            return bookmarks;
+            return result;
         }
 
         // ================================================================
-        //  SEARCH ENGINES — 与 nav.html 完全一致
+        //  搜索引擎 (精简)
         // ================================================================
-        const BASE_SEARCH_ENGINES = [{
-            name: 'Google',
-            url: 'https://www.google.com/search?q=',
-            icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/1f/cb/2a/1fcb2aab-332d-b5ed-bdec-11843b22480c/Placeholder.mill/48x48bb-75.webp'
-        }, {
-            name: 'Bing',
-            url: 'https://cn.bing.com/search?q=',
-            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/13/f6/f2/13f6f204-d41c-e87e-9f2d-6763eed5c453/AppIcon-0-1x_U007epad-0-1-0-0-85-220-0.png/48x48ia-75.webp'
-        }, {
-            name: 'Baidu',
-            url: 'https://kaifa.baidu.com/searchPage?wd=',
-            icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/b2/15/dd/b215ddb6-7657-6d5d-be18-a1d4ae5ffcfa/Placeholder.mill/48x48bb-75.webp'
-        }, {
-            name: 'Sogou',
-            url: 'https://www.sogou.com/web?query=',
-            icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/b8/48/94/b8489437-920c-196e-9b16-1c2945c65b09/Placeholder.mill/48x48bb-75.webp'
-        }, {
-            name: 'Github',
-            url: 'https://github.com/search?q=',
-            icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e5/24/6e/e5246ef1-4139-5811-732c-96b935c52715/AppIcon-0-0-1x_U007emarketing-0-9-0-0-sRGB-85-220.png/48x48ia-75.webp'
-        }, {
-            name: 'Bilibili',
-            url: 'https://search.bilibili.com/all?keyword=',
-            icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/94/56/7c/94567ccc-e458-328c-0974-3700f75c4cd1/Placeholder.mill/48x48bb-75.webp'
-        }, {
-            name: '360',
-            url: 'https://www.so.com/s?q=',
-            icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/fa/5e/fb/fa5efbaa-173e-e17c-550b-644ab8717da9/Placeholder.mill/48x48bb-75.webp'
-        }, {
-            name: 'Shenma',
-            url: 'https://m.sm.cn/s?q=',
-            icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/27/d0/06/27d00645-422a-21e2-c434-a6d581257b78/Placeholder.mill/48x48bb-75.webp'
-        }, {
-            name: 'SecRSS',
-            url: 'https://www.secrss.com/search?keywords=',
-            icon: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23999\' stroke-width=\'2\'%3E%3Crect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'4\'/%3E%3Ctext x=\'12\' y=\'16\' text-anchor=\'middle\' font-size=\'12\' fill=\'%23999\'%3E安%3C/text%3E%3C/svg%3E'
-        }, ];
+        const ENGINES = [
+            { name: 'Google', url: 'https://www.google.com/search?q=', icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/1f/cb/2a/1fcb2aab-332d-b5ed-bdec-11843b22480c/Placeholder.mill/48x48bb-75.webp' },
+            { name: 'Bing', url: 'https://cn.bing.com/search?q=', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/13/f6/f2/13f6f204-d41c-e87e-9f2d-6763eed5c453/AppIcon-0-1x_U007epad-0-1-0-0-85-220-0.png/48x48ia-75.webp' },
+            { name: 'Baidu', url: 'https://kaifa.baidu.com/searchPage?wd=', icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/b2/15/dd/b215ddb6-7657-6d5d-be18-a1d4ae5ffcfa/Placeholder.mill/48x48bb-75.webp' },
+            { name: 'GitHub', url: 'https://github.com/search?q=', icon: 'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e5/24/6e/e5246ef1-4139-5811-732c-96b935c52715/AppIcon-0-0-1x_U007emarketing-0-9-0-0-sRGB-85-220.png/48x48ia-75.webp' },
+            { name: 'Bilibili', url: 'https://search.bilibili.com/all?keyword=', icon: 'https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/94/56/7c/94567ccc-e458-328c-0974-3700f75c4cd1/Placeholder.mill/48x48bb-75.webp' },
+        ];
 
         // ================================================================
-        //  STATE
+        //  状态
         // ================================================================
-        let currentBookmarks = [];
-        let currentTitle = '我的导航';
-        let selectedEngine = localStorage.getItem('selectedEngine') || 'https://cn.bing.com/search?q=';
+        let bookmarks = [];
+        let title = '我的导航';
+        let selectedEngine = localStorage.getItem('selectedEngine') || 'https://www.google.com/search?q=';
+        let theme = localStorage.getItem('theme') || 'light';
 
         // ================================================================
-        //  JUMP TO CATEGORY - 核心跳转功能
+        //  跳转分类 (核心)
         // ================================================================
-        function jumpToCategory(categoryName, fromTag) {
-            // 1. 清除所有高亮
+        function jumpToCategory(catName) {
             document.querySelectorAll('.bookmark-card.highlight').forEach(el => el.classList.remove('highlight'));
             document.querySelectorAll('.category-section.targeted').forEach(el => el.classList.remove('targeted'));
 
-            // 2. 查找目标分类
-            const targetId = 'cat-' + categoryName;
-            const targetSection = document.getElementById(targetId);
+            const target = document.getElementById('cat-' + catName);
+            if (!target) { showToast('分类未找到', 'error'); return; }
 
-            if (!targetSection) {
-                showToast('[Info] 分类 "' + categoryName + '" 未找到', 'error');
-                return;
-            }
+            const input = document.getElementById('searchInput');
+            if (input) { input.value = ''; filterBookmarks(''); }
 
-            // 3. 清除搜索框
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.value = '';
-                filterBookmarks('');
-            }
+            target.classList.remove('hidden');
+            const cards = target.querySelectorAll('.bookmark-card');
+            cards.forEach(c => c.classList.remove('hidden'));
 
-            // 4. 确保分类可见（如果有隐藏的，强制显示）
-            targetSection.classList.remove('hidden');
-            // 确保所有卡片在该分类下可见
-            const cards = targetSection.querySelectorAll('.bookmark-card');
-            cards.forEach(card => card.classList.remove('hidden'));
+            cards.forEach((c, i) => setTimeout(() => c.classList.add('highlight'), i * 70));
+            target.classList.add('targeted');
 
-            // 5. 高亮该分类下的所有卡片
-            cards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.classList.add('highlight');
-                }, index * 80);
-            });
-
-            // 6. 添加动画效果
-            targetSection.classList.add('targeted');
-
-            // 7. 滚动到目标位置
-            const offset = 20;
-            const top = targetSection.getBoundingClientRect().top + window.scrollY - offset;
+            const top = target.getBoundingClientRect().top + window.scrollY - 10;
             window.scrollTo({ top, behavior: 'smooth' });
 
-            // 8. 更新侧边栏激活状态
-            document.querySelectorAll('.sidebar-tag').forEach(tag => {
-                tag.classList.toggle('active', tag.dataset.category === categoryName);
-            });
+            document.querySelectorAll('.sidebar-tag').forEach(t => t.classList.toggle('active', t.dataset.category === catName));
 
-            // 9. 5秒后自动移除高亮
-            setTimeout(() => {
-                cards.forEach(card => card.classList.remove('highlight'));
-            }, 5000);
-
-            // 显示提示
-            const count = cards.length;
-            showToast('[Jump] 跳转到 "' + categoryName + '" (' + count + ' 个书签)', 'success');
+            setTimeout(() => cards.forEach(c => c.classList.remove('highlight')), 4000);
+            showToast(`📌 跳转至 "${catName}" (${cards.length} 个书签)`, '');
         }
 
         // ================================================================
-        //  RENDER NAVIGATION
+        //  渲染
         // ================================================================
-        function renderNavigation(bookmarks, title) {
-            currentBookmarks = bookmarks;
-            currentTitle = title || '我的导航';
+        function render(data, name) {
+            bookmarks = data;
+            title = name || '我的导航';
 
-            const categories = {};
-            for (const bm of bookmarks) {
-                if (!categories[bm.category]) categories[bm.category] = [];
-                categories[bm.category].push(bm);
-            }
-            const categoryNames = Object.keys(categories);
-            const categoryColors = {};
-            for (const cat of categoryNames) {
-                categoryColors[cat] = getColorForCategory(cat);
-            }
+            const cats = {};
+            for (const b of bookmarks) { if (!cats[b.category]) cats[b.category] = []; cats[b.category].push(b); }
+            const catNames = Object.keys(cats);
+            const colors = {};
+            for (const c of catNames) colors[c] = getColor(c);
 
-            // Update stats
-            document.getElementById('statsBar').innerHTML =
-                `[Bookmarks] ${bookmarks.length} 个书签  [Categories] ${categoryNames.length} 个分类`;
+            // 统计
+            document.getElementById('statsBadge').textContent = `${bookmarks.length} 个书签 · ${catNames.length} 分类`;
             document.getElementById('sidebarBadge').textContent = `${bookmarks.length} 个书签`;
-            document.getElementById('sidebarFooter').textContent = `${categoryNames.length} 个分类`;
+            document.getElementById('sidebarFooter').textContent = `${catNames.length} 分类`;
             document.getElementById('sidebarTitle').textContent = title;
 
-            // ---------- Sidebar tags: use <a> with href ----------
+            // 侧边栏
             const sidebarTags = document.getElementById('sidebarTags');
             sidebarTags.innerHTML = '';
-            for (const cat of categoryNames) {
-                const count = categories[cat].length;
-                const color = categoryColors[cat];
+            for (const c of catNames) {
                 const a = document.createElement('a');
                 a.className = 'sidebar-tag';
-                a.href = '#cat-' + encodeURIComponent(cat);
-                a.dataset.category = cat;
+                a.href = '#cat-' + c;
+                a.dataset.category = c;
                 a.innerHTML = `
-                    <span class="tag-dot" style="background-color:${color}"></span>
-                    <span class="tag-name">${escapeHTML(cat)}</span>
-                    <span class="tag-count">${count}</span>
+                    <span class="tag-dot" style="background:${colors[c]}"></span>
+                    <span class="tag-name">${escapeHTML(c)}</span>
+                    <span class="tag-count">${cats[c].length}</span>
                 `;
-                a.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const category = this.dataset.category;
-                    jumpToCategory(category, this);
-                });
+                a.addEventListener('click', e => { e.preventDefault(); jumpToCategory(c); });
                 sidebarTags.appendChild(a);
             }
 
-            // Search Engines
-            const enginesContainer = document.getElementById('searchEngines');
-            enginesContainer.innerHTML = '<span class="label">[Search] 搜索：</span>';
-            for (const eng of BASE_SEARCH_ENGINES) {
+            // 搜索引擎
+            const seContainer = document.getElementById('searchEngines');
+            seContainer.innerHTML = '<span class="label">🔍 搜索：</span>';
+            for (const e of ENGINES) {
                 const btn = document.createElement('button');
-                btn.className = 'search-btn' + (eng.url === selectedEngine ? ' active' : '');
-                btn.dataset.engine = eng.url;
-
-                const iconWrap = document.createElement('span');
-                iconWrap.className = 'search-icon-wrap';
-                if (eng.icon && eng.icon.startsWith('http')) {
-                    const img = document.createElement('img');
-                    img.className = 'search-icon';
-                    img.src = eng.icon;
-                    img.alt = eng.name;
-                    img.onerror = function() {
-                        this.style.display = 'none';
-                        const fb = document.createElement('span');
-                        fb.className = 'si-fallback';
-                        fb.textContent = eng.name[0].toUpperCase();
-                        this.parentNode.appendChild(fb);
-                    };
-                    iconWrap.appendChild(img);
-                } else {
-                    // data:image or fallback
-                    const img = document.createElement('img');
-                    img.className = 'search-icon';
-                    img.src = eng.icon || '';
-                    img.alt = eng.name;
-                    img.onerror = function() {
-                        this.style.display = 'none';
-                        const fb = document.createElement('span');
-                        fb.className = 'si-fallback';
-                        fb.textContent = eng.name[0].toUpperCase();
-                        this.parentNode.appendChild(fb);
-                    };
-                    if (eng.icon) img.src = eng.icon;
-                    iconWrap.appendChild(img);
-                }
-                btn.appendChild(iconWrap);
-
-                const label = document.createElement('span');
-                label.textContent = eng.name;
-                btn.appendChild(label);
-
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const url = this.dataset.engine;
-                    if (url) {
-                        selectedEngine = url;
-                        localStorage.setItem('selectedEngine', url);
+                btn.className = 'search-btn' + (e.url === selectedEngine ? ' active' : '');
+                btn.dataset.engine = e.url;
+                btn.innerHTML = `
+                    <img src="${e.icon}" class="search-icon" onerror="this.style.display='none';this.parentElement.innerHTML+='<span class=\\'si-fallback\\'>${e.name[0]}</span>'">
+                    <span>${e.name}</span>
+                `;
+                btn.addEventListener('click', function(ev) {
+                    ev.stopPropagation();
+                    const u = this.dataset.engine;
+                    if (u) {
+                        selectedEngine = u;
+                        localStorage.setItem('selectedEngine', u);
                         document.querySelectorAll('.search-btn').forEach(b => b.classList.remove('active'));
                         this.classList.add('active');
-                        const input = document.getElementById('searchInput');
-                        if (input && input.value.trim()) {
-                            window.open(selectedEngine + encodeURIComponent(input.value.trim()), '_blank');
-                        }
+                        const inp = document.getElementById('searchInput');
+                        if (inp && inp.value.trim()) window.open(selectedEngine + encodeURIComponent(inp.value.trim()),
+                        '_blank');
                     }
                 });
-                enginesContainer.appendChild(btn);
+                seContainer.appendChild(btn);
             }
 
-            // Bookmarks content
+            // 书签内容
             const container = document.getElementById('bookmarksContainer');
             container.innerHTML = '';
-
-            for (const cat of categoryNames) {
-                const items = categories[cat];
-                const color = categoryColors[cat];
-
+            for (const c of catNames) {
+                const items = cats[c];
                 const section = document.createElement('section');
                 section.className = 'category-section';
-                section.id = 'cat-' + cat;
+                section.id = 'cat-' + c;
 
                 const header = document.createElement('div');
                 header.className = 'category-header';
                 header.innerHTML = `
-                    <span class="category-dot" style="background-color:${color}"></span>
-                    <h2 class="category-title">${escapeHTML(cat)}</h2>
-                    <span class="category-count">${items.length} 个书签</span>
+                    <span class="category-dot" style="background:${colors[c]}"></span>
+                    <span class="category-title">${escapeHTML(c)}</span>
+                    <span class="category-count">${items.length}</span>
                 `;
                 section.appendChild(header);
 
@@ -1261,121 +911,119 @@
                 grid.className = 'bookmarks-grid';
 
                 for (const bm of items) {
+                    const fav = getFavicon(bm.url);
                     const domain = getDomain(bm.url);
-                    const favicon = getFaviconUrl(bm.url);
-
                     const card = document.createElement('div');
                     card.className = 'bookmark-card';
                     card.dataset.title = bm.title.toLowerCase();
                     card.dataset.domain = domain.toLowerCase();
 
-                    const link = document.createElement('a');
-                    link.className = 'card-link';
-                    link.href = bm.url;
-                    link.target = '_blank';
-                    link.rel = 'noopener noreferrer';
-
-                    const iconDiv = document.createElement('div');
-                    iconDiv.className = 'card-icon';
-                    const img = document.createElement('img');
-                    img.src = favicon;
-                    img.alt = '';
-                    img.onerror = function() {
-                        this.parentElement.innerHTML = `<span class="fallback-icon">[P]</span>`;
-                    };
-                    iconDiv.appendChild(img);
-                    link.appendChild(iconDiv);
-
-                    const contentDiv = document.createElement('div');
-                    contentDiv.className = 'card-content';
-                    const titleDiv = document.createElement('div');
-                    titleDiv.className = 'card-title';
-                    titleDiv.textContent = bm.title;
-                    const domainDiv = document.createElement('div');
-                    domainDiv.className = 'card-domain';
-                    domainDiv.textContent = domain;
-                    contentDiv.appendChild(titleDiv);
-                    contentDiv.appendChild(domainDiv);
-                    link.appendChild(contentDiv);
-
-                    card.appendChild(link);
+                    card.innerHTML = `
+                        <a href="${escapeHTML(bm.url)}" target="_blank" rel="noopener" class="card-link">
+                            <div class="card-icon">
+                                <img src="${escapeHTML(fav)}" alt="" onerror="this.parentElement.innerHTML='<span class=\\'fallback-icon\\'>📄</span>'">
+                            </div>
+                            <div class="card-content">
+                                <div class="card-title">${escapeHTML(bm.title)}</div>
+                                <div class="card-domain">${escapeHTML(domain)}</div>
+                            </div>
+                        </a>
+                    `;
                     grid.appendChild(card);
                 }
-
                 section.appendChild(grid);
                 container.appendChild(section);
             }
 
-            // Show preview, hide upload
             document.getElementById('uploadZone').style.display = 'none';
             document.getElementById('navPreview').classList.add('visible');
             document.getElementById('exportBtn').disabled = false;
 
-            // Re-run filter
             filterBookmarks('');
-
-            // Highlight first tag
-            const firstTag = document.querySelector('.sidebar-tag');
-            if (firstTag) firstTag.classList.add('active');
-
-            // Scroll to top
+            const first = document.querySelector('.sidebar-tag');
+            if (first) first.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            // Setup dataset for filtering
-            document.querySelectorAll('.bookmark-card').forEach(card => {
-                const titleEl = card.querySelector('.card-title');
-                const domainEl = card.querySelector('.card-domain');
-                if (titleEl) card.dataset.title = titleEl.textContent.toLowerCase();
-                if (domainEl) card.dataset.domain = domainEl.textContent.toLowerCase();
-            });
         }
 
         // ================================================================
-        //  FILTER BOOKMARKS
+        //  过滤
         // ================================================================
-        function filterBookmarks(keyword) {
-            const kw = keyword.toLowerCase().trim();
+        function filterBookmarks(kw) {
+            const key = kw.toLowerCase().trim();
             const sections = document.querySelectorAll('.category-section');
-            let totalMatches = 0;
-
-            for (const section of sections) {
-                const cards = section.querySelectorAll('.bookmark-card');
-                let sectionMatches = 0;
-                for (const card of cards) {
-                    const title = card.dataset.title || '';
-                    const domain = card.dataset.domain || '';
-                    const match = kw === '' || title.includes(kw) || domain.includes(kw);
-                    card.classList.toggle('hidden', !match);
-                    if (match) sectionMatches++;
+            let total = 0;
+            sections.forEach(sec => {
+                const cards = sec.querySelectorAll('.bookmark-card');
+                let match = 0;
+                cards.forEach(c => {
+                    const t = c.dataset.title || '';
+                    const d = c.dataset.domain || '';
+                    const ok = key === '' || t.includes(key) || d.includes(key);
+                    c.classList.toggle('hidden', !ok);
+                    if (ok) match++;
+                });
+                total += match;
+                sec.classList.toggle('hidden', key !== '' && match === 0);
+            });
+            let no = document.getElementById('noResults');
+            if (total === 0 && key !== '') {
+                if (!no) {
+                    no = document.createElement('div');
+                    no.id = 'noResults';
+                    no.className = 'no-results';
+                    no.innerHTML = '<span style="font-size:28px;">🔍</span><p>没有匹配的书签</p>';
+                    document.getElementById('bookmarksContainer').appendChild(no);
                 }
-                totalMatches += sectionMatches;
-                section.classList.toggle('hidden', kw !== '' && sectionMatches === 0);
-            }
-
-            let noResults = document.getElementById('noResults');
-            if (totalMatches === 0 && kw !== '') {
-                if (!noResults) {
-                    noResults = document.createElement('div');
-                    noResults.id = 'noResults';
-                    noResults.className = 'no-results';
-                    noResults.innerHTML = `<span class="icon">[S]</span><p>没有找到匹配的书签</p>`;
-                    document.getElementById('bookmarksContainer').appendChild(noResults);
-                }
-            } else if (noResults) {
-                noResults.remove();
-            }
+            } else if (no) { no.remove(); }
         }
 
         // ================================================================
-        //  EXPORT HTML
+        //  导出 HTML
         // ================================================================
         function exportHTML() {
-            if (!currentBookmarks.length) {
-                showToast('[Error] 没有书签可导出', 'error');
-                return;
+            if (!bookmarks.length) { showToast('没有书签可导出', 'error'); return; }
+            // 复用当前样式，嵌入数据
+            const style = document.querySelector('style').textContent;
+            const cats = {};
+            for (const b of bookmarks) { if (!cats[b.category]) cats[b.category] = []; cats[b.category].push(b); }
+            let content = '';
+            for (const c of Object.keys(cats)) {
+                const items = cats[c];
+                const col = getColor(c);
+                let cards = '';
+                for (const b of items) {
+                    const domain = getDomain(b.url);
+                    const fav = getFavicon(b.url);
+                    cards += `
+                        <div class="bookmark-card">
+                            <a href="${escapeHTML(b.url)}" target="_blank" rel="noopener" class="card-link">
+                                <div class="card-icon"><img src="${escapeHTML(fav)}" onerror="this.parentElement.innerHTML='<span class=\\'fallback-icon\\'>📄</span>'"></div>
+                                <div class="card-content"><div class="card-title">${escapeHTML(b.title)}</div><div class="card-domain">${escapeHTML(domain)}</div></div>
+                            </a>
+                        </div>
+                    `;
+                }
+                content += `
+                    <section class="category-section" id="cat-${escapeHTML(c)}">
+                        <div class="category-header"><span class="category-dot" style="background:${col}"></span><span class="category-title">${escapeHTML(c)}</span><span class="category-count">${items.length}</span></div>
+                        <div class="bookmarks-grid">${cards}</div>
+                    </section>
+                `;
             }
 
-            const html = generateFullHTML(currentBookmarks, currentTitle);
+            const html = `<!DOCTYPE html>
+        <html lang="zh-CN">
+        <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHTML(title)}</title><style>${style}.toolbar{display:none;}.upload-zone{display:none;}.nav-preview{display:flex!important;}</style></head>
+        <body><div class="app"><div class="nav-preview visible"><div class="nav-body"><aside class="sidebar"><div class="sidebar-header"><div class="title">📑 ${escapeHTML(title)}</div><div class="sub">${bookmarks.length} 个书签</div></div><div class="sidebar-search"><input type="text" id="sidebarSearch" placeholder="过滤标签..."></div><nav class="sidebar-tags" id="sidebarTags">${Object.keys(cats).map(c => `<a class="sidebar-tag" onclick="jumpToCategory('${escapeHTML(c)}')"><span class="tag-dot" style="background:${getColor(c)}"></span><span class="tag-name">${escapeHTML(c)}</span><span class="tag-count">${cats[c].length}</span></a>`).join('')}</nav><div class="sidebar-footer"><span>${Object.keys(cats).length} 分类</span><span>✨</span></div></aside><main class="main-content"><div class="main-header"><h1>⭐ 我的书签</h1><p>收纳 · 探索 · 效率</p></div><div class="search-engines"><span class="label">🔍 搜索：</span>${ENGINES.map(e => `<button class="search-btn" data-engine="${e.url}"><img src="${e.icon}" class="search-icon" onerror="this.style.display='none'"><span>${e.name}</span></button>`).join('')}</div><div class="search-bar"><input type="text" id="searchInput" placeholder="搜索书签..."><span class="shortcut">⌘K</span></div><div id="bookmarksContainer">${content}</div></main></div></div></div>
+        <script>
+            function jumpToCategory(c){const el=document.getElementById('cat-'+c);if(!el)return;el.scrollIntoView({behavior:'smooth',block:'start'});}
+            document.getElementById('searchInput').addEventListener('input',function(){const kw=this.value.toLowerCase().trim();document.querySelectorAll('.category-section').forEach(s=>{let m=0;s.querySelectorAll('.bookmark-card').forEach(c=>{const t=(c.dataset.title||'').toLowerCase(),d=(c.dataset.domain||'').toLowerCase(),ok=kw===''||t.includes(kw)||d.includes(kw);c.classList.toggle('hidden',!ok);if(ok)m++});s.classList.toggle('hidden',kw!==''&&m===0);});});
+            document.querySelectorAll('.bookmark-card').forEach(c=>{const t=c.querySelector('.card-title'),d=c.querySelector('.card-domain');if(t)c.dataset.title=t.textContent.toLowerCase();if(d)c.dataset.domain=d.textContent.toLowerCase();});
+            document.querySelectorAll('.search-btn').forEach(b=>{b.addEventListener('click',function(e){e.stopPropagation();const u=this.dataset.engine;if(u){const inp=document.getElementById('searchInput');if(inp&&inp.value.trim())window.open(u+encodeURIComponent(inp.value.trim()),'_blank');}});});
+            document.getElementById('sidebarSearch').addEventListener('input',function(){const kw=this.value.toLowerCase().trim();document.querySelectorAll('.sidebar-tag').forEach(t=>{const n=t.querySelector('.tag-name').textContent.toLowerCase();t.style.display=(kw===''||n.includes(kw))?'flex':'none';});});
+        <\/script>
+        </body></html>`;
+
             const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1385,339 +1033,39 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            showToast('[Success] 导出成功！', 'success');
-        }
-
-        function generateFullHTML(bookmarks, title) {
-            const categories = {};
-            for (const bm of bookmarks) {
-                if (!categories[bm.category]) categories[bm.category] = [];
-                categories[bm.category].push(bm);
-            }
-            const categoryNames = Object.keys(categories);
-            const categoryColors = {};
-            for (const cat of categoryNames) {
-                categoryColors[cat] = getColorForCategory(cat);
-            }
-
-            // Sidebar items with <a>
-            let sidebarItems = '';
-            for (const cat of categoryNames) {
-                const count = categories[cat].length;
-                const color = categoryColors[cat];
-                sidebarItems += `
-                    <a href="#cat-${escapeHTML(cat)}" class="sidebar-tag" data-category="${escapeHTML(cat)}" onclick="jumpToCategory('${escapeHTML(cat)}')">
-                        <span class="tag-dot" style="background-color:${color}"></span>
-                        <span class="tag-name">${escapeHTML(cat)}</span>
-                        <span class="tag-count">${count}</span>
-                    </a>
-                `;
-            }
-
-            // Bookmarks content
-            let contentHTML = '';
-            for (const cat of categoryNames) {
-                const items = categories[cat];
-                const color = categoryColors[cat];
-                let cardsHTML = '';
-                for (const bm of items) {
-                    const domain = getDomain(bm.url);
-                    const favicon = getFaviconUrl(bm.url);
-                    cardsHTML += `
-                        <div class="bookmark-card">
-                            <a href="${escapeHTML(bm.url)}" target="_blank" rel="noopener noreferrer" class="card-link">
-                                <div class="card-icon">
-                                    <img src="${escapeHTML(favicon)}" alt="" onerror="this.parentElement.innerHTML='<span class=\\'fallback-icon\\'>[P]</span>'">
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-title">${escapeHTML(bm.title)}</div>
-                                    <div class="card-domain">${escapeHTML(domain)}</div>
-                                </div>
-                            </a>
-                        </div>
-                    `;
-                }
-                contentHTML += `
-                    <section class="category-section" id="cat-${escapeHTML(cat)}">
-                        <div class="category-header">
-                            <span class="category-dot" style="background-color:${color}"></span>
-                            <h2 class="category-title">${escapeHTML(cat)}</h2>
-                            <span class="category-count">${items.length} 个书签</span>
-                        </div>
-                        <div class="bookmarks-grid">
-                            ${cardsHTML}
-                        </div>
-                    </section>
-                `;
-            }
-
-            // Search engines buttons (same icons)
-            let searchButtons = '';
-            for (const eng of BASE_SEARCH_ENGINES) {
-                const iconHTML = eng.icon ?
-                    `<img src="${escapeHTML(eng.icon)}" alt="${escapeHTML(eng.name)}" class="search-icon" onerror="this.style.display='none';this.parentElement.innerHTML+='<span class=\\'si-fallback\\'>${eng.name[0].toUpperCase()}</span>'">` :
-                    `<span class="si-fallback">${eng.name[0].toUpperCase()}</span>`;
-                searchButtons += `
-                    <button class="search-btn" data-engine="${escapeHTML(eng.url)}" title="${escapeHTML(eng.name)}">
-                        <span class="search-icon-wrap">${iconHTML}</span>
-                        <span>${escapeHTML(eng.name)}</span>
-                    </button>
-                `;
-            }
-
-            return `<!DOCTYPE html>
-        <html lang="zh-CN" class="dark">
-        <head>
-            <meta charset="UTF-8" />
-            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-            <meta name="apple-mobile-web-app-capable" content="yes" />
-            <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-            <title>${escapeHTML(title)}</title>
-            <style>
-                ${document.querySelector('style').textContent}
-                .toolbar { display: none !important; }
-                .app-container { padding-top: 16px; }
-                .upload-zone { display: none !important; }
-                .nav-preview { display: flex !important; }
-                .sidebar { height: calc(100vh - 40px); }
-                .main-content { max-height: calc(100vh - 40px); }
-                .sidebar-tag { border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; }
-                .bookmark-card.highlight { background: rgba(79,70,229,0.12); border-color: #4f46e5; }
-                .category-section.targeted { animation: highlightPulse 1.2s ease; }
-                @keyframes highlightPulse {
-                    0% { opacity: 1; }
-                    20% { opacity: 0.3; }
-                    40% { opacity: 1; }
-                    60% { opacity: 0.5; }
-                    80% { opacity: 1; }
-                    100% { opacity: 1; }
-                }
-            </style>
-        </head>
-        <body>
-            <div class="bg-effects"><div class="glow1"></div><div class="glow2"></div></div>
-            <div class="app-container">
-                <div class="nav-preview visible">
-                    <div class="nav-body">
-                        <aside class="sidebar">
-                            <div class="sidebar-header">
-                                <div class="logo"><span>[B]</span><span>${escapeHTML(title)}</span></div>
-                                <div class="badge">${bookmarks.length} 个书签</div>
-                            </div>
-                            <div class="sidebar-search">
-                                <input type="text" id="sidebarSearch" placeholder="过滤标签..." autocomplete="off" />
-                            </div>
-                            <nav class="sidebar-tags" id="sidebarTags">${sidebarItems}</nav>
-                            <div class="sidebar-footer">${categoryNames.length} 个分类</div>
-                        </aside>
-                        <main class="main-content" id="mainContent">
-                            <div class="main-header">
-                                <h1>[Star] 我的书签</h1>
-                                <p>收纳 · 分享 · 探索</p>
-                            </div>
-                            <div class="search-engines">
-                                <span class="label">[Search] 搜索：</span>
-                                ${searchButtons}
-                            </div>
-                            <div class="search-wrapper">
-                                <input type="text" id="searchInput" placeholder="搜索书签..." autocomplete="off" />
-                                <span class="shortcut">[Cmd+K]</span>
-                            </div>
-                            <div id="bookmarksContainer">${contentHTML}</div>
-                        </main>
-                    </div>
-                </div>
-            </div>
-            <script>
-                // 跳转函数（与预览相同）
-                function jumpToCategory(categoryName) {
-                    document.querySelectorAll('.bookmark-card.highlight').forEach(el => el.classList.remove('highlight'));
-                    document.querySelectorAll('.category-section.targeted').forEach(el => el.classList.remove('targeted'));
-
-                    const targetId = 'cat-' + categoryName;
-                    const targetSection = document.getElementById(targetId);
-                    if (!targetSection) return;
-
-                    const searchInput = document.getElementById('searchInput');
-                    if (searchInput) { searchInput.value = ''; filterBookmarks(''); }
-
-                    targetSection.classList.remove('hidden');
-                    const cards = targetSection.querySelectorAll('.bookmark-card');
-                    cards.forEach(card => card.classList.remove('hidden'));
-
-                    cards.forEach((card, index) => {
-                        setTimeout(() => { card.classList.add('highlight'); }, index * 80);
-                    });
-
-                    targetSection.classList.add('targeted');
-                    const offset = 20;
-                    const top = targetSection.getBoundingClientRect().top + window.scrollY - offset;
-                    window.scrollTo({ top, behavior: 'smooth' });
-
-                    document.querySelectorAll('.sidebar-tag').forEach(tag => {
-                        tag.classList.toggle('active', tag.dataset.category === categoryName);
-                    });
-
-                    setTimeout(() => {
-                        cards.forEach(card => card.classList.remove('highlight'));
-                    }, 5000);
-                }
-
-                // 过滤函数
-                function filterBookmarks(kw) {
-                    const keyword = kw.toLowerCase().trim();
-                    const sections = document.querySelectorAll('.category-section');
-                    let total = 0;
-                    sections.forEach(section => {
-                        const cards = section.querySelectorAll('.bookmark-card');
-                        let matches = 0;
-                        cards.forEach(card => {
-                            const title = (card.dataset.title || '').toLowerCase();
-                            const domain = (card.dataset.domain || '').toLowerCase();
-                            const match = keyword === '' || title.includes(keyword) || domain.includes(keyword);
-                            card.classList.toggle('hidden', !match);
-                            if (match) matches++;
-                        });
-                        total += matches;
-                        section.classList.toggle('hidden', keyword !== '' && matches === 0);
-                    });
-                    let noResults = document.getElementById('noResults');
-                    if (total === 0 && keyword !== '') {
-                        if (!noResults) {
-                            noResults = document.createElement('div');
-                            noResults.id = 'noResults';
-                            noResults.className = 'no-results';
-                            noResults.innerHTML = '<span class="icon">[S]</span><p>没有找到匹配的书签</p>';
-                            document.getElementById('bookmarksContainer').appendChild(noResults);
-                        }
-                    } else if (noResults) { noResults.remove(); }
-                }
-
-                // 侧边栏搜索
-                const sidebarSearch = document.getElementById('sidebarSearch');
-                if (sidebarSearch) {
-                    sidebarSearch.addEventListener('input', function() {
-                        const kw = this.value.toLowerCase().trim();
-                        document.querySelectorAll('.sidebar-tag').forEach(tag => {
-                            const name = tag.querySelector('.tag-name').textContent.toLowerCase();
-                            tag.style.display = (kw === '' || name.includes(kw)) ? 'flex' : 'none';
-                        });
-                    });
-                }
-
-                // 主搜索
-                const searchInput = document.getElementById('searchInput');
-                if (searchInput) {
-                    searchInput.addEventListener('input', function() { filterBookmarks(this.value); });
-                    searchInput.addEventListener('keydown', function(e) {
-                        if (e.key === 'Enter') {
-                            const q = this.value.trim();
-                            if (q) {
-                                const engine = localStorage.getItem('selectedEngine') || 'https://cn.bing.com/search?q=';
-                                window.open(engine + encodeURIComponent(q), '_blank');
-                            }
-                        }
-                    });
-                }
-
-                // 搜索引擎切换
-                const engineBtns = document.querySelectorAll('.search-btn');
-                let currentEngine = localStorage.getItem('selectedEngine') || 'https://cn.bing.com/search?q=';
-                engineBtns.forEach(btn => {
-                    if (btn.dataset.engine === currentEngine) btn.classList.add('active');
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const url = this.dataset.engine;
-                        if (url) {
-                            currentEngine = url;
-                            localStorage.setItem('selectedEngine', url);
-                            engineBtns.forEach(b => b.classList.remove('active'));
-                            this.classList.add('active');
-                            if (searchInput && searchInput.value.trim()) {
-                                window.open(currentEngine + encodeURIComponent(searchInput.value.trim()), '_blank');
-                            }
-                        }
-                    });
-                });
-
-                // 快捷键
-                document.addEventListener('keydown', function(e) {
-                    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                        e.preventDefault();
-                        if (searchInput) { searchInput.focus(); searchInput.select(); }
-                    }
-                    if (e.key === 'Escape' && searchInput) {
-                        searchInput.value = '';
-                        filterBookmarks('');
-                        searchInput.blur();
-                    }
-                });
-
-                // 设置 dataset
-                document.querySelectorAll('.bookmark-card').forEach(card => {
-                    const titleEl = card.querySelector('.card-title');
-                    const domainEl = card.querySelector('.card-domain');
-                    if (titleEl) card.dataset.title = titleEl.textContent.toLowerCase();
-                    if (domainEl) card.dataset.domain = domainEl.textContent.toLowerCase();
-                });
-
-                // 滚动高亮标签
-                const sections = document.querySelectorAll('.category-section');
-                function highlightTag() {
-                    let currentId = '';
-                    const scrollY = window.scrollY + 80;
-                    sections.forEach(section => {
-                        const rect = section.getBoundingClientRect();
-                        if (rect.top + window.scrollY <= scrollY) currentId = section.id;
-                    });
-                    document.querySelectorAll('.sidebar-tag').forEach(tag => {
-                        tag.classList.toggle('active', tag.dataset.category === currentId.replace('cat-', ''));
-                    });
-                }
-                window.addEventListener('scroll', highlightTag);
-                setTimeout(highlightTag, 100);
-            <\/script>
-        </body>
-        </html>`;
+            showToast('✅ 导出成功', '');
         }
 
         // ================================================================
-        //  FILE UPLOAD HANDLING
+        //  文件上传
         // ================================================================
         function handleFile(file) {
             if (!file) return;
             const ext = file.name.split('.').pop().toLowerCase();
-            if (!['md', 'markdown'].includes(ext)) {
-                showToast('[Warning] 请上传 .md 或 .markdown 文件', 'error');
-                return;
-            }
-
+            if (!['md', 'markdown'].includes(ext)) { showToast('请上传 .md 文件', 'error'); return; }
             const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const content = e.target.result;
-                    const bookmarks = parseMarkdownBookmarks(content);
-                    if (!bookmarks.length) {
-                        showToast('[Warning] 未解析到书签，请检查格式', 'error');
-                        return;
-                    }
-                    const title = file.name.replace(/\.[^.]+$/, '') || '我的导航';
-                    renderNavigation(bookmarks, title);
-                    showToast(`[Success] 成功导入 ${bookmarks.length} 个书签`, 'success');
-                } catch (err) {
-                    showToast('[Error] 解析失败: ' + err.message, 'error');
-                    console.error(err);
-                }
-            };
-            reader.onerror = function() {
-                showToast('[Error] 读取文件失败', 'error');
+            reader.onload = e => {
+                const data = parseBookmarks(e.target.result);
+                if (!data.length) { showToast('未解析到书签，检查格式', 'error'); return; }
+                const name = file.name.replace(/\.[^.]+$/, '') || '我的导航';
+                render(data, name);
+                showToast(`✅ 导入 ${data.length} 个书签`, '');
             };
             reader.readAsText(file);
         }
 
         // ================================================================
-        //  EVENT BINDINGS
+        //  主题切换
+        // ================================================================
+        function setTheme(t) {
+            theme = t;
+            document.documentElement.setAttribute('data-theme', t);
+            localStorage.setItem('theme', t);
+            document.getElementById('themeToggle').textContent = t === 'dark' ? '☀️' : '🌙';
+        }
+
+        // ================================================================
+        //  事件绑定
         // ================================================================
         document.addEventListener('DOMContentLoaded', function() {
             const uploadZone = document.getElementById('uploadZone');
@@ -1726,82 +1074,62 @@
             const exportBtn = document.getElementById('exportBtn');
             const searchInput = document.getElementById('searchInput');
             const sidebarSearch = document.getElementById('sidebarSearch');
+            const themeBtn = document.getElementById('themeToggle');
 
-            uploadBtn.addEventListener('click', function() {
-                fileInput.click();
-            });
+            // 主题
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
 
-            fileInput.addEventListener('change', function(e) {
-                if (this.files && this.files.length > 0) {
-                    handleFile(this.files[0]);
-                }
-                this.value = '';
-            });
+            themeBtn.addEventListener('click', () => setTheme(theme === 'dark' ? 'light' : 'dark'));
 
-            uploadZone.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.classList.add('dragover');
-            });
-            uploadZone.addEventListener('dragleave', function(e) {
-                e.preventDefault();
-                this.classList.remove('dragover');
-            });
-            uploadZone.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.classList.remove('dragover');
-                const files = e.dataTransfer.files;
-                if (files && files.length > 0) {
-                    handleFile(files[0]);
-                }
-            });
-            uploadZone.addEventListener('click', function() {
-                fileInput.click();
-            });
+            uploadBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', function(e) { if (this.files.length) handleFile(this.files[0]);
+                this.value = ''; });
+
+            uploadZone.addEventListener('dragover', e => { e.preventDefault();
+                uploadZone.style.borderColor = 'var(--accent)'; });
+            uploadZone.addEventListener('dragleave', e => { e.preventDefault();
+                uploadZone.style.borderColor = ''; });
+            uploadZone.addEventListener('drop', e => { e.preventDefault();
+                uploadZone.style.borderColor = ''; if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
+            uploadZone.addEventListener('click', () => fileInput.click());
 
             exportBtn.addEventListener('click', exportHTML);
 
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    filterBookmarks(this.value);
-                });
-                searchInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter') {
-                        const q = this.value.trim();
-                        if (q) {
-                            window.open(selectedEngine + encodeURIComponent(q), '_blank');
-                        }
-                    }
-                });
-            }
-
-            if (sidebarSearch) {
-                sidebarSearch.addEventListener('input', function() {
-                    const kw = this.value.toLowerCase().trim();
-                    document.querySelectorAll('.sidebar-tag').forEach(tag => {
-                        const name = tag.querySelector('.tag-name').textContent.toLowerCase();
-                        tag.style.display = (kw === '' || name.includes(kw)) ? 'flex' : 'none';
-                    });
-                });
-            }
-
-            document.addEventListener('keydown', function(e) {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                    e.preventDefault();
-                    if (searchInput) {
-                        searchInput.focus();
-                        searchInput.select();
-                    }
-                }
-                if (e.key === 'Escape') {
-                    if (searchInput) {
-                        searchInput.value = '';
-                        filterBookmarks('');
-                        searchInput.blur();
-                    }
+            searchInput.addEventListener('input', function() { filterBookmarks(this.value); });
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && this.value.trim()) {
+                    window.open(selectedEngine + encodeURIComponent(this.value.trim()), '_blank');
                 }
             });
 
-            console.log('[Bookmark] 书签导航生成器已加载，请上传 .md 文件');
+            sidebarSearch.addEventListener('input', function() {
+                const kw = this.value.toLowerCase().trim();
+                document.querySelectorAll('.sidebar-tag').forEach(t => {
+                    const n = t.querySelector('.tag-name').textContent.toLowerCase();
+                    t.style.display = (kw === '' || n.includes(kw)) ? 'flex' : 'none';
+                });
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault();
+                    searchInput.focus();
+                    searchInput.select(); }
+                if (e.key === 'Escape') { searchInput.value = '';
+                    filterBookmarks('');
+                    searchInput.blur(); }
+            });
+
+            // 预设示例数据，便于展示
+            const demo = [
+                { category: '开发工具', title: 'GitHub', url: 'https://github.com' },
+                { category: '开发工具', title: 'Stack Overflow', url: 'https://stackoverflow.com' },
+                { category: '学习资源', title: 'MDN Web Docs', url: 'https://developer.mozilla.org' },
+                { category: '学习资源', title: 'HelloGitHub', url: 'https://hellogithub.com' },
+                { category: '设计素材', title: 'Dribbble', url: 'https://dribbble.com' },
+            ];
+            render(demo, '我的导航 · 示例');
+            showToast('💡 上传 .md 文件替换示例数据', '');
         });
     </script>
 </body>
