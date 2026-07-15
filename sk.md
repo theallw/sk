@@ -1,4 +1,4 @@
-## 常用网站（个人常用 / 快捷）
+## 常用网站
 - [哔哩哔哩](http://www.bilibili.com/)
 - [shouku-keep](https://shouku123.com/keep)
 - [书签地球](https://www.bookmarkearth.cn/)
@@ -9,7 +9,7 @@
 - [MMP](https://bmm.lccl.cc/)
 - [ATK HUB](https://hub.atk.pro/)
 
-## Download / 文件传输 / 临时分享工具
+## 下载与文件传输
 - [FilePizza](https://file.pizza/)
 - [360_chrome](https://baoku.360.cn/soft/show/appid/2000004411?channel=9510140&channel=9510140)
 - [qinanxin_thonny](https://pc.soft.qianxin.com/search/thonny)
@@ -24,7 +24,7 @@
 - [163客户端](https://d8.music.126.net/dmusic2/NeteaseCloudMusic_Music_official_3.1.30.205130_64.exe)
 - [Yaak-离线api客户端](https://github.com/mountain-loop/yaak/releases/download/v2026.4.0/Yaak_2026.4.0_x64-setup.exe)
 
-## 开发平台、代码托管与协作
+## 开发平台与代码托管
 - [GitHub](https://github.com/)
 - [Hellogithub](https://hellogithub.com/)
 - [Gitee](https://gitee.com)
@@ -50,7 +50,7 @@
 - [AngularJS](https://shouku123.com/pub/gotoUrl.do?id=1399834)
 - [jQuery 插件库](https://shouku123.com/pub/gotoUrl.do?id=1399835)
 
-## 云服务、主机、CDN 与托管平台
+## 云服务与托管平台
 - [Digital Ocean](https://www.digitalocean.com/)
 - [Fly.io](https://fly.io/)
 - [Fleek](https://fleek.co/)
@@ -67,14 +67,14 @@
 - [RackNerd](https://my.racknerd.com/aff.php?aff=12160)
 - [Hosteons](https://my.hosteons.com/aff.php?aff=2311)
 
-## 容器 / 部署 / DevOps / CI
+## 容器与CI/CD
 - [Travis CI](https://travis-ci.com/)
 - [Play with Docker](https://labs.play-with-docker.com/)
 - [Caddy](https://caddyserver.com/)
 - [Digital Ocean](https://www.digitalocean.com/)
 - [Fly.io](https://fly.io/)
 
-## 后端服务、Headless CMS、数据库 与 API 工具
+## 后端与API工具
 - [Directus](https://directus.io/)
 - [endpoints.dev](https://www.endpoints.dev/)
 - [TablePro](https://tablepro.app/)
@@ -84,7 +84,7 @@
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 - [MCP Flow](https://mcpflow.io/)
 
-## 人工智能 / 模型 / AIGC 平台与工具
+## AI与模型平台
 - [DeepSeek](https://chat.deepseek.com/)
 - [腾讯元宝](https://yuanbao.tencent.com/)
 - [千问](https://www.qianwen.com/)
@@ -118,7 +118,7 @@
 - [Cherry Studio](https://cherry-ai.com/)
 - [Cutia](https://cutia.msgbyte.com/)
 
-## 模型资源 / 生成式艺术 / 图像资源
+## 模型与图像资源
 - [Civitai](https://civitai.com/)
 - [DiffusionBee](https://diffusionbee.com/)
 - [Mochi Diffusion](https://github.com/MochiDiffusion/MochiDiffusion)
@@ -145,7 +145,7 @@
 - [Drawnix](https://drawnix.com/)
 - [App Shots](https://www.appshots.top/)
 
-## 设计、UI 组件 与 前端资源
+## UI组件与前端资源
 - [Mantine UI](https://mantine.dev/)
 - [PrimeVue Vue UI组件库](https://primevue.org/)
 - [Vuesax](https://vuesax.com/)
@@ -160,7 +160,7 @@
 - [Obra Icons](https://icons.obra.studio/)
 - [FontSpace](https://www.fontspace.com/)
 
-## 产品力 / 生产力 / 笔记 与 知识管理
+## 笔记与知识管理
 - [FlowUs 息流](https://flowus.cn/)
 - [Flowus 搜索](https://cn.bing.com/search?q=site:flowus.cn)
 - [Mubu 幕布](https://mubu.com/)
@@ -171,7 +171,7 @@
 - [App Shots](https://www.appshots.top/)
 - [PandaWiki](https://pandawiki.docs.baizhi.cloud/)
 
-## 浏览器、插件、扩展与本地工具
+## 浏览器与扩展工具
 - [Chrome 应用商店](https://chromewebstore.google.com/)
 - [CRX插件搜索](https://www.crxsoso.com/)
 - [BetterCapture](https://bettercapture.app/)
@@ -185,14 +185,13 @@
 - [beb-theme-xpi](https://f2.crxsoso.com/firefox/downloads/latest/beb/platform:5/beb.xpi)
 - [bianse-xpi](https://f2.crxsoso.com/firefox/downloads/latest/adaptive-tab-bar-colour/platform:5/adaptive-tab-bar-colour.xpi)
 
-
-## 搜索 / 相似站点 / 推荐
+## 搜索与相似站点
 - [SimilarSites](https://similarsites.com/)
 - [SimilarSiteSearch](https://www.similarsitesearch.com/)
 - [Get Emoji](https://getemoji.com/)
 - [CopyChar](https://copychar.cc/)
 
-## 教育 / 学习资源 / 文档 / 书籍
+## 学习与文档
 - [MDN Web Docs](https://developer.mozilla.org/zh-CN/)
 - [Exploring TypeScript](https://exploringjs.com/ts/book/index.html)
 - [科学文库](https://book.sciencereading.cn/shop/main/Login/shopFrame.do)
@@ -214,7 +213,7 @@
 - [校园网联合镜像站](https://mirrors.cernet.edu.cn/about)
 - [ONE · 一个](http://wufazhuce.com/)
 
-## 社区 / 问答 / 技术媒体
+## 社区与技术媒体
 - [知乎](https://www.zhihu.com/)
 - [小红书](https://www.xiaohongshu.com)
 - [豆瓣](https://www.douban.com/)
@@ -231,7 +230,7 @@
 - [InfoQ](https://shouku123.com/pub/gotoUrl.do?id=1399826)
 - [IBM中国](https://shouku123.com/pub/gotoUrl.do?id=1399822)
 
-## 新闻 / 资讯 / 热榜
+## 新闻与热榜
 - [今日热榜](https://tophub.today/)
 - [今日头条](http://www.toutiao.com/)
 - [腾讯新闻](http://news.qq.com/)
@@ -242,7 +241,7 @@
 - [Top HN Stories](https://www.tophn.co/)
 - [Tech Twitter](https://www.techtwitter.com/)
 
-## 视频 / 短视频 / 直播 / 平台
+## 视频与直播平台
 - [哔哩哔哩](https://www.bilibili.com/)
 - [抖音](https://www.douyin.com)
 - [斗鱼](https://www.douyu.com/)
@@ -254,21 +253,21 @@
 - [B站创作中心](https://member.bilibili.com/platform/upload/text/draft)
 - [RetaTube](https://retatube.com/)
 
-## 音乐
+## 音乐平台
 - [网易云音乐](https://music.163.com/)
 - [QQ音乐](https://y.qq.com/)
 - [酷狗音乐](https://www.kugou.com/)
 - [Apple Music](https://music.apple.com/cn/new)
 - [歌曲宝](https://www.gequbao.com/)
 
-## 网购 / 电商
+## 电商购物
 - [淘宝](https://www.taobao.com/)
 - [京东](https://www.jd.com/)
 - [亚马逊](https://www.amazon.cn/)
 - [苏宁易购](https://www.suning.com)
 - [聚美优品](http://jumei.com/)
 
-## 彩票 / 娱乐
+## 彩票与娱乐
 - [超级大乐透](https://www.lottery.gov.cn/dlt/index.html)
 - [14场胜平负](https://zx.500.com/zc/?zkid=157)
 - [P5和值](https://www.17500.cn/tool/pl5-ylzx.html)
@@ -276,20 +275,16 @@
 - [IP138彩票](https://caipiao.ip138.com/)
 - [彩票](https://shouku123.com/pub/gotoUrl.do?id=1400156)
 
-
-## 游戏 / 竞技 / 云顶 / LOL 工具
+## 游戏与电竞工具
 - [OP.GG](https://op.gg/zh-cn/lol/modes/aram)
 - [TFT数据检索](https://www.datatft.com/explorer)
 - [tactics.tools数据检索](https://tactics.tools/zh/team-compositions)
-- [datatft](https://www.datatft.com/)
-- [国服云顶](https://www.datatft.com/comps/tier)
-- [datatft英雄数据](https://www.datatft.com/units)
-- [metatft](https://www.metatft.com/comps)
+- [Datatft英雄数据](https://www.datatft.com/units)
 - [MetaTFT](https://www.metatft.com/comps)
 - [LOL攻略资料](https://101.qq.com/#/hero-rank-fight)
-- [TapTap](https://shouku123.com/pub/gotoUrl.do?id=1399878)
+- [TapTap](https://www.taptap.cn/)
 
-## SEO / 网站运营 / 工具
+## SEO与网站tool
 - [SEO菜鸟工具](https://www.jyshare.com/)
 - [Google SearchConsole](https://search.google.com/search-console)
 - [IP138](https://www.ip138.com/)
@@ -300,22 +295,19 @@
 - [UU在线tool](https://uutool.cn/phone-batch/)
 - [在线CyberChef编码](https://gchq.github.io/CyberChef/)
 
-## 安全 / 渗透 / 威胁情报
+## 安全与威胁情报
 - [安全内参](https://www.secrss.com/)
 - [Freebuf](https://www.freebuf.com/)
 - [看雪论坛](https://bbs.kanxue.com/)
 - [微步安全](https://x.threatbook.com/)
 - [威胁猎人](https://threathunter.cn/)
 
-## 桌面 / 系统 / Windows 设置
-- Hosts 配置（条目已保留）
+## 系统与桌面工具
 - [Chrome 设置](chrome://settings/)
-- 系统版本：Windows 10 企业版 LTSC 21H2
-- [英雄联盟配置文件路径](notepad X:\网络游戏\英雄联盟\Game\config\PersistedSettings.json)
 - [MuMu模拟器](https://mumu.163.com/)
 - [Termux 下载](https://gitee.com/ygt314159/subject-termux)
 
-## Android / Root / 模拟器 / 手机工具
+## Android与手机工具
 - [Fdroid清华源](https://mirrors.tuna.tsinghua.edu.cn/help/fdroid/)
 - [Termux下载](https://gitee.com/ygt314159/subject-termux)
 - [晨钟网络软件](http://jamcz.com/)
@@ -329,7 +321,7 @@
 - [Android Root方案](https://sukisu.org/zh/)
 - [模块化Android工具箱](https://rom.yulovehan.top/)
 
-## 邮箱 / 临时邮箱 / 通信
+## 邮箱与临时邮箱
 - [QQ邮箱](https://mail.qq.com/)
 - [163邮箱](http://mail.163.com/)
 - [126邮箱](http://www.126.com/)
@@ -337,7 +329,7 @@
 - [新浪邮箱](http://mail.sina.com.cn/)
 - [Temp Mail](https://temp-mail.io/zh)
 
-## 政务服务 / 教育考试
+## 政务服务与教育考试
 - [国家政务服务平台](https://gjzwfw.www.gov.cn/index.html)
 - [教育部](https://shouku123.com/pub/gotoUrl.do?id=1399869)
 - [学信网](https://shouku123.com/pub/gotoUrl.do?id=1399870)
@@ -345,7 +337,7 @@
 - [海事一网通办](https://shouku123.com/pub/gotoUrl.do?id=1399872)
 - [自然人税务申报](https://shouku123.com/pub/gotoUrl.do?id=1399873)
 
-## 参考手册与文档（语言 / API / 标准）
+## 参考手册与文档
 - [HTML参考手册](https://shouku123.com/pub/gotoUrl.do?id=1399827)
 - [CSS参考手册](https://shouku123.com/pub/gotoUrl.do?id=1399828)
 - [JavaScript参考手册](https://shouku123.com/pub/gotoUrl.do?id=1399829)
@@ -353,31 +345,30 @@
 - [Java SE文档](https://shouku123.com/pub/gotoUrl.do?id=1399831)
 - [Python3.12文档](https://docs.pythonlang.cn/3.12/)
 
-## GitHub / 镜像 / 加速 / 镜像站
+## GitHub镜像与加速
 - [GitHub镜像站](https://www.moretools.app/zh-CN/github-proxy)
 - [清华镜像站](https://mirrors.tuna.tsinghua.edu.cn/help/fdroid/)
 - [GitHub加速-steampp](https://steampp.net/download)
 - [Xget加速](https://xuc.xi-xu.me/)
 - [steampp-windows](https://wwn.lanzouy.com/b01v4iz1g)
 
-## PCB / 硬件
+## PCB与硬件
 - [嘉立创开源广场](https://oshwhub.com/)
 - [无线WIFI转有线路由](https://oshwhub.com/yc_chen/wireless-wifi-to-wired-routing)
 
-## 壁纸
+## 壁纸资源
 - [macOS Wallpapers](https://www.applewalls.com/zh/macos-wallpapers)
 - [Phone Wallpaper](https://phwalls.com/zh)
 - [AppleWalls](https://www.applewalls.com/)
 
-
-## 站点导航 / 书签 / 导航类
+## 站点导航
 - [渗透导航](https://www.shentoushi.top/)
 - [36k导航](https://36kdh.com/)
 - [书签地球](https://www.bookmarkearth.cn/)
 - [龙轩导航](http://ilxdh.com/)
 - [bmm (MMP)](https://bmm.lccl.cc/)
 
-## 图标 / 字体 / 素材 市场
+## 图标与字体素材
 - [Iconbolt](https://www.iconbolt.com/)
 - [ICONSVG](https://iconsvg.xyz/)
 - [Obra Icons](https://icons.obra.studio/)
@@ -386,7 +377,7 @@
 - [素材SoSo](https://clipso.agilestudio.cn/)
 - [findicons](https://www.freeimages.com/)
 
-## 开放平台（第三方平台开发者中心）
+## 开放平台
 - [微信开放平台](https://shouku123.com/pub/gotoUrl.do?id=1399842)
 - [百度开发者中心](https://shouku123.com/pub/gotoUrl.do?id=1399843)
 - [蚂蚁金服开放平台](https://shouku123.com/pub/gotoUrl.do?id=1399844)
@@ -397,7 +388,7 @@
 - [美团](https://passport.meituan.com/account/unitivelogin)
 - [饿了么](https://h5.ele.me/login/)
 
-## 其他 / 个人博客 / 特殊条目 / 本地指向
+## 其他
 - [2D Wallpapers](https://www.2dwallpapers.com/)
 - [AdonisJS](https://adonisjs.com/)
 - [AGE动漫](https://www.agefans.com/)
@@ -488,7 +479,6 @@
 - [吾爱破解](https://www.52pojie.cn/)
 - [在线拼图工具](https://www.online-collage-maker.com/)
 - [多平台视频图片去水印工具](https://dy.kukutool.com/)
-- [奈飞工厂](https://www.netflixgc.com/)
 - [孙志锋](http://www.deathghost.cn/)
 - [幕布](https://mubu.com/)
 - [扣子](https://www.coze.cn/overview?invite_code=dde937fe02a6436f9b1bbe115a7c471a)
@@ -499,16 +489,7 @@
 - [沉浸式翻译](https://immersivetranslate.com/)
 - [流行软件的开源替代方案](https://openalternative.co/)
 - [火山引擎](https://www.volcengine.com/)
-- [百宝箱](https://www.tbox.cn/)
 - [硅基流动](https://cloud.siliconflow.cn/i/kfJQIZKo)
 - [站长之家](https://www.chinaz.com/)
-- [素材SoSo](https://clipso.agilestudio.cn/)
-- [讨论区 | JIKE](https://jike.info/)
-- [诗泉](https://poetry.palemoky.com/)
-- [追剧狂人](https://www.zjkrmv.com/)
 - [野草云](https://my.yecaoyun.com/aff.php?aff=4815)
-- [长桥 Web 版](https://trade.longbridge.com/)
 - [雪球](https://xueqiu.com/)
-- [麦田影院](https://mtyy.tv/)
-
----
