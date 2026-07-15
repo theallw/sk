@@ -9,12 +9,13 @@
 - [MMP](https://bmm.lccl.cc/)
 - [ATK HUB](https://hub.atk.pro/)
 
-## 下载与文件传输
+## 下载文件
 - [FilePizza](https://file.pizza/)
 - [360_chrome](https://baoku.360.cn/soft/show/appid/2000004411?channel=9510140&channel=9510140)
 - [qinanxin_thonny](https://pc.soft.qianxin.com/search/thonny)
 - [yunlogin-browser](https://www.yunlogin.com/oldversion.html?platform=windows)
 - [Reqable](https://reqable.com/zh-CN/)
+- [steampp-download](https://wwn.lanzouy.com/b01v4iz1g)
 - [Convertio](https://convertio.co/zh/)
 - [Filebase](https://filebase.com/)
 - [iCloud](https://www.icloud.com.cn/)
@@ -24,7 +25,7 @@
 - [163客户端](https://d8.music.126.net/dmusic2/NeteaseCloudMusic_Music_official_3.1.30.205130_64.exe)
 - [Yaak-离线api客户端](https://github.com/mountain-loop/yaak/releases/download/v2026.4.0/Yaak_2026.4.0_x64-setup.exe)
 
-## 开发平台与代码托管
+## 开发代码托管
 - [GitHub](https://github.com/)
 - [Hellogithub](https://hellogithub.com/)
 - [Gitee](https://gitee.com)
@@ -50,6 +51,28 @@
 - [AngularJS](https://shouku123.com/pub/gotoUrl.do?id=1399834)
 - [jQuery 插件库](https://shouku123.com/pub/gotoUrl.do?id=1399835)
 
+## 学习文档
+- [MDN Web Docs](https://developer.mozilla.org/zh-CN/)
+- [Exploring TypeScript](https://exploringjs.com/ts/book/index.html)
+- [科学文库](https://book.sciencereading.cn/shop/main/Login/shopFrame.do)
+- [SaltyLeo 的书架](https://book.tstrs.me/)
+- [JavaScript Promise迷你书](http://liubin.org/promises-book/)
+- [hello算法](https://www.hello-algo.com/chapter_hello_algo/)
+- [菜鸟教程](https://www.runoob.com/)
+- [考研进阶版](https://flowus.cn/share/74caa249-11a2-404a-97b9-048a8fd91a03)
+- [数学资料汇总](https://flowus.cn/less/share/7af590fc-23cd-4f4e-a429-2303ea3f0d95)
+- [数学乐](https://www.shuxuele.com/)
+- [多邻国](https://www.duolingo.cn/)
+- [广东省教育考试院](https://eea.gd.gov.cn/bmbk/index.html)
+- [深圳大学继续教育学院](https://cce.szu.edu.cn/)
+- [政府政策搜索](https://sousuo.www.gov.cn/zcwjk/policyDocumentLibrary)
+- [Anthropic工程实践文档](https://abserari.github.io/quartz-blog/Anthropic%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%96%87%E6%A1%A3%E9%9B%86)
+- [考研计算机网络笔记 | SiriBlog](https://blog.siriyang.cn/posts/20190915230345id.html)
+- [SiriBlog](https://blog.siriyang.cn/)
+- [曾哥](https://blog.zgsec.cn/)
+- [校园网联合镜像站](https://mirrors.cernet.edu.cn/about)
+- [ONE · 一个](http://wufazhuce.com/)
+  
 ## 云服务与托管平台
 - [Digital Ocean](https://www.digitalocean.com/)
 - [Fly.io](https://fly.io/)
@@ -74,7 +97,7 @@
 - [Digital Ocean](https://www.digitalocean.com/)
 - [Fly.io](https://fly.io/)
 
-## 后端与API工具
+## 后端API
 - [Directus](https://directus.io/)
 - [endpoints.dev](https://www.endpoints.dev/)
 - [TablePro](https://tablepro.app/)
@@ -84,7 +107,7 @@
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 - [MCP Flow](https://mcpflow.io/)
 
-## AI与模型平台
+## AI模型
 - [DeepSeek](https://chat.deepseek.com/)
 - [腾讯元宝](https://yuanbao.tencent.com/)
 - [千问](https://www.qianwen.com/)
@@ -118,7 +141,7 @@
 - [Cherry Studio](https://cherry-ai.com/)
 - [Cutia](https://cutia.msgbyte.com/)
 
-## 模型与图像资源
+## 模型图像资源
 - [Civitai](https://civitai.com/)
 - [DiffusionBee](https://diffusionbee.com/)
 - [Mochi Diffusion](https://github.com/MochiDiffusion/MochiDiffusion)
@@ -145,7 +168,7 @@
 - [Drawnix](https://drawnix.com/)
 - [App Shots](https://www.appshots.top/)
 
-## UI组件与前端资源
+## UI前端资源
 - [Mantine UI](https://mantine.dev/)
 - [PrimeVue Vue UI组件库](https://primevue.org/)
 - [Vuesax](https://vuesax.com/)
@@ -160,7 +183,7 @@
 - [Obra Icons](https://icons.obra.studio/)
 - [FontSpace](https://www.fontspace.com/)
 
-## 笔记与知识管理
+## 知识管理
 - [FlowUs 息流](https://flowus.cn/)
 - [Flowus 搜索](https://cn.bing.com/search?q=site:flowus.cn)
 - [Mubu 幕布](https://mubu.com/)
@@ -171,7 +194,7 @@
 - [App Shots](https://www.appshots.top/)
 - [PandaWiki](https://pandawiki.docs.baizhi.cloud/)
 
-## 浏览器与扩展工具
+## Browser扩展工具
 - [Chrome 应用商店](https://chromewebstore.google.com/)
 - [CRX插件搜索](https://www.crxsoso.com/)
 - [BetterCapture](https://bettercapture.app/)
@@ -185,35 +208,13 @@
 - [beb-theme-xpi](https://f2.crxsoso.com/firefox/downloads/latest/beb/platform:5/beb.xpi)
 - [bianse-xpi](https://f2.crxsoso.com/firefox/downloads/latest/adaptive-tab-bar-colour/platform:5/adaptive-tab-bar-colour.xpi)
 
-## 搜索与相似站点
+## 搜索站点
 - [SimilarSites](https://similarsites.com/)
 - [SimilarSiteSearch](https://www.similarsitesearch.com/)
 - [Get Emoji](https://getemoji.com/)
 - [CopyChar](https://copychar.cc/)
 
-## 学习与文档
-- [MDN Web Docs](https://developer.mozilla.org/zh-CN/)
-- [Exploring TypeScript](https://exploringjs.com/ts/book/index.html)
-- [科学文库](https://book.sciencereading.cn/shop/main/Login/shopFrame.do)
-- [SaltyLeo 的书架](https://book.tstrs.me/)
-- [JavaScript Promise迷你书](http://liubin.org/promises-book/)
-- [hello算法](https://www.hello-algo.com/chapter_hello_algo/)
-- [菜鸟教程](https://www.runoob.com/)
-- [考研进阶版](https://flowus.cn/share/74caa249-11a2-404a-97b9-048a8fd91a03)
-- [数学资料汇总](https://flowus.cn/less/share/7af590fc-23cd-4f4e-a429-2303ea3f0d95)
-- [数学乐](https://www.shuxuele.com/)
-- [多邻国](https://www.duolingo.cn/)
-- [广东省教育考试院](https://eea.gd.gov.cn/bmbk/index.html)
-- [深圳大学继续教育学院](https://cce.szu.edu.cn/)
-- [政府政策搜索](https://sousuo.www.gov.cn/zcwjk/policyDocumentLibrary)
-- [Anthropic工程实践文档](https://abserari.github.io/quartz-blog/Anthropic%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E6%96%87%E6%A1%A3%E9%9B%86)
-- [考研计算机网络笔记 | SiriBlog](https://blog.siriyang.cn/posts/20190915230345id.html)
-- [SiriBlog](https://blog.siriyang.cn/)
-- [曾哥](https://blog.zgsec.cn/)
-- [校园网联合镜像站](https://mirrors.cernet.edu.cn/about)
-- [ONE · 一个](http://wufazhuce.com/)
-
-## 社区与技术媒体
+## 社区媒体
 - [知乎](https://www.zhihu.com/)
 - [小红书](https://www.xiaohongshu.com)
 - [豆瓣](https://www.douban.com/)
@@ -256,6 +257,7 @@
 ## 音乐平台
 - [网易云音乐](https://music.163.com/)
 - [QQ音乐](https://y.qq.com/)
+- [Bilibili-摇滚](https://space.bilibili.com/394004596/favlist?fid=1633674&ftype=collect&ctype=21)
 - [酷狗音乐](https://www.kugou.com/)
 - [Apple Music](https://music.apple.com/cn/new)
 - [歌曲宝](https://www.gequbao.com/)
@@ -267,7 +269,7 @@
 - [苏宁易购](https://www.suning.com)
 - [聚美优品](http://jumei.com/)
 
-## 彩票与娱乐
+## 彩票娱乐
 - [超级大乐透](https://www.lottery.gov.cn/dlt/index.html)
 - [14场胜平负](https://zx.500.com/zc/?zkid=157)
 - [P5和值](https://www.17500.cn/tool/pl5-ylzx.html)
@@ -275,7 +277,7 @@
 - [IP138彩票](https://caipiao.ip138.com/)
 - [彩票](https://shouku123.com/pub/gotoUrl.do?id=1400156)
 
-## 游戏与电竞工具
+## Game数据检索
 - [OP.GG](https://op.gg/zh-cn/lol/modes/aram)
 - [TFT数据检索](https://www.datatft.com/explorer)
 - [tactics.tools数据检索](https://tactics.tools/zh/team-compositions)
@@ -284,7 +286,7 @@
 - [LOL攻略资料](https://101.qq.com/#/hero-rank-fight)
 - [TapTap](https://www.taptap.cn/)
 
-## SEO与网站tool
+## 网站在线工具
 - [SEO菜鸟工具](https://www.jyshare.com/)
 - [Google SearchConsole](https://search.google.com/search-console)
 - [IP138](https://www.ip138.com/)
@@ -294,18 +296,26 @@
 - [蓝奏云](https://www.lanzoui.com/)
 - [UU在线tool](https://uutool.cn/phone-batch/)
 - [在线CyberChef编码](https://gchq.github.io/CyberChef/)
+- [Xget加速](https://xuc.xi-xu.me/)
+- [Jsfind](https://github.com/Threezh1/JSFinder)
 
-## 安全与威胁情报
+## 安全威胁情报
 - [安全内参](https://www.secrss.com/)
 - [Freebuf](https://www.freebuf.com/)
 - [看雪论坛](https://bbs.kanxue.com/)
 - [微步安全](https://x.threatbook.com/)
 - [威胁猎人](https://threathunter.cn/)
 
-## 系统与桌面工具
-- [Chrome 设置](chrome://settings/)
-- [MuMu模拟器](https://mumu.163.com/)
-- [Termux 下载](https://gitee.com/ygt314159/subject-termux)
+## 数据监控平台
+- [点点数据](https://app.diandian.com/)
+- [七麦数据](https://www.qimai.cn/)
+- [金十数据](https://www.jin10.com/)
+- [国家新闻出版版号](https://www.nppa.gov.cn/bsfw/jggs/yxspjg/)
+- [17373版号](https://news.17173.com/version/index/2021/pc-game.shtml)
+- [Taptap检索](https://www.taptap.cn/)
+- [Apple检索](https://apps.apple.com/cn/iphone/today)
+- [IpaDowload](https://ipadump.com/#/home)
+- [扬帆出海](https://www.yfchuhai.com/)
 
 ## Android与手机工具
 - [Fdroid清华源](https://mirrors.tuna.tsinghua.edu.cn/help/fdroid/)
@@ -320,8 +330,10 @@
 - [一加工具箱](https://shouku123.com/pub/gotoUrl.do?id=1399855)
 - [Android Root方案](https://sukisu.org/zh/)
 - [模块化Android工具箱](https://rom.yulovehan.top/)
+- [MuMu模拟器](https://mumu.163.com/)
+- [Termux 下载](https://gitee.com/ygt314159/subject-termux)
 
-## 邮箱与临时邮箱
+## 临时邮箱
 - [QQ邮箱](https://mail.qq.com/)
 - [163邮箱](http://mail.163.com/)
 - [126邮箱](http://www.126.com/)
@@ -329,7 +341,7 @@
 - [新浪邮箱](http://mail.sina.com.cn/)
 - [Temp Mail](https://temp-mail.io/zh)
 
-## 政务服务与教育考试
+## 政务教育
 - [国家政务服务平台](https://gjzwfw.www.gov.cn/index.html)
 - [教育部](https://shouku123.com/pub/gotoUrl.do?id=1399869)
 - [学信网](https://shouku123.com/pub/gotoUrl.do?id=1399870)
@@ -337,22 +349,20 @@
 - [海事一网通办](https://shouku123.com/pub/gotoUrl.do?id=1399872)
 - [自然人税务申报](https://shouku123.com/pub/gotoUrl.do?id=1399873)
 
-## 参考手册与文档
+## 参考手册文档
 - [HTML参考手册](https://shouku123.com/pub/gotoUrl.do?id=1399827)
 - [CSS参考手册](https://shouku123.com/pub/gotoUrl.do?id=1399828)
 - [JavaScript参考手册](https://shouku123.com/pub/gotoUrl.do?id=1399829)
 - [jQuery API中文文档](https://shouku123.com/pub/gotoUrl.do?id=1399830)
 - [Java SE文档](https://shouku123.com/pub/gotoUrl.do?id=1399831)
-- [Python3.12文档](https://docs.pythonlang.cn/3.12/)
+- [Python3.12文档](https://docs.pythonlang.cn/3.10/)
 
-## GitHub镜像与加速
+## GitHub加速
 - [GitHub镜像站](https://www.moretools.app/zh-CN/github-proxy)
 - [清华镜像站](https://mirrors.tuna.tsinghua.edu.cn/help/fdroid/)
 - [GitHub加速-steampp](https://steampp.net/download)
-- [Xget加速](https://xuc.xi-xu.me/)
-- [steampp-windows](https://wwn.lanzouy.com/b01v4iz1g)
 
-## PCB与硬件
+## PCB硬件
 - [嘉立创开源广场](https://oshwhub.com/)
 - [无线WIFI转有线路由](https://oshwhub.com/yc_chen/wireless-wifi-to-wired-routing)
 
@@ -368,7 +378,7 @@
 - [龙轩导航](http://ilxdh.com/)
 - [bmm (MMP)](https://bmm.lccl.cc/)
 
-## 图标与字体素材
+## 图标字体
 - [Iconbolt](https://www.iconbolt.com/)
 - [ICONSVG](https://iconsvg.xyz/)
 - [Obra Icons](https://icons.obra.studio/)
@@ -377,7 +387,7 @@
 - [素材SoSo](https://clipso.agilestudio.cn/)
 - [findicons](https://www.freeimages.com/)
 
-## 开放平台
+## 超级开放平台
 - [微信开放平台](https://shouku123.com/pub/gotoUrl.do?id=1399842)
 - [百度开发者中心](https://shouku123.com/pub/gotoUrl.do?id=1399843)
 - [蚂蚁金服开放平台](https://shouku123.com/pub/gotoUrl.do?id=1399844)
