@@ -35,6 +35,7 @@
 - [com.junge.algorithmaide](https://wwmb.lanzouw.com/iOrIc0xkn9fg)
 - [Reqable-download](https://reqable.com/zh-CN/)
 - [Magisk](https://mrzzoxo.lanzoue.com/b02rvgq6j)
+- [Kitsune Magisk v27.2](https://xbnbcn.lanzouw.com/ihblU35f0gaf)
 - [LSPosed（Zygisk）](https://mrzzoxo.lanzoue.com/b02pfsr2f)
 
 
