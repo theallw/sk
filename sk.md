@@ -12,7 +12,7 @@
 - [ATK HUB](https://hub.atk.pro/)
 
 ##待处理
--[aHR0cHM6Ly93d3cuOTU1OTAuY24vZWJpei92aWV3L3F1aWNrUXVvdGVDYWxjdWxhdGVyL21vYmlsZUNhclF1b3RlLmpzcD91dG1fc291cmNlPW1vYmlsZV9jYXImcmVmd2V3ZW09aHR0cDovL21vLjk1NTkwLmNuL3ZpZXcvaG9tZS9ob21lL2h0bWw=](aHR0cHM6Ly93d3cuOTU1OTAuY24vZWJpei92aWV3L3F1aWNrUXVvdGVDYWxjdWxhdGVyL21vYmlsZUNhclF1b3RlLmpzcD91dG1fc291cmNlPW1vYmlsZV9jYXImcmVmd2V3ZW09aHR0cDovL21vLjk1NTkwLmNuL3ZpZXcvaG9tZS9ob21lL2h0bWw=)
+- [aHR0cHM6Ly93d3cuOTU1OTAuY24vZWJpei92aWV3L3F1aWNrUXVvdGVDYWxjdWxhdGVyL21vYmlsZUNhclF1b3RlLmpzcD91dG1fc291cmNlPW1vYmlsZV9jYXImcmVmd2V3ZW09aHR0cDovL21vLjk1NTkwLmNuL3ZpZXcvaG9tZS9ob21lL2h0bWw=](aHR0cHM6Ly93d3cuOTU1OTAuY24vZWJpei92aWV3L3F1aWNrUXVvdGVDYWxjdWxhdGVyL21vYmlsZUNhclF1b3RlLmpzcD91dG1fc291cmNlPW1vYmlsZV9jYXImcmVmd2V3ZW09aHR0cDovL21vLjk1NTkwLmNuL3ZpZXcvaG9tZS9ob21lL2h0bWw=)
 
 ## 下载文件
 - [FilePizza](https://file.pizza/)
@@ -20,7 +20,6 @@
 - [奇安信软件-thonny](https://pc.soft.qianxin.com/search/thonny)
 - [QQ软件-vivaldi](https://pc.qq.com/search.html#!keyword=viva)
 - [yunlogin-browser](https://www.yunlogin.com/oldversion.html?platform=windows)
-- [Reqable-download](https://reqable.com/zh-CN/)
 - [steampp-download](https://wwn.lanzouy.com/b01v4iz1g)
 - [Convertio](https://convertio.co/zh/)
 - [Filebase](https://filebase.com/)
@@ -31,7 +30,12 @@
 - [Yaak-离线api客户端](https://github.com/mountain-loop/yaak/releases/download/v2026.4.0/Yaak_2026.4.0_x64-setup.exe)
 
 ##Root
--[SukiSU-Ultra](https://github.com/SukiSU-Ultra/SukiSU-Ultra/releases/download/v4.1.3/SukiSU_v4.1.3_40796-release.apk)
+- [SukiSU-Ultra](https://github.com/SukiSU-Ultra/SukiSU-Ultra/releases/download/v4.1.3/SukiSU_v4.1.3_40796-release.apk)
+- [com.junge.algorithmaide](https://wwmb.lanzouw.com/iOrIc0xkn9fg)
+- [Reqable-download](https://reqable.com/zh-CN/)
+- [Magisk](https://mrzzoxo.lanzoue.com/b02rvgq6j)
+- [LSPosed（Zygisk）](https://mrzzoxo.lanzoue.com/b02pfsr2f)
+
 
 ## 开发代码托管
 - [GitHub](https://github.com/)
