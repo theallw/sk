@@ -30,6 +30,9 @@
 - [163music客户端](https://d8.music.126.net/dmusic2/NeteaseCloudMusic_Music_official_3.1.30.205130_64.exe)
 - [Yaak-离线api客户端](https://github.com/mountain-loop/yaak/releases/download/v2026.4.0/Yaak_2026.4.0_x64-setup.exe)
 
+##Root
+-[SukiSU-Ultra](https://github.com/SukiSU-Ultra/SukiSU-Ultra/releases/download/v4.1.3/SukiSU_v4.1.3_40796-release.apk)
+
 ## 开发代码托管
 - [GitHub](https://github.com/)
 - [Hellogithub](https://hellogithub.com/)
