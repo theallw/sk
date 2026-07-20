@@ -31,7 +31,9 @@
 
 ##Root
 - [SukiSU-Ultra](https://github.com/SukiSU-Ultra/SukiSU-Ultra/releases/download/v4.1.3/SukiSU_v4.1.3_40796-release.apk)
-- [多开鸭框架](https://www.duokaiya.com/class_xp)
+- [多开鸭教程](https://www.duokaiya.com/class_xp)
+- [Magisk中文](https://magiskcn.com/)
+- [lsposed中文](https://lsposed.cn/)
 - [com.junge.algorithmaide](https://wwmb.lanzouw.com/iOrIc0xkn9fg)
 - [Reqable-download](https://reqable.com/zh-CN/)
 - [Magisk](https://mrzzoxo.lanzoue.com/b02rvgq6j)
