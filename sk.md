@@ -39,6 +39,9 @@
 - [com.junge.algorithmaide](https://wwmb.lanzouw.com/iOrIc0xkn9fg)
 - [Reqable-download](https://reqable.com/zh-CN/)
 - [mumu安卓15-LSPosed步骤](https://kernelsu.com/lsposed-install.html)
+- [1-Zygisk-Next](https://mrzzoxo.lanzoue.com/b02qglcha)
+- [2-LSPosed（Zygisk）](https://mrzzoxo.lanzoue.com/b02pfsr2f)
+- [3-拨号键快捷创建](*#*#5776733#*#*)
 
 
 ## 开发代码托管
