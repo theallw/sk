@@ -11,9 +11,6 @@
 - [MMP](https://bmm.lccl.cc/)
 - [ATK HUB](https://hub.atk.pro/)
 
-## 待处理
-- [aHR0cHM6Ly93d3cuOTU1OTAuY24vZWJpei92aWV3L3F1aWNrUXVvdGVDYWxjdWxhdGVyL21vYmlsZUNhclF1b3RlLmpzcD91dG1fc291cmNlPW1vYmlsZV9jYXImcmVmd2V3ZW09aHR0cDovL21vLjk1NTkwLmNuL3ZpZXcvaG9tZS9ob21lL2h0bWw=](aHR0cHM6Ly93d3cuOTU1OTAuY24vZWJpei92aWV3L3F1aWNrUXVvdGVDYWxjdWxhdGVyL21vYmlsZUNhclF1b3RlLmpzcD91dG1fc291cmNlPW1vYmlsZV9jYXImcmVmd2V3ZW09aHR0cDovL21vLjk1NTkwLmNuL3ZpZXcvaG9tZS9ob21lL2h0bWw=)
-
 ## 下载文件
 - [FilePizza](https://file.pizza/)
 - [360软件-chrome](https://baoku.360.cn/soft/show/appid/2000004411?channel=9510140&channel=9510140)
