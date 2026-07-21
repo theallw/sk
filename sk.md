@@ -10,6 +10,8 @@
 - [FlowUs 息流](https://flowus.cn/)
 - [MMP](https://bmm.lccl.cc/)
 - [ATK HUB](https://hub.atk.pro/)
+- [在线CyberChef编码](https://gchq.github.io/CyberChef/)
+- [Xget加速](https://xuc.xi-xu.me/)
 
 ## 下载文件
 - [FilePizza](https://file.pizza/)
@@ -311,11 +313,8 @@
 - [IP138](https://www.ip138.com/)
 - [SimilarSites](https://similarsites.com/)
 - [SimilarSiteSearch](https://www.similarsitesearch.com/)
-- [Xget全球加速](https://xuc.xi-xu.me/?utm_source=opensource.zone)
 - [蓝奏云](https://www.lanzoui.com/)
 - [UU在线tool](https://uutool.cn/phone-batch/)
-- [在线CyberChef编码](https://gchq.github.io/CyberChef/)
-- [Xget加速](https://xuc.xi-xu.me/)
 - [Jsfind](https://github.com/Threezh1/JSFinder)
 
 ## 安全威胁情报
