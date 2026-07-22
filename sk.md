@@ -10,7 +10,7 @@
 - [FlowUs 息流](https://flowus.cn/)
 - [MMP](https://bmm.lccl.cc/)
 - [ATK HUB](https://hub.atk.pro/)
-- [在线CyberChef编码](https://gchq.github.io/CyberChef/)
+- [在线CyberChef编码]([https://gchq.github.io/CyberChef/](https://xget.xi-xu.me/gh/gchq/CyberChef/releases/download/v11.2.0/CyberChef_d358d82cbcb269d764a2deb598a37043bd054f45.zip))
 - [Xget加速](https://xuc.xi-xu.me/)
 
 ## 下载文件
