@@ -1,5 +1,17 @@
 **Flag**`aHR0cHM6Ly93d3cuOTU1OTAuY24vZWJpei92aWV3L3F1aWNrUXVvdGVDYWxjdWxhdGVyL21vYmlsZUNhclF1b3RlLmpzcD91dG1fc291cmNlPW1vYmlsZV9jYXImcmVmd2V3ZW09aHR0cDovL21vLjk1NTkwLmNuL3ZpZXcvaG9tZS9ob21lL2h0bWw=`
 
+
+
+```python
+解密秘钥（文本）：ZXIgbWFya2V0IGlu
+解密秘钥（Base64）：WlhJZ2JXRnlhMlYwSUdsdQ==
+解密秘钥（Hex）：5a584967625746796132563049476c75
+
+解密Iv（文本）：WVudCwgTW9qYW5HK
+解密Iv（Base64）：V1Z1ZEN3Z1RXOXFZVzVISw==
+解密Iv（Hex）：5756756443776754573971595735484b
+```
+
 ## 在 MuMu 模拟器上配置 Magisk（面具）和 LSPosed
 **准备文件**
 #### [1-Mumu多开12](https://baoku.360.cn/qbfl/600006825.html?channel=9510140)
