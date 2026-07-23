@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" class="dark" style="color-scheme: dark;">
+<html lang="zh-CN" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -7,8 +7,26 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>我的导航页</title>
     <style>
-        /* ===== CSS Variables - BMM Style ===== */
+        /* ===== CSS Variables - 双主题 ===== */
         :root {
+            /* 浅色主题 (默认) */
+            --bg-primary: #f0f2f5;
+            --bg-secondary: rgba(0,0,0,0.04);
+            --bg-card: rgba(0,0,0,0.06);
+            --bg-card-hover: rgba(0,0,0,0.10);
+            --bg-sidebar: rgba(0,0,0,0.04);
+            --text-primary: #1a1a1a;
+            --text-secondary: rgba(0,0,0,0.65);
+            --text-muted: rgba(0,0,0,0.45);
+            --border-color: rgba(0,0,0,0.08);
+            --shadow-card: 0 4px 12px rgba(0,0,0,0.1);
+            --accent: #4f46e5;
+            --accent-hover: #4338ca;
+            --sidebar-width: 240px;
+        }
+
+        html.dark {
+            /* 深色主题 */
             --bg-primary: #06111b;
             --bg-secondary: rgba(255,255,255,0.04);
             --bg-card: rgba(255,255,255,0.06);
@@ -19,12 +37,6 @@
             --text-muted: rgba(255,255,255,0.45);
             --border-color: rgba(255,255,255,0.08);
             --shadow-card: 0 4px 12px rgba(0,0,0,0.3);
-            --radius-card: 16px;
-            --radius-btn: 8px;
-            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            --accent: #4f46e5;
-            --accent-hover: #4338ca;
-            --sidebar-width: 240px;
         }
 
         /* ===== Reset ===== */
@@ -42,6 +54,7 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         /* ===== Background Effects ===== */
@@ -98,6 +111,7 @@
             margin-right: 20px;
             display: flex;
             flex-direction: column;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .sidebar::-webkit-scrollbar {
@@ -123,7 +137,7 @@
             letter-spacing: -0.3px;
         }
         .sidebar-header .logo span {
-            background: linear-gradient(135deg, #fff 0%, #888 100%);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-muted) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -146,14 +160,14 @@
             font-family: inherit;
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            background: rgba(255,255,255,0.04);
+            background: var(--bg-secondary);
             color: var(--text-primary);
             outline: none;
             transition: var(--transition);
         }
         .sidebar-search input:focus {
             border-color: var(--accent);
-            background: rgba(255,255,255,0.08);
+            background: var(--bg-card-hover);
         }
         .sidebar-search input::placeholder {
             color: var(--text-muted);
@@ -179,7 +193,7 @@
             font-weight: 450;
         }
         .sidebar-tag:hover {
-            background: rgba(255,255,255,0.06);
+            background: var(--bg-card-hover);
             color: var(--text-primary);
             transform: translateX(2px);
         }
@@ -203,7 +217,7 @@
         .tag-count {
             font-size: 11px;
             color: var(--text-muted);
-            background: rgba(255,255,255,0.06);
+            background: var(--bg-secondary);
             padding: 0 8px;
             border-radius: 10px;
             line-height: 18px;
@@ -227,9 +241,15 @@
 
         /* ===== Header ===== */
         .main-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 8px 0 20px;
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 24px;
+        }
+        .main-header .header-left {
+            flex: 1;
         }
         .main-header h1 {
             font-size: 28px;
@@ -240,6 +260,45 @@
         .main-header p {
             font-size: 14px;
             color: var(--text-secondary);
+        }
+
+        /* ===== 主题切换按钮 ===== */
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+        .theme-toggle:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--text-muted);
+        }
+        .theme-toggle .icon-sun,
+        .theme-toggle .icon-moon {
+            font-size: 20px;
+            line-height: 1;
+        }
+        /* 默认（浅色）显示太阳，深色显示月亮 */
+        .theme-toggle .icon-moon {
+            display: none;
+        }
+        .theme-toggle .icon-sun {
+            display: inline;
+        }
+        html.dark .theme-toggle .icon-moon {
+            display: inline;
+        }
+        html.dark .theme-toggle .icon-sun {
+            display: none;
         }
 
         /* ===== Search Engines ===== */
@@ -272,7 +331,7 @@
             transition: var(--transition);
         }
         .search-btn:hover {
-            background: rgba(255,255,255,0.08);
+            background: var(--bg-card-hover);
             border-color: rgba(255,255,255,0.15);
             color: var(--text-primary);
         }
@@ -302,14 +361,14 @@
             font-family: inherit;
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            background: rgba(255,255,255,0.04);
+            background: var(--bg-secondary);
             color: var(--text-primary);
             outline: none;
             transition: var(--transition);
         }
         .search-wrapper input:focus {
             border-color: var(--accent);
-            background: rgba(255,255,255,0.08);
+            background: var(--bg-card-hover);
         }
         .search-wrapper input::placeholder {
             color: var(--text-muted);
@@ -317,7 +376,7 @@
         .search-wrapper .shortcut {
             font-size: 11px;
             color: var(--text-muted);
-            background: rgba(255,255,255,0.04);
+            background: var(--bg-secondary);
             padding: 2px 10px;
             border-radius: 4px;
             border: 1px solid var(--border-color);
@@ -371,7 +430,7 @@
         .bookmark-card:hover {
             background: var(--bg-card-hover);
             transform: translateY(-2px);
-            border-color: rgba(255,255,255,0.15);
+            border-color: var(--text-muted);
             box-shadow: var(--shadow-card);
         }
 
@@ -389,7 +448,7 @@
             height: 36px;
             flex-shrink: 0;
             border-radius: 8px;
-            background: rgba(255,255,255,0.06);
+            background: var(--bg-secondary);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -481,6 +540,10 @@
             .search-engines {
                 justify-content: center;
             }
+            .theme-toggle {
+                width: 36px;
+                height: 36px;
+            }
         }
 
         @media (max-width: 380px) {
@@ -503,11 +566,11 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.15);
+            background: var(--border-color);
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,255,255,0.25);
+            background: var(--text-muted);
         }
     </style>
 </head>
@@ -526,7 +589,7 @@
                     <span>📑</span>
                     <span>我的导航页</span>
                 </div>
-                <div class="badge">451 个书签</div>
+                <div class="badge">450 个书签</div>
             </div>
 
             <div class="sidebar-search">
@@ -538,7 +601,7 @@
             <a href="#常用" class="sidebar-tag" data-category="常用">
                 <span class="tag-dot" style="background-color: #41b883;"></span>
                 <span class="tag-name">常用</span>
-                <span class="tag-count">11</span>
+                <span class="tag-count">13</span>
             </a>
         
             <a href="#下载文件" class="sidebar-tag" data-category="下载文件">
@@ -664,7 +727,7 @@
             <a href="#网站在线工具" class="sidebar-tag" data-category="网站在线工具">
                 <span class="tag-dot" style="background-color: #ffb13b;"></span>
                 <span class="tag-name">网站在线工具</span>
-                <span class="tag-count">11</span>
+                <span class="tag-count">8</span>
             </a>
         
             <a href="#安全威胁情报" class="sidebar-tag" data-category="安全威胁情报">
@@ -761,8 +824,14 @@
         <!-- 主内容 -->
         <main class="main-content" id="mainContent">
             <div class="main-header">
-                <h1>📚 我的书签</h1>
-                <p>收纳、分享、探索优质网站</p>
+                <div class="header-left">
+                    <h1>📚 我的书签</h1>
+                    <p>收纳、分享、探索优质网站</p>
+                </div>
+                <button id="themeToggle" class="theme-toggle" aria-label="切换主题" title="切换主题">
+                    <span class="icon-sun">☀️</span>
+                    <span class="icon-moon">🌙</span>
+                </button>
             </div>
 
             <!-- 搜索引擎 -->
@@ -772,11 +841,6 @@
             <button class="search-btn" data-engine="https://m.sm.cn/s?q=" title="神马">
                 <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/b4/ef/d1/b4efd142-d1ee-433c-b046-fc174aee892a/Placeholder.mill/48x48bb-75.webp" alt="神马" class="search-icon">
                 <span>神马</span>
-            </button>
-        
-            <button class="search-btn" data-engine="https://www.google.com/search?q=" title="Google">
-                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/eb/65/52/eb655269-9d17-58c6-ea0c-166e6793df08/Placeholder.mill/48x48bb-75.webp" alt="Google" class="search-icon">
-                <span>Google</span>
             </button>
         
             <button class="search-btn" data-engine="https://search.bilibili.com/all?keyword=" title="Bilibili">
@@ -789,9 +853,9 @@
                 <span>Github</span>
             </button>
         
-            <button class="search-btn" data-engine="https://www.sogou.com/web?query=" title="搜狗">
-                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/01/e5/7e/01e57efc-2e80-f66a-a895-1650a36fc363/Placeholder.mill/48x48bb-75.webp" alt="搜狗" class="search-icon">
-                <span>搜狗</span>
+            <button class="search-btn" data-engine="https://kaifa.baidu.com/searchPage?wd=" title="Baidu">
+                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/fa/ec/62/faec62fc-844d-dfab-26e1-e7934fed03e1/Placeholder.mill/48x48bb-75.webp" alt="Baidu" class="search-icon">
+                <span>Baidu</span>
             </button>
         
             <button class="search-btn" data-engine="https://cn.bing.com/search?q=" title="Bing">
@@ -799,9 +863,9 @@
                 <span>Bing</span>
             </button>
         
-            <button class="search-btn" data-engine="https://www.so.com/s?q=" title="360">
-                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/82/d7/a2/82d7a24f-ee79-39c2-f398-2f312cbcfc30/Placeholder.mill/48x48bb-75.webp" alt="360" class="search-icon">
-                <span>360</span>
+            <button class="search-btn" data-engine="https://www.google.com/search?q=" title="Google">
+                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/6e/6a/57/6e6a5750-e732-40b1-3909-55f4945057b8/Placeholder.mill/48x48bb-75.webp" alt="Google" class="search-icon">
+                <span>Google</span>
             </button>
         
             <button class="search-btn" data-engine="https://www.secrss.com/search?keywords=" title="安全内参">
@@ -809,9 +873,14 @@
                 <span>安全内参</span>
             </button>
         
-            <button class="search-btn" data-engine="https://kaifa.baidu.com/searchPage?wd=" title="Baidu">
-                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/fa/ec/62/faec62fc-844d-dfab-26e1-e7934fed03e1/Placeholder.mill/48x48bb-75.webp" alt="Baidu" class="search-icon">
-                <span>Baidu</span>
+            <button class="search-btn" data-engine="https://www.sogou.com/web?query=" title="搜狗">
+                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/01/e5/7e/01e57efc-2e80-f66a-a895-1650a36fc363/Placeholder.mill/48x48bb-75.webp" alt="搜狗" class="search-icon">
+                <span>搜狗</span>
+            </button>
+        
+            <button class="search-btn" data-engine="https://www.so.com/s?q=" title="360">
+                <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/82/d7/a2/82d7a24f-ee79-39c2-f398-2f312cbcfc30/Placeholder.mill/48x48bb-75.webp" alt="360" class="search-icon">
+                <span>360</span>
             </button>
         
             </div>
@@ -829,7 +898,7 @@
                 <div class="category-header">
                     <span class="category-dot" style="background-color: #41b883;"></span>
                     <h2 class="category-title">常用</h2>
-                    <span class="category-count">11 个书签</span>
+                    <span class="category-count">13 个书签</span>
                 </div>
                 <div class="bookmarks-grid">
                     
@@ -961,6 +1030,30 @@
                         <div class="card-content">
                             <div class="card-title">ATK HUB</div>
                             <div class="card-domain">hub.atk.pro</div>
+                        </div>
+                    </a>
+                </div>
+            
+                <div class="bookmark-card">
+                    <a href="https://xget.xi-xu.me/gh/gchq/CyberChef/releases/download/v11.2.0/CyberChef_d358d82cbcb269d764a2deb598a37043bd054f45.zip" target="_blank" rel="noopener noreferrer" class="card-link">
+                        <div class="card-icon">
+                            <img src="https://api.lcll.cc/favicon?host=xget.xi-xu.me" alt="" onerror="this.parentElement.innerHTML='<span class='fallback-icon'>🌐</span>'">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">在线CyberChef编码</div>
+                            <div class="card-domain">xget.xi-xu.me</div>
+                        </div>
+                    </a>
+                </div>
+            
+                <div class="bookmark-card">
+                    <a href="https://xuc.xi-xu.me/" target="_blank" rel="noopener noreferrer" class="card-link">
+                        <div class="card-icon">
+                            <img src="https://api.lcll.cc/favicon?host=xuc.xi-xu.me" alt="" onerror="this.parentElement.innerHTML='<span class='fallback-icon'>🌐</span>'">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">Xget加速</div>
+                            <div class="card-domain">xuc.xi-xu.me</div>
                         </div>
                     </a>
                 </div>
@@ -4228,7 +4321,7 @@
                 <div class="category-header">
                     <span class="category-dot" style="background-color: #ffb13b;"></span>
                     <h2 class="category-title">网站在线工具</h2>
-                    <span class="category-count">11 个书签</span>
+                    <span class="category-count">8 个书签</span>
                 </div>
                 <div class="bookmarks-grid">
                     
@@ -4293,18 +4386,6 @@
                 </div>
             
                 <div class="bookmark-card">
-                    <a href="https://xuc.xi-xu.me/?utm_source=opensource.zone" target="_blank" rel="noopener noreferrer" class="card-link">
-                        <div class="card-icon">
-                            <img src="https://api.lcll.cc/favicon?host=xuc.xi-xu.me" alt="" onerror="this.parentElement.innerHTML='<span class='fallback-icon'>🌐</span>'">
-                        </div>
-                        <div class="card-content">
-                            <div class="card-title">Xget全球加速</div>
-                            <div class="card-domain">xuc.xi-xu.me</div>
-                        </div>
-                    </a>
-                </div>
-            
-                <div class="bookmark-card">
                     <a href="https://www.lanzoui.com/" target="_blank" rel="noopener noreferrer" class="card-link">
                         <div class="card-icon">
                             <img src="https://api.lcll.cc/favicon?host=lanzoui.com" alt="" onerror="this.parentElement.innerHTML='<span class='fallback-icon'>🌐</span>'">
@@ -4324,30 +4405,6 @@
                         <div class="card-content">
                             <div class="card-title">UU在线tool</div>
                             <div class="card-domain">uutool.cn</div>
-                        </div>
-                    </a>
-                </div>
-            
-                <div class="bookmark-card">
-                    <a href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener noreferrer" class="card-link">
-                        <div class="card-icon">
-                            <img src="https://api.lcll.cc/favicon?host=gchq.github.io" alt="" onerror="this.parentElement.innerHTML='<span class='fallback-icon'>🌐</span>'">
-                        </div>
-                        <div class="card-content">
-                            <div class="card-title">在线CyberChef编码</div>
-                            <div class="card-domain">gchq.github.io</div>
-                        </div>
-                    </a>
-                </div>
-            
-                <div class="bookmark-card">
-                    <a href="https://xuc.xi-xu.me/" target="_blank" rel="noopener noreferrer" class="card-link">
-                        <div class="card-icon">
-                            <img src="https://api.lcll.cc/favicon?host=xuc.xi-xu.me" alt="" onerror="this.parentElement.innerHTML='<span class='fallback-icon'>🌐</span>'">
-                        </div>
-                        <div class="card-content">
-                            <div class="card-title">Xget加速</div>
-                            <div class="card-domain">xuc.xi-xu.me</div>
                         </div>
                     </a>
                 </div>
@@ -6640,6 +6697,40 @@
     <script>
         (function() {
             'use strict';
+
+            // ===== 主题切换 =====
+            const htmlEl = document.documentElement;
+            const toggleBtn = document.getElementById('themeToggle');
+
+            // 应用主题
+            function applyTheme(theme) {
+                if (theme === 'light') {
+                    htmlEl.classList.remove('dark');
+                    htmlEl.style.colorScheme = 'light';
+                } else {
+                    htmlEl.classList.add('dark');
+                    htmlEl.style.colorScheme = 'dark';
+                }
+                localStorage.setItem('theme', theme);
+            }
+
+            // 初始化主题
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else {
+                // 默认深色（已有 dark 类）
+                htmlEl.style.colorScheme = 'dark';
+                localStorage.setItem('theme', 'dark');
+            }
+
+            // 切换按钮点击
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    const isDark = htmlEl.classList.contains('dark');
+                    applyTheme(isDark ? 'light' : 'dark');
+                });
+            }
 
             // ===== DOM 引用 =====
             const sidebar = document.getElementById('sidebar');
