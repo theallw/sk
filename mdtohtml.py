@@ -1,5 +1,6 @@
 import re
 import html
+import sys
 import requests
 from bs4 import BeautifulSoup
 from pathlib import Path
@@ -7,6 +8,19 @@ from typing import List, Dict, Optional, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
 import hashlib
+import subprocess
+
+
+def auto_install():
+    packages = ['requests', 'beautifulsoup4']
+    for pkg in packages:
+        try:
+            __import__(pkg if pkg != 'beautifulsoup4' else 'bs4')
+        except ImportError:
+            subprocess.run([sys.executable, "-m", "pip", "install", pkg])
+
+# 运行安装
+auto_install()
 
 # 尝试导入chardet，如果不存在则使用简单编码检测
 try:
