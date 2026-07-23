@@ -129,7 +129,7 @@ def enrich_search_engines_with_icons(search_engines: List[Dict], max_workers: in
     return enriched
 
 def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
-    """生成BMM风格书签导航HTML页面"""
+    """生成BMM风格书签导航HTML页面（带主题切换）"""
     
     # 按分类分组
     categories = {}
@@ -231,7 +231,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
     search_buttons_html = ''.join(search_buttons)
     
     html_template = f'''<!DOCTYPE html>
-<html lang="zh-CN" class="dark" style="color-scheme: dark;">
+<html lang="zh-CN" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -239,8 +239,26 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>{html.escape(title)}</title>
     <style>
-        /* ===== CSS Variables - BMM Style ===== */
+        /* ===== CSS Variables - 双主题 ===== */
         :root {{
+            /* 浅色主题 (默认) */
+            --bg-primary: #f0f2f5;
+            --bg-secondary: rgba(0,0,0,0.04);
+            --bg-card: rgba(0,0,0,0.06);
+            --bg-card-hover: rgba(0,0,0,0.10);
+            --bg-sidebar: rgba(0,0,0,0.04);
+            --text-primary: #1a1a1a;
+            --text-secondary: rgba(0,0,0,0.65);
+            --text-muted: rgba(0,0,0,0.45);
+            --border-color: rgba(0,0,0,0.08);
+            --shadow-card: 0 4px 12px rgba(0,0,0,0.1);
+            --accent: #4f46e5;
+            --accent-hover: #4338ca;
+            --sidebar-width: 240px;
+        }}
+
+        html.dark {{
+            /* 深色主题 */
             --bg-primary: #06111b;
             --bg-secondary: rgba(255,255,255,0.04);
             --bg-card: rgba(255,255,255,0.06);
@@ -251,12 +269,6 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             --text-muted: rgba(255,255,255,0.45);
             --border-color: rgba(255,255,255,0.08);
             --shadow-card: 0 4px 12px rgba(0,0,0,0.3);
-            --radius-card: 16px;
-            --radius-btn: 8px;
-            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            --accent: #4f46e5;
-            --accent-hover: #4338ca;
-            --sidebar-width: 240px;
         }}
 
         /* ===== Reset ===== */
@@ -274,6 +286,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
         }}
 
         /* ===== Background Effects ===== */
@@ -330,6 +343,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             margin-right: 20px;
             display: flex;
             flex-direction: column;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }}
 
         .sidebar::-webkit-scrollbar {{
@@ -355,7 +369,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             letter-spacing: -0.3px;
         }}
         .sidebar-header .logo span {{
-            background: linear-gradient(135deg, #fff 0%, #888 100%);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-muted) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -378,14 +392,14 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             font-family: inherit;
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            background: rgba(255,255,255,0.04);
+            background: var(--bg-secondary);
             color: var(--text-primary);
             outline: none;
             transition: var(--transition);
         }}
         .sidebar-search input:focus {{
             border-color: var(--accent);
-            background: rgba(255,255,255,0.08);
+            background: var(--bg-card-hover);
         }}
         .sidebar-search input::placeholder {{
             color: var(--text-muted);
@@ -411,7 +425,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             font-weight: 450;
         }}
         .sidebar-tag:hover {{
-            background: rgba(255,255,255,0.06);
+            background: var(--bg-card-hover);
             color: var(--text-primary);
             transform: translateX(2px);
         }}
@@ -435,7 +449,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
         .tag-count {{
             font-size: 11px;
             color: var(--text-muted);
-            background: rgba(255,255,255,0.06);
+            background: var(--bg-secondary);
             padding: 0 8px;
             border-radius: 10px;
             line-height: 18px;
@@ -459,9 +473,15 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
 
         /* ===== Header ===== */
         .main-header {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 8px 0 20px;
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 24px;
+        }}
+        .main-header .header-left {{
+            flex: 1;
         }}
         .main-header h1 {{
             font-size: 28px;
@@ -472,6 +492,45 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
         .main-header p {{
             font-size: 14px;
             color: var(--text-secondary);
+        }}
+
+        /* ===== 主题切换按钮 ===== */
+        .theme-toggle {{
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            margin-left: 16px;
+        }}
+        .theme-toggle:hover {{
+            background: var(--bg-card-hover);
+            border-color: var(--text-muted);
+        }}
+        .theme-toggle .icon-sun,
+        .theme-toggle .icon-moon {{
+            font-size: 20px;
+            line-height: 1;
+        }}
+        /* 默认（浅色）显示太阳，深色显示月亮 */
+        .theme-toggle .icon-moon {{
+            display: none;
+        }}
+        .theme-toggle .icon-sun {{
+            display: inline;
+        }}
+        html.dark .theme-toggle .icon-moon {{
+            display: inline;
+        }}
+        html.dark .theme-toggle .icon-sun {{
+            display: none;
         }}
 
         /* ===== Search Engines ===== */
@@ -504,7 +563,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             transition: var(--transition);
         }}
         .search-btn:hover {{
-            background: rgba(255,255,255,0.08);
+            background: var(--bg-card-hover);
             border-color: rgba(255,255,255,0.15);
             color: var(--text-primary);
         }}
@@ -534,14 +593,14 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             font-family: inherit;
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            background: rgba(255,255,255,0.04);
+            background: var(--bg-secondary);
             color: var(--text-primary);
             outline: none;
             transition: var(--transition);
         }}
         .search-wrapper input:focus {{
             border-color: var(--accent);
-            background: rgba(255,255,255,0.08);
+            background: var(--bg-card-hover);
         }}
         .search-wrapper input::placeholder {{
             color: var(--text-muted);
@@ -549,7 +608,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
         .search-wrapper .shortcut {{
             font-size: 11px;
             color: var(--text-muted);
-            background: rgba(255,255,255,0.04);
+            background: var(--bg-secondary);
             padding: 2px 10px;
             border-radius: 4px;
             border: 1px solid var(--border-color);
@@ -603,7 +662,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
         .bookmark-card:hover {{
             background: var(--bg-card-hover);
             transform: translateY(-2px);
-            border-color: rgba(255,255,255,0.15);
+            border-color: var(--text-muted);
             box-shadow: var(--shadow-card);
         }}
 
@@ -621,7 +680,7 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             height: 36px;
             flex-shrink: 0;
             border-radius: 8px;
-            background: rgba(255,255,255,0.06);
+            background: var(--bg-secondary);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -713,6 +772,10 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             .search-engines {{
                 justify-content: center;
             }}
+            .theme-toggle {{
+                width: 36px;
+                height: 36px;
+            }}
         }}
 
         @media (max-width: 380px) {{
@@ -735,11 +798,11 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
             background: transparent;
         }}
         ::-webkit-scrollbar-thumb {{
-            background: rgba(255,255,255,0.15);
+            background: var(--border-color);
             border-radius: 3px;
         }}
         ::-webkit-scrollbar-thumb:hover {{
-            background: rgba(255,255,255,0.25);
+            background: var(--text-muted);
         }}
     </style>
 </head>
@@ -777,8 +840,14 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
         <!-- 主内容 -->
         <main class="main-content" id="mainContent">
             <div class="main-header">
-                <h1>📚 我的书签</h1>
-                <p>收纳、分享、探索优质网站</p>
+                <div class="header-left">
+                    <h1>📚 我的书签</h1>
+                    <p>收纳、分享、探索优质网站</p>
+                </div>
+                <button id="themeToggle" class="theme-toggle" aria-label="切换主题" title="切换主题">
+                    <span class="icon-sun">☀️</span>
+                    <span class="icon-moon">🌙</span>
+                </button>
             </div>
 
             <!-- 搜索引擎 -->
@@ -803,6 +872,40 @@ def generate_html(bookmarks: List[Dict], title: str = "我的导航页") -> str:
     <script>
         (function() {{
             'use strict';
+
+            // ===== 主题切换 =====
+            const htmlEl = document.documentElement;
+            const toggleBtn = document.getElementById('themeToggle');
+
+            // 应用主题
+            function applyTheme(theme) {{
+                if (theme === 'light') {{
+                    htmlEl.classList.remove('dark');
+                    htmlEl.style.colorScheme = 'light';
+                }} else {{
+                    htmlEl.classList.add('dark');
+                    htmlEl.style.colorScheme = 'dark';
+                }}
+                localStorage.setItem('theme', theme);
+            }}
+
+            // 初始化主题
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {{
+                applyTheme(savedTheme);
+            }} else {{
+                // 默认深色（已有 dark 类）
+                htmlEl.style.colorScheme = 'dark';
+                localStorage.setItem('theme', 'dark');
+            }}
+
+            // 切换按钮点击
+            if (toggleBtn) {{
+                toggleBtn.addEventListener('click', function() {{
+                    const isDark = htmlEl.classList.contains('dark');
+                    applyTheme(isDark ? 'light' : 'dark');
+                }});
+            }}
 
             // ===== DOM 引用 =====
             const sidebar = document.getElementById('sidebar');
@@ -972,7 +1075,6 @@ def get_favicon_url(url: str) -> str:
         else:
             domain = url.split('/')[0]
         domain = domain.replace('www.', '')
-        # 使用更稳定的favicon服务
         return f"https://api.lcll.cc/favicon?host={domain}"
     except:
         return ""
@@ -1021,7 +1123,6 @@ def read_file_with_fallback(file_path: Path) -> str:
     """使用多种编码尝试读取文件"""
     encodings = ['utf-8', 'gbk', 'gb2312', 'gb18030', 'utf-8-sig', 'latin-1']
     
-    # 尝试检测编码
     try:
         detected = detect_encoding(file_path)
         if detected:
@@ -1036,7 +1137,6 @@ def read_file_with_fallback(file_path: Path) -> str:
         except (UnicodeDecodeError, LookupError):
             continue
     
-    # 最后尝试忽略错误
     with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
         return f.read()
 
