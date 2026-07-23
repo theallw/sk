@@ -24,9 +24,11 @@
 - [Filebase](https://filebase.com/)
 - [AppleiCloud](https://www.icloud.com.cn/)
 - [Apple-IPA下载](https://ipadump.com/#/home)
-- [Localsend-FTP传输](https://localsend.org/zh-CN/download)
-- [163music客户端](https://d8.music.126.net/dmusic2/NeteaseCloudMusic_Music_official_3.1.30.205130_64.exe)
-- [Yaak-离线api客户端](https://github.com/mountain-loop/yaak/releases/download/v2026.4.0/Yaak_2026.4.0_x64-setup.exe)
+- [Localsend-](https://localsend.org/zh-CN/download)
+- [163music-客户端](https://d8.music.126.net/dmusic2/NeteaseCloudMusic_Music_official_3.1.30.205130_64.exe)
+- [Yaak-客户端](https://github.com/mountain-loop/yaak/releases/download/v2026.4.0/Yaak_2026.4.0_x64-setup.exe)
+- [Obsidian-客户端](https://github.com/obsidianmd/obsidian-releases/releases/download/v1.12.7/Obsidian-1.12.7.exe)
+- [Heliumbrowser-客户端](https://xget.xi-xu.me/gh/imputnet/helium-windows/releases/download/0.14.8.2/helium_0.14.8.2_x64-installer.exe)
 
 ## Root
 - [SukiSU-Ultra](https://github.com/SukiSU-Ultra/SukiSU-Ultra/releases/download/v4.1.3/SukiSU_v4.1.3_40796-release.apk)
