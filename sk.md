@@ -32,6 +32,7 @@
 
 ## Root
 - [SukiSU-Ultra](https://github.com/SukiSU-Ultra/SukiSU-Ultra/releases/download/v4.1.3/SukiSU_v4.1.3_40796-release.apk)
+- [Apatch](https://apatch.dev/zh_CN/)
 - [KernelSU Next](https://kernelsu-next.github.io/webpage/zh_CN/)
 - [多开鸭教程](https://www.duokaiya.com/class_xp)
 - [Magisk中文](https://magiskcn.com/)
